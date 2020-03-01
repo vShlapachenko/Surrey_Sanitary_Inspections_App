@@ -1,0 +1,6 @@
+(Representing the roles for the 1st iteration)
+
+Scrum Master - Andrew Ursu / aursu
+Product Owner - Alexander Brown / ajbrown
+Repository Manager - Valentyn Shlapachenko / vshlapac
+Team Member - Jasraj Dhaliwal / jasrajd
