@@ -9,17 +9,17 @@ public class Inspection implements Comparable<Inspection>{
     private final int inspectionDate;
     private final String inspectionType;
     private final int numCritical;
-    private final int namNonCritical;
+    private final int numNonCritical;
     private final String hazardLevel;
     private final String violLump;
 
     public Inspection(String trackingNumber, int inspectionDate, String inspectionType,
-                      int numCritical, int namNonCritical, String hazardLevel, String violLump) {
+                      int numCritical, int numNonCritical, String hazardLevel, String violLump) {
         this.trackingNumber = trackingNumber;
         this.inspectionDate = inspectionDate;
         this.inspectionType = inspectionType;
         this.numCritical = numCritical;
-        this.namNonCritical = namNonCritical;
+        this.numNonCritical = numNonCritical;
         this.hazardLevel = hazardLevel;
         this.violLump = violLump;
     }
@@ -40,8 +40,8 @@ public class Inspection implements Comparable<Inspection>{
         return numCritical;
     }
 
-    public int getNamNonCritical() {
-        return namNonCritical;
+    public int getNumNonCritical() {
+        return numNonCritical;
     }
 
     public String getHazardLevel() {
