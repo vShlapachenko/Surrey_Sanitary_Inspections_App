@@ -1,5 +1,9 @@
 package com.example.cmpt276_project_iron.model;
 
+/**
+ * Restaurant object Stored
+ */
+
 public class Restaurant implements Comparable<Restaurant>{
     private final String trackingNumber;
     private final String name;
@@ -20,17 +24,32 @@ public class Restaurant implements Comparable<Restaurant>{
         this.longitude = longitude;
     }
 
-    @Override
-    public String toString() {
-        return "Restaurant{" +
-                "trackingNumber='" + trackingNumber + '\'' +
-                ", name='" + name + '\'' +
-                ", physicalAddress='" + physicalAddress + '\'' +
-                ", physicalCity='" + physicalCity + '\'' +
-                ", facType='" + facType + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                '}';
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhysicalAddress() {
+        return physicalAddress;
+    }
+
+    public String getPhysicalCity() {
+        return physicalCity;
+    }
+
+    public String getFacType() {
+        return facType;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 
     @Override

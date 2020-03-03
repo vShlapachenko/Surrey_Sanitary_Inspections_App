@@ -1,9 +1,21 @@
 package com.example.cmpt276_project_iron.model;
 
+import java.util.Collections;
+
+/**
+ * in future will convert CSV file to restaurantList
+ * Right now hard codes Dr.Brian's sample
+ */
+
 public class CSVConverterForRestaurant {
-    RestaurantManager manager = RestaurantManager.getInstance();
+    private RestaurantManager manager = RestaurantManager.getInstance();
 
     public void convertRestaurantCSVToList() {
+        createList();
+        Collections.sort(manager.getRestaurantList());
+    }
+
+    private void createList() {
         manager.add("SDFO-8HKP7E", "Pattullo A&W", "12808 King George Blvd",
                 "Surrey", "Restaurant", 49.20610961, -122.8668064);
         manager.add("SHEN-B7BNSR", "Lee Yuen Seafood Restaurant", "1812 152 St",
