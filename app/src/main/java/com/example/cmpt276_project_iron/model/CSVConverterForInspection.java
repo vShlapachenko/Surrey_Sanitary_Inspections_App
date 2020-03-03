@@ -1,11 +1,34 @@
 package com.example.cmpt276_project_iron.model;
 
-public class CSVConverterForInspection {
-    InspectionManager manager = InspectionManager.getInstance();
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-//    public
+/**
+ * in future will convert CSV file to inspectionList
+ * Right now hard codes Dr.Brian's sample
+ */
+
+public class CSVConverterForInspection {
+    private InspectionManager manager = InspectionManager.getInstance();
 
     public void convertInspectionCSVToList() {
+        addAllToList();
+        convertListToMap();
+    }
+
+    private void convertListToMap() {
+        manager.setInspectionMap(manager.getList()
+                .stream()
+                .collect(Collectors.groupingBy(Inspection::getTrackingNumber)));
+        for(Map.Entry<String, List<Inspection>> entry : manager.getInspectionMap().entrySet()){
+            Collections.sort(entry.getValue());
+        }
+        manager.getList().clear();
+    }
+
+    private void addAllToList() {
         manager.add("SDFO-8HKP7E",20181101,"Follow-Up",0,1,"Low","308,Not Critical,Equipment/utensils/food contact surfaces are not in good working order [s. 16(b)],Not Repeat");
         manager.add("SHEN-ANSLB4",20190227,"Routine",1,0,"Low","301,Critical,Equipment/utensils/food contact surfaces not maintained in sanitary condition [s. 17(1)],Not Repeat");
         manager.add("SPLH-9NEUHG",20190410,"Routine",1,1,"Low","206,Critical,Hot potentially hazardous food stored/displayed below 60 °C. [s. 14(2)],Not Repeat|501,Not Critical,Operator does not have FOODSAFE Level 1 or Equivalent [s. 10(1)],Not Repeat");

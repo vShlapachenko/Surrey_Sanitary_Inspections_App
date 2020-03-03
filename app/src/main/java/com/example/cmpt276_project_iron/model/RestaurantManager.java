@@ -1,33 +1,27 @@
 package com.example.cmpt276_project_iron.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+
+/**
+ * Creates sorted List of restaurants by date
+ */
 
 public class RestaurantManager{
 
     private static RestaurantManager instance;
-    private static List<Restaurant> restaurantList = new ArrayList<>();
+    private List<Restaurant> restaurantList = new ArrayList<>();
 
     public static RestaurantManager getInstance() {
         if (instance == null){
             instance = new RestaurantManager();
             CSVConverterForRestaurant converter = new CSVConverterForRestaurant();
             converter.convertRestaurantCSVToList();
-            Collections.sort(restaurantList);
         }
         return instance;
     }
 
-    @Override
-    public String toString() {
-        return "RestaurantManager{" +
-                "restaurantList=" + restaurantList +
-                '}';
-    }
-
-    private List<Restaurant> getRestaurantList(){
+    public List<Restaurant> getRestaurantList(){
         return restaurantList;
     }
 
