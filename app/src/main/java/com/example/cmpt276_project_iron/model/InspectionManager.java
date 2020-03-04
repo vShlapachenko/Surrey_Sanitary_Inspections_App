@@ -12,8 +12,10 @@ import java.util.Map;
 public class InspectionManager {
 
     private static InspectionManager instance;
-
     private List<Inspection> inspectionList = new ArrayList<>();
+
+    private List<Inspection> filteredList;
+
     private Map<String, List<Inspection>> inspectionMap;
 
     public static InspectionManager getInstance() {
@@ -31,8 +33,24 @@ public class InspectionManager {
                 namNonCritical, hazardLevel, violLump));
     }
 
-    List<Inspection> getList(){
+
+    public List<Inspection> getList(){
         return inspectionList;
+    }
+
+    public void filterList(String trackingNum){
+        //Creating a new arrayList each time the filter function is called such that it can be filtered multiple times for a single one
+        filteredList =  new ArrayList<>();
+        for(Inspection i : inspectionList){
+            if(i.getTrackingNumber().equalsIgnoreCase(trackingNum)){
+                filteredList.add(i);
+            }
+        }
+    }
+    //^^ Temporary, needs to be removed if committed by mistake
+
+    public List<Inspection> getFilteredList(){
+        return filteredList;
     }
 
     public Map<String, List<Inspection>> getInspectionMap(){

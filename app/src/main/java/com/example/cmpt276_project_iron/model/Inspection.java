@@ -1,5 +1,7 @@
 package com.example.cmpt276_project_iron.model;
 
+import java.io.Serializable;
+
 /**
  * Inspection object with all getters
  */

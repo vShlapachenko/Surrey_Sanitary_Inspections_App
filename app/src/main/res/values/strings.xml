@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">CMPT276_Project_Iron</string>
+    <string name="restaurantIconDescription">resprents the restaurant icon</string>
+    <string name="address_text">Address:</string>
+    <string name="coordinates_text">Coordinates:</string>
+    <string name="inspectionHistoryText">Inspection History:</string>
+    <string name="borderDescription">seperator of list from text</string>
+    <string name="inspection_text">Inspection</string>
+    <string name="crit_text"># Crticial Issues Found:</string>
+    <string name="nonCrit_text"># Non-Critical Issues Found:</string>
+    <string name="date_text">Date:</string>
+    <string name="hazardIconDescription">displays cur hazard level</string>
 </resources>
