@@ -1,10 +1,10 @@
 package com.example.cmpt276_project_iron.model;
 
 /**
- * Restaurant object Stored
+ * Restaurant (immutable) object with all getters
  */
 
-public class Restaurant implements Comparable<Restaurant>{
+public class Restaurant implements Comparable<Restaurant> {
     private final String trackingNumber;
     private final String name;
     private final String physicalAddress;

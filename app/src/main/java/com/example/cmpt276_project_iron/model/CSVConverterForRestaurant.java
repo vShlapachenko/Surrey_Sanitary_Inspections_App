@@ -1,36 +1,71 @@
 package com.example.cmpt276_project_iron.model;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 /**
- * in future will convert CSV file to restaurantList
- * Right now hard codes Dr.Brian's sample
+ * Converts Restaurant CSV to sorted RestaurantList
  */
 
 public class CSVConverterForRestaurant {
+
+    private static final char DEFAULT_SEPARATOR = ',';
+    private static final char DEFAULT_QUOTE = '"';
+
     private RestaurantManager manager = RestaurantManager.getInstance();
 
     public void convertRestaurantCSVToList() {
-        createList();
+        String file = "res/raw/restaurants_itr1.csv";
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream(file);
+        Scanner scanner = new Scanner(in);
+        scanner.nextLine();
+        while (scanner.hasNext()) {
+            List<String> line = parseLine(scanner.nextLine());
+            manager.add(line.get(0), line.get(1), line.get(2), line.get(3), line.get(4),
+                    Double.parseDouble(line.get(5)), Double.parseDouble(line.get(6)));
+        }
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        scanner.close();
         Collections.sort(manager.getRestaurantList());
     }
 
-    private void createList() {
-        manager.add("SDFO-8HKP7E", "Pattullo A&W", "12808 King George Blvd",
-                "Surrey", "Restaurant", 49.20610961, -122.8668064);
-        manager.add("SHEN-B7BNSR", "Lee Yuen Seafood Restaurant", "1812 152 St",
-                "Surrey", "Restaurant", 49.03508252, -122.80086843);
-        manager.add("NOSU-CHNUM", "The Unfindable Bar", "12345 67 Ave",
-                "Surrey", "Restaurant", 49.14214908, -122.86815856);
-        manager.add("SWOD-AHZUMF", "Lee Yuen Seafood Restaurant", "14755 104 Ave",
-                "Surrey", "Restaurant", 49.19166808, -122.8136896);
-        manager.add("SDFO-8GPUJX", "Top in Town Pizza", "12788 76A Ave",
-                "Surrey", "Restaurant", 49.14218908, -122.86855856);
-        manager.add("SWOD-APSP3X", "104 Sushi & Co.", "10422 168 St",
-                "Surrey", "Restaurant", 49.19205936, -122.75625586);
-        manager.add("SHEN-ANSLB4", "Top In Town Pizza", "14330 64 Ave",
-                "Surrey", "Restaurant", 49.11851305, -122.82521495);
-        manager.add("SPLH-9NEUHG", "Zugba Flame Grilled Chicken", "14351 104 Ave",
-                "Surrey", "Restaurant", 49.19172759, -122.82418348);
+    private static List<String> parseLine(String cvsLine) {
+        List<String> result = new ArrayList<>();
+        if (cvsLine == null && cvsLine.isEmpty()) {
+            return result;
+        }
+        StringBuffer curVal = new StringBuffer();
+        boolean inQuotes = false;
+        char[] chars = cvsLine.toCharArray();
+        for (char ch : chars) {
+            if (inQuotes) {
+                if (ch == DEFAULT_QUOTE) {
+                    inQuotes = false;
+                } else {
+                    curVal.append(ch);
+                }
+            } else {
+                if (ch == DEFAULT_QUOTE) {
+                    inQuotes = true;
+                } else if (ch == DEFAULT_SEPARATOR) {
+                    result.add(curVal.toString());
+                    curVal = new StringBuffer();
+                } else if (ch == '\n') {
+                    break;
+                } else {
+                    curVal.append(ch);
+                }
+            }
+        }
+        result.add(curVal.toString());
+        return result;
     }
 }
