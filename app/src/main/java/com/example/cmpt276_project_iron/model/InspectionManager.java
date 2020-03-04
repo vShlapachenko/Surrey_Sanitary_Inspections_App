@@ -17,25 +17,25 @@ public class InspectionManager {
     private Map<String, List<Inspection>> inspectionMap;
 
     public static InspectionManager getInstance() {
-        if (instance == null){
+        if (instance == null) {
             instance = new InspectionManager();
             CSVConverterForInspection converter = new CSVConverterForInspection();
-            converter.convertInspectionCSVToList();
+            converter.convertInspectionCSVToMap();
         }
         return instance;
     }
 
-    public void add(String trackingNumber, int inspectionDate, String inspectionType, int numCritical,
-                    int namNonCritical, String hazardLevel, String violLump){
+    void add(String trackingNumber, int inspectionDate, String inspectionType, int numCritical,
+             int numNonCritical, String hazardLevel, List<Violation> violationList) {
         inspectionList.add(new Inspection(trackingNumber, inspectionDate, inspectionType, numCritical,
-                namNonCritical, hazardLevel, violLump));
+                numNonCritical, hazardLevel, violationList));
     }
 
-    List<Inspection> getList(){
+    List<Inspection> getList() {
         return inspectionList;
     }
 
-    public Map<String, List<Inspection>> getInspectionMap(){
+    public Map<String, List<Inspection>> getInspectionMap() {
         return inspectionMap;
     }
 
