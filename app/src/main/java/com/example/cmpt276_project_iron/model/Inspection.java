@@ -1,30 +1,32 @@
 package com.example.cmpt276_project_iron.model;
 
+import java.util.List;
+
 /**
- * Inspection object with all getters
+ * Inspection (immutable) object with all getters
  */
 
-public class Inspection implements Comparable<Inspection>{
+public class Inspection implements Comparable<Inspection> {
     private final String trackingNumber;
     private final int inspectionDate;
     private final String inspectionType;
     private final int numCritical;
     private final int numNonCritical;
     private final String hazardLevel;
-    private final String violLump;
+    private final List<Violation> violationList;
 
-    public Inspection(String trackingNumber, int inspectionDate, String inspectionType,
-                      int numCritical, int numNonCritical, String hazardLevel, String violLump) {
+    public Inspection(String trackingNumber, int inspectionDate, String inspectionType, int numCritical,
+                      int numNonCritical, String hazardLevel, List<Violation> violationList) {
         this.trackingNumber = trackingNumber;
         this.inspectionDate = inspectionDate;
         this.inspectionType = inspectionType;
         this.numCritical = numCritical;
         this.numNonCritical = numNonCritical;
         this.hazardLevel = hazardLevel;
-        this.violLump = violLump;
+        this.violationList = violationList;
     }
 
-    public String getTrackingNumber(){
+    public String getTrackingNumber() {
         return trackingNumber;
     }
 
@@ -48,8 +50,8 @@ public class Inspection implements Comparable<Inspection>{
         return hazardLevel;
     }
 
-    public String getViolLump() {
-        return violLump;
+    public List<Violation> getViolationList() {
+        return violationList;
     }
 
     @Override
