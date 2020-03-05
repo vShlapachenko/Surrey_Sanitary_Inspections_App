@@ -16,16 +16,21 @@ public class CSVConverterForRestaurant {
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
 
-    private RestaurantManager manager = RestaurantManager.getInstance();
+    private Manager manager = Manager.getInstance();
 
     public void convertRestaurantCSVToList() {
+        convertToList();
+        Collections.sort(manager.getRestaurantList());
+    }
+
+    private void convertToList() {
         String file = "res/raw/restaurants_itr1.csv";
         InputStream in = this.getClass().getClassLoader().getResourceAsStream(file);
         Scanner scanner = new Scanner(in);
         scanner.nextLine();
         while (scanner.hasNext()) {
             List<String> line = parseLine(scanner.nextLine());
-            manager.add(line.get(0), line.get(1), line.get(2), line.get(3), line.get(4),
+            manager.addRestaurant(line.get(0), line.get(1), line.get(2), line.get(3), line.get(4),
                     Double.parseDouble(line.get(5)), Double.parseDouble(line.get(6)));
         }
         try {
@@ -34,7 +39,6 @@ public class CSVConverterForRestaurant {
             e.printStackTrace();
         }
         scanner.close();
-        Collections.sort(manager.getRestaurantList());
     }
 
     private static List<String> parseLine(String cvsLine) {
