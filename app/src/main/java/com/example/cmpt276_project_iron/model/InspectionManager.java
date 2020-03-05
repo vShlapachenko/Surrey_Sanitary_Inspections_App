@@ -31,7 +31,7 @@ public class InspectionManager {
                 numNonCritical, hazardLevel, violationList));
     }
 
-    List<Inspection> getList() {
+    public List<Inspection> getList() {
         return inspectionList;
     }
 

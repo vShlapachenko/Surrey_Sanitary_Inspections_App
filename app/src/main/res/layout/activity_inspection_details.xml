@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="88dp"
         android:text="@string/hazard_level"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/crit_issues" />
@@ -51,7 +51,57 @@
         android:id="@+id/listof_violations"
         android:layout_width="409dp"
         android:layout_height="563dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="96dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hazard_level" />
+
+    <TextView
+        android:id="@+id/inspection_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/inspections"
+        app:layout_constraintStart_toEndOf="@+id/inspection_date"
+        app:layout_constraintTop_toBottomOf="@+id/inspection" />
+
+    <TextView
+        android:id="@+id/num_critical_issues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/crticalissues"
+        app:layout_constraintStart_toEndOf="@+id/crit_issues"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_number" />
+
+    <TextView
+        android:id="@+id/haz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="88dp"
+        android:text="@string/hazard"
+        app:layout_constraintStart_toEndOf="@+id/hazard_level"
+        app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />
+
+    <TextView
+        android:id="@+id/non_critical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/non_critical_issues"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/crit_issues" />
+
+    <TextView
+        android:id="@+id/num_nc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/noncrit"
+        app:layout_constraintStart_toEndOf="@+id/non_critical"
+        app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
