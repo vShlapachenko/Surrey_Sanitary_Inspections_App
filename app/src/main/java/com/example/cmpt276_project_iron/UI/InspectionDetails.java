@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
-import com.example.cmpt276_project_iron.model.InspectionManager;
-import com.example.cmpt276_project_iron.model.RestaurantManager;
+import com.example.cmpt276_project_iron.model.Manager;
+
 
 public class InspectionDetails extends AppCompatActivity {
     private Inspection restaurantInspection;
@@ -19,7 +19,7 @@ public class InspectionDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection_details);
-
+        getInspectionIndex();
 
         TextView inspectionDate = findViewById(R.id.inspection_number);
         inspectionDate.setText("6"); // switch to date when inspection is passed in
@@ -33,15 +33,18 @@ public class InspectionDetails extends AppCompatActivity {
 
     public void getInspectionIndex(){
         int index = getIntent().getIntExtra("curInspection", 0);
-        InspectionManager i = InspectionManager.getInstance();
-        restaurantInspection = i.getList().get(index);
+        String tNumber = getIntent().getStringExtra("curInspectionTNumber");
+        Manager manager = Manager.getInstance();
+        restaurantInspection = manager.getInspectionMap().get(tNumber).get(index);
+
     }
 
 
-    public static Intent getIntent(Context context, int index){
+    public static Intent getIntent(Context context, int index, String tNumber){
         Intent intent = new Intent(context, InspectionDetails.class);
 
         intent.putExtra("curInspection", index);
+        intent.putExtra("curInspectionTNumber", tNumber);
 
         return intent;
 
