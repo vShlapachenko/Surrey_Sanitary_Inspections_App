@@ -11,14 +11,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
 
+import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.List;
-
-//Custom adapter for the list of inspections for the second screen, required for formatting with multiple data in a single item
+/*
+Custom adapter for the list of inspections for the second screen, required for formatting with multiple data in a single item
+ */
 public class CustomListAdapter extends ArrayAdapter<Inspection> {
 
     private Context context;
@@ -66,51 +69,69 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
 
         //Extracting the required portions to compare with the current date's year/month which should yield the necessary data
         int year = inspection.getInspectionDate().get(Calendar.YEAR);
-        int month = inspection.getInspectionDate().get(Calendar.MONTH) + 1; //Incrementing as starting at 0, but will use in calculations
+        int month = inspection.getInspectionDate().get(Calendar.MONTH);
         int day = inspection.getInspectionDate().get(Calendar.DAY_OF_MONTH);
 
         Calendar curCal = Calendar.getInstance();
         int curYear = curCal.get(Calendar.YEAR);
-        int curMonth = curCal.get(Calendar.MONTH) + 1;
+        int curMonth = curCal.get(Calendar.MONTH);
         int curDay = curCal.get(Calendar.DAY_OF_MONTH);
 
+        //Determing which month the inspection took place for printing
         String monthName = "";
-        if(month == 1){
-            monthName = context.getResources().getString(R.string.jan_month);
+        switch(month){
+            case Calendar.JANUARY:
+                monthName = context.getResources().getString(R.string.jan_month);
+                break;
+
+            case Calendar.FEBRUARY:
+                monthName = context.getResources().getString(R.string.feb_month);
+                break;
+
+            case Calendar.MARCH:
+                monthName = context.getResources().getString(R.string.mar_month);
+                break;
+
+            case Calendar.APRIL:
+                monthName = context.getResources().getString(R.string.apr_month);
+                break;
+
+            case Calendar.MAY:
+                monthName = context.getResources().getString(R.string.may_month);
+                break;
+
+            case Calendar.JUNE:
+                monthName = context.getResources().getString(R.string.jun_month);
+                break;
+
+            case Calendar.JULY:
+                monthName = context.getResources().getString(R.string.jul_month);
+                break;
+
+            case Calendar.AUGUST:
+                monthName = context.getResources().getString(R.string.aug_month);
+                break;
+
+            case Calendar.SEPTEMBER:
+                monthName = context.getResources().getString(R.string.sep_month);
+                break;
+
+            case Calendar.OCTOBER:
+                monthName = context.getResources().getString(R.string.oct_month);
+                break;
+
+            case Calendar.NOVEMBER:
+                monthName = context.getResources().getString(R.string.nov_month);
+                break;
+
+            case Calendar.DECEMBER:
+                monthName = context.getResources().getString(R.string.dec_month);
+
+            //No default case as all the value ranges are covered, assuming that Calendar returns correclty
         }
-        else if(month == 2){
-            monthName = context.getResources().getString(R.string.feb_month);
-        }
-        else if(month == 3){
-            monthName = context.getResources().getString(R.string.mar_month);
-        }
-        else if(month == 4){
-            monthName = context.getResources().getString(R.string.apr_month);
-        }
-        else if(month == 5){
-            monthName = context.getResources().getString(R.string.may_month);
-        }
-        else if(month == 6){
-            monthName = context.getResources().getString(R.string.jun_month);
-        }
-        else if(month == 7){
-            monthName = context.getResources().getString(R.string.jul_month);
-        }
-        else if(month == 8){
-            monthName = context.getResources().getString(R.string.aug_month);
-        }
-        else if(month == 9){
-            monthName = context.getResources().getString(R.string.sep_month);
-        }
-        else if(month == 10){
-            monthName = context.getResources().getString(R.string.oct_month);
-        }
-        else if(month == 11){
-            monthName = context.getResources().getString(R.string.nov_month);
-        }
-        else if(month == 12){
-            monthName = context.getResources().getString(R.string.dec_month);
-        }
+        //Attaining the max days in the month of the inspection, used for case in which it is a seperate month but still less than 30 days
+        int daysInMonth = inspection.getInspectionDate().getActualMaximum(Calendar.DAY_OF_MONTH);
+
 
         //Making comparisons between the date of inspection and curDate to determine which case to display in regards to
         //First case - within 30 days
@@ -119,10 +140,11 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
             int dayDifference = curDay - day;
             inspectionDate.setText(dayDifference + context.getResources().getString(R.string.days_text));
         }
+
         //Alternative first case scenario + second case scenario one
         if(curYear == year){
             if(curMonth - month == 1){
-                int dayDifference = curDay + (30 - day);
+                int dayDifference = curDay + (daysInMonth - day);
                 if(dayDifference <= 30) {
                     inspectionDate.setText(dayDifference + context.getResources().getString(R.string.days_text));
                 }
@@ -165,20 +187,18 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
             hazardIcon.setImageResource(R.drawable.low_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             //Setting background of the item along with tinting it such that the icon is more apparent
-            view.setBackgroundColor(view.getResources().getColor(R.color.colorLowHazard));
-
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
 
         }
         else if(hazardLevel.equalsIgnoreCase("Moderate")){
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(view.getResources().getColor(R.color.colorModerateHazard));
-
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorModerateHazard));
         }
         else if(hazardLevel.equalsIgnoreCase("High")){
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(view.getResources().getColor(R.color.colorHighHazard));
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
 
         }
 
