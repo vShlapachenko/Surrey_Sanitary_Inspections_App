@@ -2,7 +2,10 @@ package com.example.cmpt276_project_iron.model;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +24,8 @@ public class CSVConverterForInspection {
     private static final char DEFAULT_QUOTE = '"';
     private static final int NUM_FIELDS_IN_VIOL = 4;
 
-    private InspectionManager manager = InspectionManager.getInstance();
+    private List<Inspection> inspectionList = new ArrayList<>();
+    private Manager manager = Manager.getInstance();
 
     void convertInspectionCSVToMap() {
         makeListFromFile();
@@ -35,8 +39,15 @@ public class CSVConverterForInspection {
         scanner.nextLine();
         while (scanner.hasNext()) {
             List<String> line = parseLine(scanner.nextLine());
-            manager.add(line.get(0), Integer.parseInt(line.get(1)), line.get(2), Integer.parseInt(line.get(3)),
-                    Integer.parseInt(line.get(4)), line.get(5), convertToViolList(line.get(6)));
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            try {
+                cal.setTime(sdf.parse(line.get(1)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            inspectionList.add(new Inspection(line.get(0), cal, line.get(2), Integer.parseInt(line.get(3)),
+                    Integer.parseInt(line.get(4)), line.get(5), convertToViolList(line.get(6))));
         }
         try {
             in.close();
@@ -116,12 +127,12 @@ public class CSVConverterForInspection {
     }
 
     private void convertListToMap() {
-        manager.setInspectionMap(manager.getList()
+        manager.setInspectionMap(inspectionList
                 .stream()
                 .collect(Collectors.groupingBy(Inspection::getTrackingNumber)));
         for (Map.Entry<String, List<Inspection>> entry : manager.getInspectionMap().entrySet()) {
             Collections.sort(entry.getValue());
         }
-        manager.getList().clear();
+        inspectionList.clear();
     }
 }

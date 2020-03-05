@@ -1,5 +1,6 @@
 package com.example.cmpt276_project_iron.model;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -8,14 +9,14 @@ import java.util.List;
 
 public class Inspection implements Comparable<Inspection> {
     private final String trackingNumber;
-    private final int inspectionDate;
+    private final Calendar inspectionDate;
     private final String inspectionType;
     private final int numCritical;
     private final int numNonCritical;
     private final String hazardLevel;
     private final List<Violation> violationList;
 
-    public Inspection(String trackingNumber, int inspectionDate, String inspectionType, int numCritical,
+    public Inspection(String trackingNumber, Calendar inspectionDate, String inspectionType, int numCritical,
                       int numNonCritical, String hazardLevel, List<Violation> violationList) {
         this.trackingNumber = trackingNumber;
         this.inspectionDate = inspectionDate;
@@ -30,7 +31,7 @@ public class Inspection implements Comparable<Inspection> {
         return trackingNumber;
     }
 
-    public int getInspectionDate() {
+    public Calendar getInspectionDate() {
         return inspectionDate;
     }
 
@@ -56,6 +57,6 @@ public class Inspection implements Comparable<Inspection> {
 
     @Override
     public int compareTo(Inspection other) {
-        return -(this.inspectionDate - other.inspectionDate);
+        return -(this.inspectionDate.compareTo(other.inspectionDate));
     }
 }
