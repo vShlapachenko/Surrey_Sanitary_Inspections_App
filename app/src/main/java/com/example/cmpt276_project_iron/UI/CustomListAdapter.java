@@ -25,8 +25,6 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
     private int resource;
     private List<Inspection> inspections;
 
-    //Used to label the inspections in format of <inspection n>
-    private int counter = 0;
 
     public CustomListAdapter(Context context, int resource, List<Inspection> inspections){
         //Must call constructor of ArrayAdapter
@@ -52,7 +50,7 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         //Set the data in accordance with the list of inspections
         //Set the inspection number
         TextView inspectionNum = view.findViewById(R.id.inspectionNum);
-        inspectionNum.setText(Integer.toString(counter));
+        inspectionNum.setText(Integer.toString(position));
 
 
         //set number of critical issues
@@ -62,8 +60,6 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         //set number of non-critical issues
         TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
         nonCritIssues.setText(String.valueOf(inspection.getNumNonCritical()));
-
-
 
 
         //set the inspection's date by processing the Calendar type from Inspection and the current date
