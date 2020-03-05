@@ -14,9 +14,9 @@ import android.widget.Toast;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
-import com.example.cmpt276_project_iron.model.InspectionManager;
+import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
-import com.example.cmpt276_project_iron.model.RestaurantManager;
+
 
 import org.w3c.dom.Text;
 
@@ -26,8 +26,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
     //Stores the restaurant that is passed through intent when one is clicked in the 1st activity
     private Restaurant curRestaurant = null;
-    private InspectionManager inspectionManager = null;
-    private List<Inspection> inspections = null;
+    private Manager manager = null;
 
 
     @Override
@@ -37,8 +36,8 @@ public class RestaurantDetails extends AppCompatActivity {
 
         //Attain info from intent so it can be accessed with ease for more details
         //getIntentData();
-        RestaurantManager restaurantManager = RestaurantManager.getInstance(); //REMOVE + BELOW REMOVE
-        curRestaurant = restaurantManager.getRestaurantList().get(2);
+        manager = Manager.getInstance(); //REMOVE + BELOW REMOVE when complete
+        curRestaurant = manager.getRestaurantList().get(2);
 
         //Set title of screen to pertain to the current restaurant in format: <restaurant's name> details
         setRestaurantName();
@@ -83,11 +82,9 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void inflateInspectionList(){
         //attain the inspections pertaining to the restaurant to use with arrayAdapter to display
-        inspectionManager = InspectionManager.getInstance();
-        inspections = inspectionManager.getInspectionMap().get(curRestaurant.getTrackingNumber());
+        List<Inspection> inspections = manager.getInspectionMap().get(curRestaurant.getTrackingNumber());
 
         Log.i("inspections_amount", "# inspections: " + inspections.size());
-        //Toast.makeText(this,  "# inspections: " + inspections.size(), Toast.LENGTH_LONG).show();
 
         if(inspections.size() == 0){
             //If there are no inspections for the restaurant then set a text to indicate for the user
@@ -108,8 +105,8 @@ public class RestaurantDetails extends AppCompatActivity {
 
         //Safest to have a default value of 0
         int index = getIntent().getIntExtra("restaurantIndex", 0);
-        RestaurantManager restaurantManager = RestaurantManager.getInstance();
-        curRestaurant = restaurantManager.getRestaurantList().get(index);
+        manager = Manager.getInstance();
+        curRestaurant = manager.getRestaurantList().get(index);
     }
 
     /*Intent via pass object

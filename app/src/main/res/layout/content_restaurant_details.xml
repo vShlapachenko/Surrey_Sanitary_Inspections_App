@@ -92,8 +92,8 @@
 
     <ListView
         android:id="@+id/inspectionList"
-        android:layout_width="424dp"
-        android:layout_height="272dp"
+        android:layout_width="428dp"
+        android:layout_height="284dp"
         android:layout_marginTop="128dp"
         android:layout_weight="1"
         android:clickable="false"

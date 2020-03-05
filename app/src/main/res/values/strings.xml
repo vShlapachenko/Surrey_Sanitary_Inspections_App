@@ -12,4 +12,17 @@
     <string name="hazardIconDescription">displays cur hazard level</string>
     <string name="no_inspection_text">No inspections available</string>
     <string name="restaurantExtension">\'s Details</string>
+    <string name="days_text"> days</string>
+    <string name="feb_month">February</string>
+    <string name="jan_month">January</string>
+    <string name="mar_month">March</string>
+    <string name="apr_month">April</string>
+    <string name="may_month">May</string>
+    <string name="jun_month">June</string>
+    <string name="jul_month">July</string>
+    <string name="aug_month">August</string>
+    <string name="sep_month">September</string>
+    <string name="oct_month">October</string>
+    <string name="nov_month">November</string>
+    <string name="dec_month">December</string>
 </resources>

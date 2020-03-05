@@ -1,18 +1,13 @@
 package com.example.cmpt276_project_iron.UI;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,8 +15,7 @@ import androidx.annotation.Nullable;
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
 
-import org.w3c.dom.Text;
-
+import java.util.Calendar;
 import java.util.List;
 
 //Custom adapter for the list of inspections for the second screen, required for formatting with multiple data in a single item
@@ -69,9 +63,103 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
         nonCritIssues.setText(String.valueOf(inspection.getNumNonCritical()));
 
-        //set the inspection's date
+
+
+
+        //set the inspection's date by processing the Calendar type from Inspection and the current date
         TextView inspectionDate = view.findViewById(R.id.inspection_date);
-        inspectionDate.setText(String.valueOf(inspection.getInspectionDate()));
+
+        //Extracting the required portions to compare with the current date's year/month which should yield the necessary data
+        int year = inspection.getInspectionDate().get(Calendar.YEAR);
+        int month = inspection.getInspectionDate().get(Calendar.MONTH) + 1; //Incrementing as starting at 0, but will use in calculations
+        int day = inspection.getInspectionDate().get(Calendar.DAY_OF_MONTH);
+
+        Calendar curCal = Calendar.getInstance();
+        int curYear = curCal.get(Calendar.YEAR);
+        int curMonth = curCal.get(Calendar.MONTH) + 1;
+        int curDay = curCal.get(Calendar.DAY_OF_MONTH);
+
+        String monthName = "";
+        if(month == 1){
+            monthName = context.getResources().getString(R.string.jan_month);
+        }
+        else if(month == 2){
+            monthName = context.getResources().getString(R.string.feb_month);
+        }
+        else if(month == 3){
+            monthName = context.getResources().getString(R.string.mar_month);
+        }
+        else if(month == 4){
+            monthName = context.getResources().getString(R.string.apr_month);
+        }
+        else if(month == 5){
+            monthName = context.getResources().getString(R.string.may_month);
+        }
+        else if(month == 6){
+            monthName = context.getResources().getString(R.string.jun_month);
+        }
+        else if(month == 7){
+            monthName = context.getResources().getString(R.string.jul_month);
+        }
+        else if(month == 8){
+            monthName = context.getResources().getString(R.string.aug_month);
+        }
+        else if(month == 9){
+            monthName = context.getResources().getString(R.string.sep_month);
+        }
+        else if(month == 10){
+            monthName = context.getResources().getString(R.string.oct_month);
+        }
+        else if(month == 11){
+            monthName = context.getResources().getString(R.string.nov_month);
+        }
+        else if(month == 12){
+            monthName = context.getResources().getString(R.string.dec_month);
+        }
+
+        //Making comparisons between the date of inspection and curDate to determine which case to display in regards to
+        //First case - within 30 days
+        if(curYear == year && curMonth == month){
+            //If same year and date, then it will always be in the past, so error checked in condition
+            int dayDifference = curDay - day;
+            inspectionDate.setText(dayDifference + context.getResources().getString(R.string.days_text));
+        }
+        //Alternative first case scenario + second case scenario one
+        if(curYear == year){
+            if(curMonth - month == 1){
+                int dayDifference = curDay + (30 - day);
+                if(dayDifference <= 30) {
+                    inspectionDate.setText(dayDifference + context.getResources().getString(R.string.days_text));
+                }
+            }
+            //Second case - less than a year ago
+            else{
+                inspectionDate.setText(monthName + " " + day);
+            }
+        }
+        //Second case - second scenario + third case first scenario
+        if(curYear - year == 1){
+            int monthDifference = curMonth - month;
+            if(monthDifference < 0){ //It is within a year if the month difference is a negative number
+                inspectionDate.setText(monthName + " " + day);
+            }
+            else if(monthDifference == 0){
+                int dayDifference = curDay - day;
+                if(dayDifference < 0){
+                    inspectionDate.setText(monthName + " " + day);
+                }
+                else{
+                    inspectionDate.setText(monthName + " " + year);
+                }
+            }
+            else{
+                inspectionDate.setText(monthName + " " + year);
+            }
+        }
+        //Third case - more than a year ago , second scenario
+        if(curYear - year > 1){
+            inspectionDate.setText(monthName + " " + year);
+        }
 
 
         //Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
