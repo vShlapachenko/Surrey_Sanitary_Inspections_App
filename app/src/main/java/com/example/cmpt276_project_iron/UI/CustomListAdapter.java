@@ -50,8 +50,7 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         //Set the data in accordance with the list of inspections
         //Set the inspection number
         TextView inspectionNum = view.findViewById(R.id.inspectionNum);
-        inspectionNum.setText(Integer.toString(position));
-
+        inspectionNum.setText(Integer.toString(position + 1));
 
         //set number of critical issues
         TextView critIssues = view.findViewById(R.id.numCritIssues);

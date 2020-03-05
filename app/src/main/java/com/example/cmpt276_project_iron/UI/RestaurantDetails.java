@@ -35,9 +35,7 @@ public class RestaurantDetails extends AppCompatActivity {
         setContentView(R.layout.activity_restaurant_details);
 
         //Attain info from intent so it can be accessed with ease for more details
-        //getIntentData();
-        manager = Manager.getInstance(); //REMOVE + BELOW REMOVE when complete
-        curRestaurant = manager.getRestaurantList().get(2);
+        getIntentData();
 
         //Set title of screen to pertain to the current restaurant in format: <restaurant's name> details
         setRestaurantName();
@@ -106,7 +104,7 @@ public class RestaurantDetails extends AppCompatActivity {
         //Safest to have a default value of 0
         int index = getIntent().getIntExtra("restaurantIndex", 0);
         manager = Manager.getInstance();
-        curRestaurant = manager.getRestaurantList().get(index);
+        curRestaurant = manager.getRestaurantList().get(1);
     }
 
     /*Intent via pass object
