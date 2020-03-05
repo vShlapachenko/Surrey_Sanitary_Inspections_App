@@ -18,6 +18,8 @@ import com.example.cmpt276_project_iron.model.InspectionManager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.example.cmpt276_project_iron.model.RestaurantManager;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class RestaurantDetails extends AppCompatActivity {
@@ -33,11 +35,10 @@ public class RestaurantDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_details);
 
-        //Attain info from intent so it can be accessed with ease for more details      ************************************ CHANGE BACK
-        RestaurantManager manager = RestaurantManager.getInstance();
-        List<Restaurant> a = manager.getRestaurantList();
-        //curRestaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
-        curRestaurant = a.get(0);
+        //Attain info from intent so it can be accessed with ease for more details
+        //getIntentData();
+        RestaurantManager restaurantManager = RestaurantManager.getInstance();
+        curRestaurant = restaurantManager.getRestaurantList().get(2);
 
         //Set title of screen to pertain to the current restaurant in format: <restaurant's name> details
         setRestaurantName();
@@ -55,7 +56,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void setRestaurantName(){
         ActionBar detailsBar = getSupportActionBar();
-        String restaurantTitle = curRestaurant.getName() + "'s Details";
+        String restaurantTitle = curRestaurant.getName() + getResources().getString(R.string.restaurantExtension);
 
         detailsBar.setTitle(restaurantTitle);
     }
@@ -82,26 +83,53 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void inflateInspectionList(){
         //attain the inspections pertaining to the restaurant to use with arrayAdapter to display
-        //Rework once map figured
         inspectionManager = InspectionManager.getInstance();
-        inspectionManager.filterList(curRestaurant.getTrackingNumber());
-        inspections = inspectionManager.getFilteredList();
-        Toast.makeText(this,"# inspections: " + inspections.size(), Toast.LENGTH_LONG).show();
+        inspections = inspectionManager.getInspectionMap().get(curRestaurant.getTrackingNumber());
 
+        Log.i("inspections_amount", "# inspections: " + inspections.size());
+        //Toast.makeText(this,  "# inspections: " + inspections.size(), Toast.LENGTH_LONG).show();
+
+        if(inspections.size() == 0){
+            //If there are no inspections for the restaurant then set a text to indicate for the user
+            TextView emptyListText = findViewById(R.id.noInspectionsText);
+            emptyListText.setText(getResources().getString(R.string.no_inspection_text));
+        }
         //'move' elements from list to ListView via the custom adapter
         ListView inspectionList = findViewById(R.id.inspectionList);
         CustomListAdapter adapter = new CustomListAdapter(this, R.layout.inspection_list_item, inspections);
+        adapter.notifyDataSetChanged();
 
         inspectionList.setAdapter(adapter);
-
     }
 
+    private void getIntentData(){
+
+        //curRestaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
+
+        //Safest to have a default value of 0
+        int index = getIntent().getIntExtra("restaurantIndex", 0);
+        RestaurantManager restaurantManager = RestaurantManager.getInstance();
+        curRestaurant = restaurantManager.getRestaurantList().get(index);
+    }
+
+    /*Intent via pass object
     public static Intent getIntent(Context context, Restaurant restaurant){
         // .class (not .this) as it is being created when launched
         Intent intent = new Intent(context, RestaurantDetails.class);
 
         //To enable, related classes implement the serializable interface
         intent.putExtra("restaurant", restaurant);
+
+        return intent;
+    }*/
+
+    //Intent via pass index
+    public static Intent getIntent(Context context, int restaurantIndex){
+        // .class (not .this) as it is being created when launched
+        Intent intent = new Intent(context, RestaurantDetails.class);
+
+        //To enable, related classes implement the serializable interface
+        intent.putExtra("restaurantIndex", restaurantIndex);
 
         return intent;
     }

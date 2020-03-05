@@ -1,6 +1,7 @@
 package com.example.cmpt276_project_iron.UI;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -56,19 +57,19 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         //Set the inspection number
         TextView inspectionNum = view.findViewById(R.id.inspectionNum);
         inspectionNum.setText(Integer.toString(counter));
-        counter++;
+
 
         //set number of critical issues
         TextView critIssues = view.findViewById(R.id.numCritIssues);
-        critIssues.setText(inspection.getNumCritical());
+        critIssues.setText(String.valueOf(inspection.getNumCritical()));
 
         //set number of non-critical issues
         TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
-        nonCritIssues.setText(inspection.getNumNonCritical());
+        nonCritIssues.setText(String.valueOf(inspection.getNumNonCritical()));
 
         //set the inspection's date
         TextView inspectionDate = view.findViewById(R.id.inspection_date);
-        inspectionDate.setText(inspection.getInspectionDate());
+        inspectionDate.setText(String.valueOf(inspection.getInspectionDate()));
 
 
         //Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
@@ -77,30 +78,38 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
 
         if(hazardLevel.equalsIgnoreCase("Low")){
             hazardIcon.setImageResource(R.drawable.low_hazard);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             //Setting background of the item along with tinting it such that the icon is more apparent
             view.setBackgroundColor(view.getResources().getColor(R.color.colorLowHazard));
-            view.setBackgroundTintList(ColorStateList.valueOf(view.getResources().getColor(R.color.colorTint)));
+
 
         }
         else if(hazardLevel.equalsIgnoreCase("Moderate")){
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setBackgroundColor(view.getResources().getColor(R.color.colorModerateHazard));
-            view.setBackgroundTintList(ColorStateList.valueOf(view.getResources().getColor(R.color.colorTint)));
+
         }
         else if(hazardLevel.equalsIgnoreCase("High")){
             hazardIcon.setImageResource(R.drawable.high_hazard);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setBackgroundColor(view.getResources().getColor(R.color.colorHighHazard));
-            view.setBackgroundTintList(ColorStateList.valueOf(view.getResources().getColor(R.color.colorTint)));
+
         }
+
 
         //Set an onclick listener for the individual buttons such that the third activity can be launched with the necessary info
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //CurImageView.ScaleType.CENTER_INSIDErently disabled, however, once the third activity is up and running re-enable to have the data
+                //currently disabled, however, once the third activity is up and running re-enable to have the data
                 //of the clicked inspection (passed as the Inspection itself) passed into the third activity (rename as needed)
+                //passing index/position as requested
                 /*
-                    InspectionDetails.getIntent(this, inspections.get(position));
+                Intent intent = InspectionDetails.getIntent(this, position);
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
                  */
             }
         });

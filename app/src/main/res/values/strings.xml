@@ -10,4 +10,6 @@
     <string name="nonCrit_text"># Non-Critical Issues Found:</string>
     <string name="date_text">Date:</string>
     <string name="hazardIconDescription">displays cur hazard level</string>
+    <string name="no_inspection_text">No inspections available</string>
+    <string name="restaurantExtension">\'s Details</string>
 </resources>
