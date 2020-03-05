@@ -106,7 +106,7 @@ public class RestaurantDetails extends AppCompatActivity {
         //Safest to have a default value of 0
         int index = getIntent().getIntExtra("restaurantIndex", 0);
         manager = Manager.getInstance();
-        curRestaurant = manager.getRestaurantList().get(3);
+        curRestaurant = manager.getRestaurantList().get(index);
     }
 
     /*Intent via pass object
