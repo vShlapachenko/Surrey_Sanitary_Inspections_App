@@ -37,7 +37,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
         //Attain info from intent so it can be accessed with ease for more details
         //getIntentData();
-        RestaurantManager restaurantManager = RestaurantManager.getInstance();
+        RestaurantManager restaurantManager = RestaurantManager.getInstance(); //REMOVE + BELOW REMOVE
         curRestaurant = restaurantManager.getRestaurantList().get(2);
 
         //Set title of screen to pertain to the current restaurant in format: <restaurant's name> details
