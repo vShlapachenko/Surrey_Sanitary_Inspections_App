@@ -82,8 +82,6 @@ public class RestaurantDetails extends AppCompatActivity {
         //attain the inspections pertaining to the restaurant to use with arrayAdapter to display
         List<Inspection> inspections = manager.getInspectionMap().get(curRestaurant.getTrackingNumber());
 
-        Log.i("inspections_amount", "# inspections: " + inspections.size());
-
         if(inspections == null){
             //If there are no inspections for the restaurant then set a text to indicate for the user
             TextView emptyListText = findViewById(R.id.noInspectionsText);
