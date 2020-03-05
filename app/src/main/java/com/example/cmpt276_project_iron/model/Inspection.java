@@ -45,6 +45,7 @@ public class Inspection implements Comparable<Inspection> {
 
     public int getNumNonCritical() {
         return numNonCritical;
+
     }
 
     public String getHazardLevel() {

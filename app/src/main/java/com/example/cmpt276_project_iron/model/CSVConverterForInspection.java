@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +81,7 @@ public class CSVConverterForInspection {
                 oneField.append(c);
             }
         }
+        strings.add(oneField.toString());
         if (strings.size() == NUM_FIELDS_IN_VIOL) {
             violationList.add(new Violation(Integer.parseInt(strings.get(0)), isCritical(strings.get(1))
                     , strings.get(2), isRepeat(strings.get(3))));
@@ -127,9 +130,25 @@ public class CSVConverterForInspection {
     }
 
     private void convertListToMap() {
-        manager.setInspectionMap(inspectionList
-                .stream()
-                .collect(Collectors.groupingBy(Inspection::getTrackingNumber)));
+        Map<String, List<Inspection>> map = new HashMap<>();
+        Collections.sort(inspectionList, new Comparator<Inspection>() {
+            @Override
+            public int compare(Inspection o1, Inspection o2) {
+                return o1.getTrackingNumber().compareToIgnoreCase(o2.getTrackingNumber());
+            }
+        });
+        List <Inspection> inspections = new ArrayList<>();
+        inspections.add(inspectionList.get(0));
+        for (int i = 0; i < inspectionList.size(); i++) {
+            Inspection inspection = inspectionList.get(i);
+            if (i + 1 != inspectionList.size() && inspection.getTrackingNumber().equals(inspectionList.get(i + 1).getTrackingNumber())){
+                inspections.add(inspectionList.get(i + 1));
+            } else if (i + 1 != inspectionList.size() && !inspection.getTrackingNumber().equals(inspectionList.get(i + 1).getTrackingNumber())){
+                map.put(inspection.getTrackingNumber(), inspections);
+                inspections = new ArrayList<>();
+            }
+        }
+        manager.setInspectionMap(map);
         for (Map.Entry<String, List<Inspection>> entry : manager.getInspectionMap().entrySet()) {
             Collections.sort(entry.getValue());
         }
