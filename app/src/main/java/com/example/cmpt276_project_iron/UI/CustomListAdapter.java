@@ -16,9 +16,9 @@ import androidx.core.content.ContextCompat;
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
 
-import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.List;
+
 /*
 Custom adapter for the list of inspections for the second screen, required for formatting with multiple data in a single item
  */
