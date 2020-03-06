@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorTint"
     tools:context=".UI.RestaurantDetails"
-    tools:showIn="@layout/activity_restaurant_details">
+    tools:showIn="@layout/activity_restaurant_details"
+    android:weightSum="2.0">
 
 
     <ImageView
@@ -77,12 +78,12 @@
         android:id="@+id/inspectionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorText"
         android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
         android:fontFamily="serif"
         android:text="@string/inspectionHistoryText"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/colorText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coordsText" />
 
@@ -99,14 +100,20 @@
 
     <ListView
         android:id="@+id/inspectionList"
-        android:layout_width="428dp"
-        android:layout_height="284dp"
-        android:layout_marginTop="128dp"
-        android:layout_weight="1"
+        android:layout_width="415dp"
+        android:layout_height="403dp"
+        android:layout_marginTop="328dp"
+        android:layout_weight="1.0"
         android:clickable="false"
         android:contextClickable="false"
+        android:dividerHeight="4dp"
         android:paddingBottom="135dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/inspectionText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantIcon" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
