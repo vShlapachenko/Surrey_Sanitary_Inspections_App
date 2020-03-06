@@ -25,4 +25,6 @@
     <string name="oct_month">October</string>
     <string name="nov_month">November</string>
     <string name="dec_month">December</string>
+    <string name="inspection_date">%1s %2s</string>
+
 </resources>

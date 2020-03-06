@@ -138,7 +138,8 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         if(curYear == year && curMonth == month){
             //If same year and date, then it will always be in the past, so error checked in condition
             int dayDifference = curDay - day;
-            inspectionDate.setText(dayDifference + context.getResources().getString(R.string.days_text));
+            inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
+                    Integer.toString(dayDifference), context.getResources().getString(R.string.days_text)));
         }
 
         //Alternative first case scenario + second case scenario one
@@ -146,36 +147,43 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
             if(curMonth - month == 1){
                 int dayDifference = curDay + (daysInMonth - day);
                 if(dayDifference <= 30) {
-                    inspectionDate.setText(dayDifference + context.getResources().getString(R.string.days_text));
+                    inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
+                            Integer.toString(dayDifference), context.getResources().getString(R.string.days_text)));
                 }
             }
             //Second case - less than a year ago
             else{
-                inspectionDate.setText(monthName + " " + day);
+                inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
+                        monthName, Integer.toString(day)));
             }
         }
         //Second case - second scenario + third case first scenario
         if(curYear - year == 1){
             int monthDifference = curMonth - month;
             if(monthDifference < 0){ //It is within a year if the month difference is a negative number
-                inspectionDate.setText(monthName + " " + day);
+                inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
+                        monthName, Integer.toString(day)));
             }
             else if(monthDifference == 0){
                 int dayDifference = curDay - day;
                 if(dayDifference < 0){
-                    inspectionDate.setText(monthName + " " + day);
+                    inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
+                            monthName, Integer.toString(day)));
                 }
                 else{
-                    inspectionDate.setText(monthName + " " + year);
+                    inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
+                            monthName, Integer.toString(year)));
                 }
             }
             else{
-                inspectionDate.setText(monthName + " " + year);
+                inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
+                        monthName, Integer.toString(year)));
             }
         }
         //Third case - more than a year ago , second scenario
         if(curYear - year > 1){
-            inspectionDate.setText(monthName + " " + year);
+            inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
+                    monthName, Integer.toString(year)));
         }
 
 
