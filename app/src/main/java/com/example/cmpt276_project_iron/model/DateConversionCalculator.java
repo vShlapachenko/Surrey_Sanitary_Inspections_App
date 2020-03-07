@@ -33,7 +33,7 @@ public class DateConversionCalculator {
         }
     }
 
-    public static String getFullDate(Context context, Calendar givenDate){
+    public static String getFullFormattedDate(Context context, Calendar givenDate){
         int inspectionYear = givenDate.get(Calendar.YEAR);
         int inspectionMonth = givenDate.get(Calendar.MONTH);
         int inspectionDay = givenDate.get(Calendar.DATE);
