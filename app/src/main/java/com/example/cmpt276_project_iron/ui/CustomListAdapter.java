@@ -1,6 +1,7 @@
-package com.example.cmpt276_project_iron.UI;
+package com.example.cmpt276_project_iron.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -222,12 +223,12 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
                 //currently disabled, however, once the third activity is up and running re-enable to have the data
                 //of the clicked inspection (passed as the Inspection itself) passed into the third activity (rename as needed)
                 //passing index/position as requested
-                /*
-                Intent intent = InspectionDetails.getIntent(this, position);
+
+                /*Intent intent = InspectionDetails.getIntent(this, position);
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-                 */
+                context.startActivity(intent);*/
+
                 Log.i("Position_clicked", position + " ");
             }
         });

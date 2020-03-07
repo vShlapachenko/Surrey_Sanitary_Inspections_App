@@ -1,4 +1,4 @@
-package com.example.cmpt276_project_iron.UI;
+package com.example.cmpt276_project_iron.ui;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +31,7 @@ public class RestaurantDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_details);
+        setUpBackButton();
 
         getIntentData();
 
@@ -95,7 +96,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
         //curRestaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
 
-        int index = getIntent().getIntExtra("restaurantIndex", 2); //***Change defVal to 0 and delete comment
+        int index = getIntent().getIntExtra("restaurantIndex", 1); //***Change defVal to 0 and delete comment
         manager = Manager.getInstance();
         curRestaurant = manager.getRestaurantList().get(index);
     }
@@ -111,12 +112,16 @@ public class RestaurantDetails extends AppCompatActivity {
         return intent;
     }*/
 
-    //Intent via pass index
     public static Intent getIntent(Context context, int restaurantIndex){
         Intent intent = new Intent(context, RestaurantDetails.class);
 
         intent.putExtra("restaurantIndex", restaurantIndex);
 
         return intent;
+    }
+
+    private void setUpBackButton(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 }
