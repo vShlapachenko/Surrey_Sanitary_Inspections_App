@@ -9,4 +9,6 @@
     <color name="colorModerateHazard">#FF9800</color>
     <color name="colorHighHazard">#F43636</color>
     <color name="colorTint">#C9000000</color>
+
+    <color name="colorText">#F7FFFFFF</color>
 </resources>

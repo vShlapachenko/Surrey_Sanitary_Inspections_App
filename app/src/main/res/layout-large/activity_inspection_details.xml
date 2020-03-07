@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".ui.InspectionDetails">
 
     <TextView
         android:id="@+id/inspection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
         android:text="@string/inspection_report"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +51,7 @@
         android:id="@+id/listof_violations"
         android:layout_width="409dp"
         android:layout_height="563dp"
-        android:layout_marginTop="176dp"
+        android:layout_marginTop="220dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

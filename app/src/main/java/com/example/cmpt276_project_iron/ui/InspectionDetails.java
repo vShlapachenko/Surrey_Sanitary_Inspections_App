@@ -12,6 +12,8 @@ import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 
+import java.util.Calendar;
+
 
 public class InspectionDetails extends AppCompatActivity {
     private final String TAG = "InspectActivity";
@@ -27,13 +29,13 @@ public class InspectionDetails extends AppCompatActivity {
         Log.e(TAG, "non crit issues is " + restaurantInspection.getNumNonCritical());
 
         TextView inspectionDate = findViewById(R.id.inspection_number);
-        inspectionDate.setText("" + restaurantInspection.getNumCritical()); // switch to date when inspection is passed in
+        inspectionDate.setText("" + restaurantInspection.getInspectionDate().get(Calendar.YEAR)); // switch to date when inspection is passed in
 
         TextView criticalIssues = findViewById(R.id.num_critical_issues);
-        criticalIssues.setText("" + restaurantInspection.getNumNonCritical()); // switch to actaul issues when thing is passed in
+        criticalIssues.setText("" + restaurantInspection.getNumCritical()); // switch to actaul issues when thing is passed in
 
         TextView nonCriticalIssues = findViewById(R.id.num_nc);
-        nonCriticalIssues.setText("8"); // switch to actaul issues when thing is passed in
+        nonCriticalIssues.setText("" + restaurantInspection.getNumNonCritical()); // switch to actaul issues when thing is passed in
     }
 
     public void getInspectionIndex(){
