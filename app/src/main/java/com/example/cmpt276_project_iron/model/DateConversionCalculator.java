@@ -1,8 +1,6 @@
 package com.example.cmpt276_project_iron.model;
 
 import android.content.Context;
-import android.util.Log;
-
 import com.example.cmpt276_project_iron.R;
 
 import java.time.temporal.ChronoUnit;
