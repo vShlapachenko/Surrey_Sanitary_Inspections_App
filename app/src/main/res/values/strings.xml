@@ -40,6 +40,7 @@
         <item>December</item>
     </string-array>
     <string name="inspection_date">%1s %2s</string>
+    <string name="inspection_date_full">%1s %2d, %3d</string>
     <string name="more_info_text">(click for more info)</string>
 
 </resources>

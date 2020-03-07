@@ -32,4 +32,13 @@ public class DateConversionCalculator {
                     monthArray[inspectionMonth], Integer.toString(inspectionYear));
         }
     }
+
+    public static String getFullDate(Context context, Calendar givenDate){
+        int inspectionYear = givenDate.get(Calendar.YEAR);
+        int inspectionMonth = givenDate.get(Calendar.MONTH);
+        int inspectionDay = givenDate.get(Calendar.DATE);
+        String[] monthArray = context.getResources().getStringArray(R.array.months);
+        return context.getResources().getString(R.string.inspection_date_full,
+                monthArray[inspectionMonth], inspectionDay, inspectionYear);
+    }
 }
