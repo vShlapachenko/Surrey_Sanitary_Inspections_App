@@ -25,6 +25,20 @@
     <string name="oct_month">October</string>
     <string name="nov_month">November</string>
     <string name="dec_month">December</string>
+    <string-array name="months">
+        <item>February</item>
+        <item>January</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
     <string name="inspection_date">%1s %2s</string>
     <string name="more_info_text">(click for more info)</string>
 
