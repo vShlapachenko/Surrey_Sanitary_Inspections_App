@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.InspectionDetails">
+    tools:context=".ui.InspectionDetails">
 
     <TextView
         android:id="@+id/inspection"
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="36dp"
         android:text="@string/hazard_level"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/crit_issues" />
@@ -51,15 +51,14 @@
         android:id="@+id/listof_violations"
         android:layout_width="409dp"
         android:layout_height="563dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="220dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hazard_level" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/inspection_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:text="@string/inspections"
         app:layout_constraintStart_toEndOf="@+id/inspection_date"
@@ -69,7 +68,6 @@
         android:id="@+id/num_critical_issues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
         android:layout_marginTop="12dp"
         android:text="@string/crticalissues"
         app:layout_constraintStart_toEndOf="@+id/crit_issues"
@@ -79,8 +77,7 @@
         android:id="@+id/haz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="36dp"
         android:text="@string/hazard"
         app:layout_constraintStart_toEndOf="@+id/hazard_level"
         app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />
