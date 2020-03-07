@@ -69,7 +69,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void placeAddressText(){
         TextView address = findViewById(R.id.restaurantAddress);
-        String restaurantAddress = curRestaurant.getPhysicalAddress();
+        String restaurantAddress = curRestaurant.getPhysicalCity() + ", " + curRestaurant.getPhysicalAddress();
 
         address.setText(restaurantAddress);
     }

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Restaurant (immutable) object with all getters
  */
 //Implements Serializable interface for passing data through intent for UI
-public class Restaurant implements Comparable<Restaurant>, Serializable {
+public class Restaurant implements Comparable<Restaurant> {
     private final String trackingNumber;
     private final String name;
     private final String physicalAddress;
