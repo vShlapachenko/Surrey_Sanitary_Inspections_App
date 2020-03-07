@@ -54,4 +54,12 @@ public class InspectionDetails extends AppCompatActivity {
         return intent;
 
     }
+//public static Intent getIntent(Context context, int index){
+//    Intent intent = new Intent(context, InspectionDetails.class);
+//
+//    intent.putExtra("curInspection", index);
+//
+//    return intent;
+//
+//}
 }

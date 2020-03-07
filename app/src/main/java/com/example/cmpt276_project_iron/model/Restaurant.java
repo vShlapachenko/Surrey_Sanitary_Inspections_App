@@ -1,10 +1,12 @@
 package com.example.cmpt276_project_iron.model;
 
+import java.io.Serializable;
+
 /**
  * Restaurant (immutable) object with all getters
  */
-
-public class Restaurant implements Comparable<Restaurant> {
+//Implements Serializable interface for passing data through intent for UI
+public class Restaurant implements Comparable<Restaurant>, Serializable {
     private final String trackingNumber;
     private final String name;
     private final String physicalAddress;
