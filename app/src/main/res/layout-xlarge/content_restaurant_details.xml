@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.RestaurantDetails"
-    tools:showIn="@layout/activity_restaurant_details">
+    android:background="@color/colorTint"
+    tools:context=".ui.RestaurantDetails"
+    tools:showIn="@layout/activity_restaurant_details"
+    android:weightSum="2.0">
 
 
     <ImageView
         android:id="@+id/restaurantIcon"
-        android:layout_width="416dp"
-        android:layout_height="198dp"
+        android:layout_width="805dp"
+        android:layout_height="326dp"
         android:layout_marginBottom="531dp"
         android:contentDescription="@string/restaurantIconDescription"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,6 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
+        android:textColor="@color/colorText"
+        android:textSize="28sp"
         android:fontFamily="serif"
         android:text="@string/address_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -38,6 +42,8 @@
         android:id="@+id/restaurantAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:textColor="@color/colorText"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:fontFamily="serif"
@@ -52,6 +58,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="serif"
+        android:textSize="28sp"
+        android:textColor="@color/colorText"
         android:text="@string/coordinates_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:textSize="28sp"
+        android:textColor="@color/colorText"
         android:layout_marginTop="16dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -73,33 +83,43 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
+        android:textSize="28sp"
         android:fontFamily="serif"
         android:text="@string/inspectionHistoryText"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coordsText" />
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/inspectionList"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/noInspectionsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="28sp"
         android:layout_marginStart="8dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/colorText"
         app:layout_constraintBottom_toTopOf="@+id/inspectionList"
         app:layout_constraintStart_toEndOf="@+id/inspectionText" />
 
     <ListView
         android:id="@+id/inspectionList"
-        android:layout_width="428dp"
-        android:layout_height="284dp"
-        android:layout_marginTop="128dp"
-        android:layout_weight="1"
+        android:layout_width="799dp"
+        android:layout_height="701dp"
+        android:layout_marginTop="584dp"
+        android:layout_weight="1.0"
         android:clickable="false"
         android:contextClickable="false"
+        android:dividerHeight="4dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:paddingBottom="135dp"
+        app:layout_constraintBottom_toBottomOf="@+id/inspectionText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantIcon" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

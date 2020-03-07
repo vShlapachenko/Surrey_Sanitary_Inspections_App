@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.cmpt276_project_iron">
 
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true" />
+
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,14 +19,18 @@
         android:configChanges="keyboard|orientation|keyboardHidden"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".UI.RestaurantDetails">
 
-            <intent-filter>
+
+        <activity android:name=".ui.RestaurantDetails"
+            android:parentActivityName=".ui.RestaurantDetails"> <!--Change to Alex's class name-->
+
+            <intent-filter> <!--Remove intent filter-->
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+
 
 </manifest>
