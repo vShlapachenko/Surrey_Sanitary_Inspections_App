@@ -15,15 +15,16 @@ public class DateConversionCalculator {
         Calendar today = Calendar.getInstance();
         int inspectionYear = givenDate.get(Calendar.YEAR);
         int inspectionMonth = givenDate.get(Calendar.MONTH);
+        int inspectionDay = givenDate.get(Calendar.DATE);
         long daysBetween = ChronoUnit.DAYS.between(givenDate.toInstant(), today.toInstant());
         int yearsDiff = today.get(Calendar.YEAR) - inspectionYear;
         int monthDiff = today.get(Calendar.MONTH) - inspectionMonth;
         int monthsBetween = yearsDiff * MONTHS_IN_A_YEAR + monthDiff;
         if (daysBetween <= DAYS_THRESHOLD){
             return Long.toString(daysBetween);
-        } else if(monthsBetween <= MONTHS_IN_A_YEAR) {
+        } else if(monthsBetween < MONTHS_IN_A_YEAR
+                || (monthsBetween == MONTHS_IN_A_YEAR && inspectionDay - today.get(Calendar.DATE) < 0)) {
             String[] monthArray = context.getResources().getStringArray(R.array.months);
-            int inspectionDay = givenDate.get(Calendar.DATE);
             return context.getResources().getString(R.string.inspection_date,
                     monthArray[inspectionMonth], Integer.toString(inspectionDay));
         } else {
