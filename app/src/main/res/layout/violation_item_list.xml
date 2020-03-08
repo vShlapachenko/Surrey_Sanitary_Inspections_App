@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/item_violation_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxWidth="80dp"
+        android:maxHeight="80dp"
+        android:visibility="visible"
+        app:srcCompat="@drawable/mouse"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="29dp" />
+
+    <TextView
+        android:id="@+id/summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/item_violation_image"
+        android:layout_marginStart="41dp"
+        android:layout_marginBottom="18dp"
+        android:layout_toEndOf="@+id/item_violation_image"
+        android:text="@string/summary" />
+
+    <ImageView
+        android:id="@+id/item_hazard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/summary"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="-14dp"
+        android:layout_toEndOf="@id/summary"
+        app:srcCompat="@drawable/moderate_hazard" />
+
+</RelativeLayout>

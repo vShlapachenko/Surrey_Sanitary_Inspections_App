@@ -36,5 +36,6 @@
     <string name="dec_month">December</string>
     <string name="inspection_date">%1s %2s</string>
     <string name="more_info_text">(click for more info)</string>
+    <string name="summary">Summary</string>
 
 </resources>

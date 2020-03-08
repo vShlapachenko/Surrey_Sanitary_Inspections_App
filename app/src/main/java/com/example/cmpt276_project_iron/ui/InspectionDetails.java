@@ -1,16 +1,24 @@
 package com.example.cmpt276_project_iron.ui;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
+import com.example.cmpt276_project_iron.model.Violation;
 
 import java.util.Calendar;
 
@@ -36,6 +44,51 @@ public class InspectionDetails extends AppCompatActivity {
 
         TextView nonCriticalIssues = findViewById(R.id.num_nc);
         nonCriticalIssues.setText("" + restaurantInspection.getNumNonCritical()); // switch to actaul issues when thing is passed in
+
+        TextView hazardLevel = findViewById(R.id.haz);
+        hazardLevel.setText("" + restaurantInspection.getHazardLevel()); // switch to actaul issues when thing is passed in
+
+        populateListView();
+    }
+    private void setViolationIcons() {
+
+    }
+
+    private void populateListView() {
+        ArrayAdapter<Violation> adapter = new ViolationAdapter();
+        ListView vList = (ListView) findViewById(R.id.listof_violations);
+        vList.setAdapter(adapter);
+    }
+    private class ViolationAdapter extends ArrayAdapter<Violation> {
+        public ViolationAdapter() {
+            super(InspectionDetails.this, R.layout.violation_item_list, restaurantInspection.getViolationList());
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View itemView = convertView;
+            if(itemView == null) {
+                itemView = getLayoutInflater().inflate(R.layout.violation_item_list, parent, false);
+            }
+
+            // finding the violation
+            Violation violation = restaurantInspection.getViolationList().get(position);
+            // fill the view
+            ImageView vImage = (ImageView)itemView.findViewById(R.id.item_hazard);
+            vImage.setImageResource(violation.getIconId());
+
+            TextView summary = (TextView) itemView.findViewById(R.id.summary);
+            summary.setText(violation.getProblemDescription()); // switch to summary
+
+//            ImageView vImageHazard = (ImageView)itemView.findViewById(R.id.item_violation_image);
+//            vImageHazard.setImageResource(violation.getIconId());
+
+
+
+
+            return itemView;
+        }
     }
 
     public void getInspectionIndex(){
@@ -56,12 +109,4 @@ public class InspectionDetails extends AppCompatActivity {
         return intent;
 
     }
-//public static Intent getIntent(Context context, int index){
-//    Intent intent = new Intent(context, InspectionDetails.class);
-//
-//    intent.putExtra("curInspection", index);
-//
-//    return intent;
-//
-//}
 }
