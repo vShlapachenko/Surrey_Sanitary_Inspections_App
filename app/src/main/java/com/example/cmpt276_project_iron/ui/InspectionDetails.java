@@ -33,11 +33,8 @@ public class InspectionDetails extends AppCompatActivity {
         setContentView(R.layout.activity_inspection_details);
         getInspectionIndex();
 
-        Log.e(TAG, "crit issues is " + restaurantInspection.getNumCritical());
-        Log.e(TAG, "non crit issues is " + restaurantInspection.getNumNonCritical());
-
         TextView inspectionDate = findViewById(R.id.inspection_number);
-        inspectionDate.setText("" + restaurantInspection.getInspectionDate().get(Calendar.YEAR)); // switch to date when inspection is passed in
+        inspectionDate.setText("" + restaurantInspection.getInspectionDate().get(Calendar.MONTH) + " " + restaurantInspection.getInspectionDate().get(Calendar.DAY_OF_MONTH) + " "+ restaurantInspection.getInspectionDate().get(Calendar.YEAR)); // switch to date when inspection is passed in
 
         TextView criticalIssues = findViewById(R.id.num_critical_issues);
         criticalIssues.setText("" + restaurantInspection.getNumCritical()); // switch to actaul issues when thing is passed in
@@ -83,8 +80,6 @@ public class InspectionDetails extends AppCompatActivity {
 
 //            ImageView vImageHazard = (ImageView)itemView.findViewById(R.id.item_violation_image);
 //            vImageHazard.setImageResource(violation.getIconId());
-
-
 
 
             return itemView;

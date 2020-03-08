@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     android:background="@color/colorTint"
     tools:context=".ui.RestaurantDetails"
-    tools:showIn="@layout/activity_restaurant_details"
+    tools:showIn="@layout/activity_restaurant_details_custom"
     android:weightSum="2.0">
 
 
     <ImageView
         android:id="@+id/restaurantIcon"
-        android:layout_width="416dp"
-        android:layout_height="225dp"
+        android:layout_width="321dp"
+        android:layout_height="169dp"
         android:layout_marginBottom="531dp"
         android:contentDescription="@string/restaurantIconDescription"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +32,7 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/colorText"
         android:fontFamily="serif"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:text="@string/address_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +46,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:fontFamily="serif"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toEndOf="@+id/addressText"
         app:layout_constraintTop_toBottomOf="@+id/restaurantIcon" />
@@ -56,12 +56,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="serif"
         android:text="@string/coordinates_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorText"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addressText" />
 
@@ -70,11 +70,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorText"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/coordsText"
         app:layout_constraintTop_toBottomOf="@+id/restaurantAddress" />
 
@@ -83,11 +83,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginBottom="0dp"
+        android:textSize="12sp"
         android:fontFamily="serif"
         android:text="@string/inspectionHistoryText"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorText"
-        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/inspectionList"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -96,17 +97,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:textSize="12sp"
+        android:layout_marginBottom="0dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorText"
-        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/inspectionList"
         app:layout_constraintStart_toEndOf="@+id/inspectionText" />
 
     <ListView
         android:id="@+id/inspectionList"
-        android:layout_width="413dp"
-        android:layout_height="404dp"
+        android:layout_width="322dp"
+        android:layout_height="268dp"
         android:layout_marginTop="328dp"
         android:layout_weight="1.0"
         android:clickable="false"
@@ -120,6 +122,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.192" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

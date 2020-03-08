@@ -217,7 +217,7 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
 
 
         /**
-         * Set an onclick listener for the individual items such that the third activity can be launched with the necessary info
+         * Set an onclick listener for the individual items such that the third activity can be launched with the necessary info.
          */
         view.setOnClickListener(new View.OnClickListener() {
             @Override

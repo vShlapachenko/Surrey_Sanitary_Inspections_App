@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,8 +32,9 @@ public class RestaurantDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant_details);
+        displayCorrectLayout();
         setUpBackButton();
+
 
         getIntentData();
 
@@ -55,6 +58,7 @@ public class RestaurantDetails extends AppCompatActivity {
         String restaurantTitle = curRestaurant.getName() + getResources().getString(R.string.restaurantExtension);
 
         detailsBar.setTitle(restaurantTitle);
+
     }
 
     private void placeRestaurantIcon(){
@@ -65,7 +69,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void placeAddressText(){
         TextView address = findViewById(R.id.restaurantAddress);
-        String restaurantAddress = curRestaurant.getPhysicalAddress();
+        String restaurantAddress = curRestaurant.getPhysicalCity() + ", " + curRestaurant.getPhysicalAddress();
 
         address.setText(restaurantAddress);
     }
@@ -96,7 +100,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
         //curRestaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
 
-        int index = getIntent().getIntExtra("restaurantIndex", 1); //***Change defVal to 0 and delete comment
+        int index = getIntent().getIntExtra("restaurantIndex", 1);
         manager = Manager.getInstance();
         curRestaurant = manager.getRestaurantList().get(index);
     }
@@ -123,5 +127,25 @@ public class RestaurantDetails extends AppCompatActivity {
     private void setUpBackButton(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    private void displayCorrectLayout(){
+        Display dimensions = getWindowManager().getDefaultDisplay();
+        Point dimension = new Point();
+        dimensions.getSize(dimension);
+        int width = dimension.x;
+        int height = dimension.y;
+
+        /**
+         * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
+         * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
+         */
+        if (width == 480 && height == 800)
+        {
+            setContentView(R.layout.activity_restaurant_details_custom);
+        }
+        else{
+            setContentView(R.layout.activity_restaurant_details);
+        }
     }
 }
