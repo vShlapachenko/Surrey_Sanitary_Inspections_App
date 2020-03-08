@@ -29,7 +29,7 @@ public class DateConversionCalculator {
         if (daysWithin <= DAYS_THRESHOLD){
             return Long.toString(daysWithin);
         } else if(monthsBetween < MONTHS_IN_A_YEAR
-                || (monthsBetween == MONTHS_IN_A_YEAR && inspectionDay - today.get(Calendar.DATE) < 0)) {
+                || (monthsBetween == MONTHS_IN_A_YEAR && inspectionDay - today.get(Calendar.DATE) > 0)) {
             String[] monthArray = context.getResources().getStringArray(R.array.months);
             return context.getResources().getString(R.string.inspection_date,
                     monthArray[inspectionMonth], Integer.toString(inspectionDay));
