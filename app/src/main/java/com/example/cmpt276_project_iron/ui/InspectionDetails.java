@@ -44,11 +44,38 @@ public class InspectionDetails extends AppCompatActivity {
 
         TextView hazardLevel = findViewById(R.id.haz);
         hazardLevel.setText("" + restaurantInspection.getHazardLevel()); // switch to actaul issues when thing is passed in
-
+        setViolationIcons();
         populateListView();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     private void setViolationIcons() {
+        for(Violation cur : restaurantInspection.getViolationList()) {
+            if(cur.getViolationNum() < 200) {
+                // set operational icon
+                cur.setIconId(R.drawable.permit);
+            }
+            if(cur.getViolationNum() > 200 && cur.getViolationNum() < 300) {
+                // set temperature icon
+                cur.setIconId(R.drawable.thermometer);
+            }
+            if(cur.getViolationNum() > 300 && cur.getViolationNum() <= 315 && !isPestViolation(cur)) {
+                // set equipment icon
+                cur.setIconId(R.drawable.equipment);
+            }
+            if(isPestViolation(cur)) {
+                cur.setIconId(R.drawable.pest);
+            }
 
+        }
+    }
+    private boolean isPestViolation(Violation v) {
+        if(v.getViolationNum() == 304 || v.getViolationNum() == 315) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     private void populateListView() {
@@ -72,11 +99,15 @@ public class InspectionDetails extends AppCompatActivity {
             // finding the violation
             Violation violation = restaurantInspection.getViolationList().get(position);
             // fill the view
-            ImageView vImage = (ImageView)itemView.findViewById(R.id.item_hazard);
+            ImageView vImage = (ImageView)itemView.findViewById(R.id.item_violation_image);
             vImage.setImageResource(violation.getIconId());
 
+            String viol = "violation";
+            int id = getResources().getIdentifier(viol + violation.getViolationNum(), "string", getPackageName());
+            String setString = getString(id);
+
             TextView summary = (TextView) itemView.findViewById(R.id.summary);
-            summary.setText(violation.getProblemDescription()); // switch to summary
+            summary.setText(setString); // switch to summary
 
 //            ImageView vImageHazard = (ImageView)itemView.findViewById(R.id.item_violation_image);
 //            vImageHazard.setImageResource(violation.getIconId());

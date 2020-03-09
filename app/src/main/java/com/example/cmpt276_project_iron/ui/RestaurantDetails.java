@@ -100,7 +100,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
         //curRestaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
 
-        int index = getIntent().getIntExtra("restaurantIndex", 1);
+        int index = getIntent().getIntExtra("restaurantIndex", 2);
         manager = Manager.getInstance();
         curRestaurant = manager.getRestaurantList().get(index);
     }

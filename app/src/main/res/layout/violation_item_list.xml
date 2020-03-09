@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/item_violation_image"
-        android:layout_marginStart="41dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginBottom="35dp"
         android:layout_toEndOf="@+id/item_violation_image"
         android:text="@string/summary" />
 
@@ -34,8 +34,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/summary"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="-14dp"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="-16dp"
         android:layout_toEndOf="@id/summary"
         app:srcCompat="@drawable/moderate_hazard" />
 

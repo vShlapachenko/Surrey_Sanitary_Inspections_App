@@ -22,8 +22,8 @@
         android:id="@+id/inspection_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
         android:text="@string/date_of_inspection"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inspection" />
@@ -50,18 +50,21 @@
 
     <ListView
         android:id="@+id/listof_violations"
-        android:layout_width="409dp"
-        android:layout_height="563dp"
-        android:layout_marginTop="176dp"
+        android:layout_width="400dp"
+        android:layout_height="350dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/hazard_level"
+        app:layout_constraintVertical_bias="0.036" />
 
     <TextView
         android:id="@+id/inspection_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:text="@string/inspections"
         app:layout_constraintStart_toEndOf="@+id/inspection_date"
         app:layout_constraintTop_toBottomOf="@+id/inspection" />
