@@ -34,7 +34,7 @@ public class RestaurantDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
         setUpBackButton();
-        
+
         getIntentData();
 
         placeRestaurantNameText();
@@ -125,12 +125,16 @@ public class RestaurantDetails extends AppCompatActivity {
          * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
          * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
          */
-        if (width == 480 && height == 800)
-        {
+        if(width == 480 && height == 800) {
             setContentView(R.layout.activity_restaurant_details_custom);
+        }
+        else if(width == 1440 && height == 2560) {
+            setContentView(R.layout.activity_restaurant_details_custom_one);
         }
         else{
             setContentView(R.layout.activity_restaurant_details);
         }
+
+
     }
 }
