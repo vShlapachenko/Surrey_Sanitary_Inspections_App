@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 
 import java.util.Calendar;
@@ -60,133 +61,7 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
 
 
         TextView inspectionDate = view.findViewById(R.id.inspection_date);
-
-        /**
-         * Extracting the required portions to compare with the current date's year/month which should yield the necessary data
-         */
-        int year = inspection.getInspectionDate().get(Calendar.YEAR);
-        int month = inspection.getInspectionDate().get(Calendar.MONTH);
-        int day = inspection.getInspectionDate().get(Calendar.DAY_OF_MONTH);
-
-        Calendar curCal = Calendar.getInstance();
-        int curYear = curCal.get(Calendar.YEAR);
-        int curMonth = curCal.get(Calendar.MONTH);
-        int curDay = curCal.get(Calendar.DAY_OF_MONTH);
-
-        String monthName = "";
-        switch(month){
-            case Calendar.JANUARY:
-                monthName = context.getResources().getString(R.string.jan_month);
-                break;
-
-            case Calendar.FEBRUARY:
-                monthName = context.getResources().getString(R.string.feb_month);
-                break;
-
-            case Calendar.MARCH:
-                monthName = context.getResources().getString(R.string.mar_month);
-                break;
-
-            case Calendar.APRIL:
-                monthName = context.getResources().getString(R.string.apr_month);
-                break;
-
-            case Calendar.MAY:
-                monthName = context.getResources().getString(R.string.may_month);
-                break;
-
-            case Calendar.JUNE:
-                monthName = context.getResources().getString(R.string.jun_month);
-                break;
-
-            case Calendar.JULY:
-                monthName = context.getResources().getString(R.string.jul_month);
-                break;
-
-            case Calendar.AUGUST:
-                monthName = context.getResources().getString(R.string.aug_month);
-                break;
-
-            case Calendar.SEPTEMBER:
-                monthName = context.getResources().getString(R.string.sep_month);
-                break;
-
-            case Calendar.OCTOBER:
-                monthName = context.getResources().getString(R.string.oct_month);
-                break;
-
-            case Calendar.NOVEMBER:
-                monthName = context.getResources().getString(R.string.nov_month);
-                break;
-
-            case Calendar.DECEMBER:
-                monthName = context.getResources().getString(R.string.dec_month);
-
-
-        }
-        /**
-         * Attaining the max days in the month of the inspection, used for case in which it is a separate month but still less than 30 days
-         */
-        int daysInMonth = inspection.getInspectionDate().getActualMaximum(Calendar.DAY_OF_MONTH);
-
-        /**
-         *Making comparisons between the date of inspection and curDate to determine which case to display in regards to
-         *First case - within 30 days
-         */
-        if(curYear == year && curMonth == month){
-            int dayDifference = curDay - day;
-            inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
-                    Integer.toString(dayDifference), context.getResources().getString(R.string.days_text)));
-        }
-
-        if(curYear == year){
-            if(curMonth - month == 1){
-                int dayDifference = curDay + (daysInMonth - day);
-                if(dayDifference <= 30) {
-                    inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
-                            Integer.toString(dayDifference), context.getResources().getString(R.string.days_text)));
-                }
-            }
-            /**
-             * Second case - less than a year ago
-             */
-            else{
-                inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
-                        monthName, Integer.toString(day)));
-            }
-        }
-        /**
-         * Second case - second scenario + third case first scenario
-         */
-        if(curYear - year == 1){
-            int monthDifference = curMonth - month;
-            if(monthDifference < 0){ //It is within a year if the month difference is a negative number
-                inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
-                        monthName, Integer.toString(day)));
-            }
-            else if(monthDifference == 0){
-                int dayDifference = curDay - day;
-                if(dayDifference < 0){
-                    inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
-                            monthName, Integer.toString(day)));
-                }
-                else{
-                    inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
-                            monthName, Integer.toString(year)));
-                }
-            }
-            else{
-                inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
-                        monthName, Integer.toString(year)));
-            }
-        }
-        /**
-         * Third case - more than a year ago , second scenario
-         */
-        if(curYear - year > 1){
-            inspectionDate.setText(context.getResources().getString(R.string.inspection_date,
-                    monthName, Integer.toString(year)));
-        }
+        inspectionDate.setText(DateConversionCalculator.getFormattedDate(view.getContext(), inspection.getInspectionDate()));
 
 
         /**
