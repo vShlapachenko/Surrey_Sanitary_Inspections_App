@@ -34,8 +34,7 @@ public class RestaurantDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
         setUpBackButton();
-
-
+        
         getIntentData();
 
         placeRestaurantNameText();
@@ -55,9 +54,10 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void placeRestaurantNameText(){
         ActionBar detailsBar = getSupportActionBar();
-        String restaurantTitle = curRestaurant.getName() + getResources().getString(R.string.restaurantExtension);
+        String restaurantTitle = curRestaurant.getName();
 
         detailsBar.setTitle(restaurantTitle);
+        detailsBar.setSubtitle(getResources().getString(R.string.restaurantExtension));
 
     }
 
@@ -97,28 +97,13 @@ public class RestaurantDetails extends AppCompatActivity {
     }
 
     private void getIntentData(){
-
-        //curRestaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
-
         int index = getIntent().getIntExtra("restaurantIndex", 0);
         manager = Manager.getInstance();
         curRestaurant = manager.getRestaurantList().get(index);
     }
 
-    /*Intent via pass object
-    public static Intent getIntent(Context context, Restaurant restaurant){
-        // .class (not .this) as it is being created when launched
-        Intent intent = new Intent(context, RestaurantDetails.class);
-
-        //To enable, related classes implement the serializable interface
-        intent.putExtra("restaurant", restaurant);
-
-        return intent;
-    }*/
-
     public static Intent getIntent(Context context, int restaurantIndex){
         Intent intent = new Intent(context, RestaurantDetails.class);
-
         intent.putExtra("restaurantIndex", restaurantIndex);
 
         return intent;

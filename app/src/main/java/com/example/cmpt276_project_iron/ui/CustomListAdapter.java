@@ -18,7 +18,6 @@ import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
