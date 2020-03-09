@@ -34,9 +34,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/summary"
-        android:layout_marginStart="46dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="-16dp"
         android:layout_toEndOf="@id/summary"
         app:srcCompat="@drawable/moderate_hazard" />
+
+    <TextView
+        android:id="@+id/no_violations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/summary"
+        android:layout_alignEnd="@+id/summary"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:text="@string/no_violations"
+        android:visibility="invisible" />
 
 </RelativeLayout>

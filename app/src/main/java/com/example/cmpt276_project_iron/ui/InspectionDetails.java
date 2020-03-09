@@ -2,7 +2,9 @@ package com.example.cmpt276_project_iron.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,18 +16,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Violation;
 
 import java.util.Calendar;
-
+/*activity that deals with the inspection details such as date, hazard level, critical
+and non critical violations and has a list of violations
+ */
 
 public class InspectionDetails extends AppCompatActivity {
     private final String TAG = "InspectActivity";
     private Inspection restaurantInspection;
+
     // index to find inspection in inspection manager must be passed in
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +40,13 @@ public class InspectionDetails extends AppCompatActivity {
         setContentView(R.layout.activity_inspection_details);
         getInspectionIndex();
 
+        ActionBar detailsBar = getSupportActionBar();
+        detailsBar.setTitle("Inspection Menu");
+
+
         TextView inspectionDate = findViewById(R.id.inspection_number);
-        inspectionDate.setText("" + restaurantInspection.getInspectionDate().get(Calendar.MONTH) + " " + restaurantInspection.getInspectionDate().get(Calendar.DAY_OF_MONTH) + " "+ restaurantInspection.getInspectionDate().get(Calendar.YEAR)); // switch to date when inspection is passed in
+        DateConversionCalculator date = new DateConversionCalculator();
+        inspectionDate.setText(date.getFormattedDate(this, restaurantInspection.getInspectionDate()) + "  " + restaurantInspection.getInspectionDate().get(Calendar.YEAR));
 
         TextView criticalIssues = findViewById(R.id.num_critical_issues);
         criticalIssues.setText("" + restaurantInspection.getNumCritical()); // switch to actaul issues when thing is passed in
@@ -44,11 +56,24 @@ public class InspectionDetails extends AppCompatActivity {
 
         TextView hazardLevel = findViewById(R.id.haz);
         hazardLevel.setText("" + restaurantInspection.getHazardLevel()); // switch to actaul issues when thing is passed in
-        setViolationIcons();
-        populateListView();
+        if(restaurantInspection.getNumCritical() > 0 || restaurantInspection.getNumNonCritical() > 0) {
+            setViolationIcons();
+            populateListView();
+            setHazardIcons();
+        }
+//        else if(restaurantInspection.getViolationList() == null){ // do later breaking thing right now
+//            noViolations();
+//        }
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+//    private void noViolations() {
+//        TextView summary = (TextView) findViewById(R.id.no_violations);
+//        summary.setText(getResources().getString(R.string.no_violation_text));
+//    }
+
     private void setViolationIcons() {
         for(Violation cur : restaurantInspection.getViolationList()) {
             if(cur.getViolationNum() < 200) {
@@ -69,6 +94,16 @@ public class InspectionDetails extends AppCompatActivity {
 
         }
     }
+    private void setHazardIcons() {
+        for(Violation cur : restaurantInspection.getViolationList()) {
+            if(cur.isCritical()) {
+                cur.setHazIconId(R.drawable.high_hazard);
+            }
+            else {
+                cur.setHazIconId(R.drawable.low_hazard);
+            }
+        }
+    }
     private boolean isPestViolation(Violation v) {
         if(v.getViolationNum() == 304 || v.getViolationNum() == 315) {
             return true;
@@ -84,6 +119,7 @@ public class InspectionDetails extends AppCompatActivity {
         vList.setAdapter(adapter);
     }
     private class ViolationAdapter extends ArrayAdapter<Violation> {
+        private Context context = getContext();
         public ViolationAdapter() {
             super(InspectionDetails.this, R.layout.violation_item_list, restaurantInspection.getViolationList());
         }
@@ -109,12 +145,25 @@ public class InspectionDetails extends AppCompatActivity {
             TextView summary = (TextView) itemView.findViewById(R.id.summary);
             summary.setText(setString); // switch to summary
 
-//            ImageView vImageHazard = (ImageView)itemView.findViewById(R.id.item_violation_image);
-//            vImageHazard.setImageResource(violation.getIconId());
+            ImageView vImageHazard = (ImageView)itemView.findViewById(R.id.item_hazard);
+            vImageHazard.setImageResource(violation.getHazIconId());
 
+            if(violation.isCritical()) {
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
+            }
+            else {
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
+            }
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), violation.getProblemDescription(), Toast.LENGTH_LONG).show();
+                }
+            });
 
             return itemView;
         }
+
     }
 
     public void getInspectionIndex(){

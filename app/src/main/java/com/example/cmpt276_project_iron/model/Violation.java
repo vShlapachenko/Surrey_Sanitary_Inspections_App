@@ -10,6 +10,15 @@ public class Violation {
     private final String problemDescription;
     private final boolean repeat;
     private int iconId;
+    private int hazIconId;
+
+    public int getHazIconId() {
+        return hazIconId;
+    }
+
+    public void setHazIconId(int hazIconId) {
+        this.hazIconId = hazIconId;
+    }
 
     public int getIconId() {
         return iconId;

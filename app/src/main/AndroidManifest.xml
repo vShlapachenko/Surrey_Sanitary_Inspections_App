@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.InspectionDetails"
             android:parentActivityName=".ui.RestaurantDetails">
+
         </activity>
         <activity android:name=".ui.RestaurantDetails"
             android:parentActivityName=".ui.RestaurantDetails"> <!--Change to Alex's class name-->

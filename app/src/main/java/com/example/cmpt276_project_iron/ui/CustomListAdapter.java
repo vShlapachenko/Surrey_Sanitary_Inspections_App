@@ -222,9 +222,6 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //currently disabled, however, once the third activity is up and running re-enable to have the data
-                //of the clicked inspection (passed as the Inspection itself) passed into the third activity (rename as needed)
-                //passing index/position as requested
 
                 Intent intent = InspectionDetails.getIntent(v.getContext(), position, inspections.get(position).getTrackingNumber());
 
