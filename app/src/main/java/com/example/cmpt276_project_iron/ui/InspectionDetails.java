@@ -46,6 +46,21 @@ public class InspectionDetails extends AppCompatActivity {
         ActionBar detailsBar = getSupportActionBar();
         detailsBar.setTitle("Inspection Details");
 
+        setText();
+
+        if(restaurantInspection.getNumCritical() > 0 || restaurantInspection.getNumNonCritical() > 0) {
+            setViolationIcons();
+            populateListView();
+            setHazardIcons();
+        }
+        else if(restaurantInspection.getViolationList() == null){ // do later breaking thing right now
+            noViolations();
+        }
+
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    private void setText() {
 
         TextView inspectionDate = findViewById(R.id.inspection_number);
 
@@ -59,17 +74,6 @@ public class InspectionDetails extends AppCompatActivity {
 
         TextView hazardLevel = findViewById(R.id.haz);
         hazardLevel.setText(String.valueOf(restaurantInspection.getHazardLevel())); // switch to actaul issues when thing is passed in
-        if(restaurantInspection.getNumCritical() > 0 || restaurantInspection.getNumNonCritical() > 0) {
-            setViolationIcons();
-            populateListView();
-            setHazardIcons();
-        }
-        else if(restaurantInspection.getViolationList() == null){ // do later breaking thing right now
-            noViolations();
-        }
-
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void noViolations() {
