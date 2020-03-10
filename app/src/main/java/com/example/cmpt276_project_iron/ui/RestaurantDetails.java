@@ -35,6 +35,7 @@ public class RestaurantDetails extends AppCompatActivity {
         displayCorrectLayout();
         setUpBackButton();
 
+
         getIntentData();
 
         placeRestaurantNameText();
@@ -134,7 +135,5 @@ public class RestaurantDetails extends AppCompatActivity {
         else{
             setContentView(R.layout.activity_restaurant_details);
         }
-
-
     }
 }

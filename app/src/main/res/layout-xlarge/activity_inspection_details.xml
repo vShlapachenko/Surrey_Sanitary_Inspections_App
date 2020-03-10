@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/listof_violations"
+        android:layout_width="0dp"
+        android:layout_height="950dp"
+        android:layout_marginTop="276dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/haz3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/hazard"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/hazard_level3"
+        app:layout_constraintTop_toBottomOf="@+id/num_nc3" />
+
+    <TextView
+        android:id="@+id/hazard_level3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/hazard_level"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/non_critical3" />
+
+    <TextView
+        android:id="@+id/non_critical3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/non_critical_issues"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/crit_issues3" />
+
+    <TextView
+        android:id="@+id/num_nc3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/noncrit"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/non_critical3"
+        app:layout_constraintTop_toBottomOf="@+id/num_critical_issues3" />
+
+    <TextView
+        android:id="@+id/crit_issues3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/critical_issues_inspection"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_date3" />
+
+    <TextView
+        android:id="@+id/num_critical_issues3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/crticalissues"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/crit_issues3"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_number3" />
+
+    <TextView
+        android:id="@+id/inspection_number3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/inspections"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/inspection_date3"
+        app:layout_constraintTop_toBottomOf="@+id/inspection2" />
+
+    <TextView
+        android:id="@+id/inspection_date3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/date_of_inspection"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inspection2" />
+
+    <TextView
+        android:id="@+id/inspection2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/inspection_report"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

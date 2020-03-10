@@ -12,6 +12,7 @@
     <string name="hazardIconDescription">displays cur hazard level</string>
     <string name="no_inspection_text">No inspections available</string>
     <string name="restaurantExtension">Restaurant Details</string>
+    <string name="no_violation_text">No violations available</string>
     <string name="days_text"> days</string>
     <string-array name="months">
         <item>February</item>
@@ -66,5 +67,7 @@
     <string name="violation404">Employee smoking close to food</string>
     <string name="violation501">Operator lacks FOODSAFE level 1</string>
     <string name="violation502">Employee lacks FOODSAFE level 1</string>
+    <string name="summary">Summary</string>
+    <string name="no_violations">No violations</string>
 
 </resources>
