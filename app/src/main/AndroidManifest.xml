@@ -21,8 +21,8 @@
 
 
 
-        <activity android:name=".ui.RestaurantDetails"
-            android:parentActivityName=".ui.RestaurantDetails"> <!--Change to Alex's class name-->
+        <activity android:name=".ui.RestaurantList"
+            android:parentActivityName=".ui.RestaurantList"> <!--Change to Alex's class name-->
 
             <intent-filter> <!--Remove intent filter-->
                 <action android:name="android.intent.action.MAIN" />

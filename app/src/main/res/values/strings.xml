@@ -78,5 +78,6 @@
     <string name="violation404">Employee smoking close to food</string>
     <string name="violation501">Operator lacks FOODSAFE level 1</string>
     <string name="violation502">Employee lacks FOODSAFE level 1</string>
+    <string name="no_restaurants_text">No Restaurants Found... Try Again Later.</string>
 
 </resources>

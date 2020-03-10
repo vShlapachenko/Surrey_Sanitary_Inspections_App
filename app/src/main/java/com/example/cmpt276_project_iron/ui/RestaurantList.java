@@ -3,11 +3,16 @@ package com.example.cmpt276_project_iron.ui;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Manager;
+import com.example.cmpt276_project_iron.model.Restaurant;
+
+import java.util.List;
 
 public class RestaurantList extends AppCompatActivity {
     private Manager manager;
@@ -16,25 +21,35 @@ public class RestaurantList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
-        setUpBackButton();
+        //setUpBackButton();
 
 
         manager = Manager.getInstance();
 
-        placeRestaurantNameText();
-
-        placeRestaurantIcon();
-
-        placeAddressText();
-
-        placeGPScoords();
-
-        /**
-         * Creates and fills the list of inspections with necessary data
-         */
-        inflateInspectionList();
+        inflateRestaurantList();
 
     }
+
+    private void inflateRestaurantList(){
+        List<Restaurant> restaurants = manager.getRestaurantList();
+
+        if(restaurants == null){
+            TextView emptyListText = findViewById(R.id.noRestaurantsText);
+            emptyListText.setText(getResources().getString(R.string.no_restaurants_text));
+        }
+        else {
+            ListView restaurantList = findViewById(R.id.inspectionList);
+            RestaurantListAdapter adapter = new RestaurantListAdapter(this, R.layout.restaurant_list_item, restaurants);
+            adapter.notifyDataSetChanged();
+
+            restaurantList.setAdapter(adapter);
+        }
+    }
+
+    /*private void setUpBackButton(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }*/
 
     private void displayCorrectLayout(){
         Display dimensions = getWindowManager().getDefaultDisplay();

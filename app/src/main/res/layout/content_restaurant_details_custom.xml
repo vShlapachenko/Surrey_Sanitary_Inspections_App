@@ -93,7 +93,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/noRestaurantsText"
+        android:id="@+id/noInspectionsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -106,7 +106,7 @@
         app:layout_constraintStart_toEndOf="@+id/inspectionText" />
 
     <ListView
-        android:id="@+id/restaurantList"
+        android:id="@+id/inspectionList"
         android:layout_width="322dp"
         android:layout_height="268dp"
         android:layout_marginTop="328dp"
