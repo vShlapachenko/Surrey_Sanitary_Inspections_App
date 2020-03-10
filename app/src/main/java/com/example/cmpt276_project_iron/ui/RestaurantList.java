@@ -6,6 +6,7 @@ import android.view.Display;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cmpt276_project_iron.R;
@@ -21,8 +22,8 @@ public class RestaurantList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
-        //setUpBackButton();
-
+        placeActionBarText();
+        setUpBackButton();
 
         manager = Manager.getInstance();
 
@@ -38,7 +39,7 @@ public class RestaurantList extends AppCompatActivity {
             emptyListText.setText(getResources().getString(R.string.no_restaurants_text));
         }
         else {
-            ListView restaurantList = findViewById(R.id.inspectionList);
+            ListView restaurantList = findViewById(R.id.restaurantList);
             RestaurantListAdapter adapter = new RestaurantListAdapter(this, R.layout.restaurant_list_item, restaurants);
             adapter.notifyDataSetChanged();
 
@@ -46,10 +47,18 @@ public class RestaurantList extends AppCompatActivity {
         }
     }
 
-    /*private void setUpBackButton(){
+    private void placeActionBarText(){
+        ActionBar detailsBar = getSupportActionBar();
+        String restaurantTitle = getResources().getString(R.string.restaurant_list_title);
+
+        detailsBar.setTitle(restaurantTitle);
+
+    }
+
+    private void setUpBackButton(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    }*/
+    }
 
     private void displayCorrectLayout(){
         Display dimensions = getWindowManager().getDefaultDisplay();
@@ -64,10 +73,10 @@ public class RestaurantList extends AppCompatActivity {
          */
         if (width == 480 && height == 800)
         {
-            setContentView(R.layout.activity_restaurant_details_custom);
+            setContentView(R.layout.activity_restaurant_list);
         }
         else{
-            setContentView(R.layout.activity_restaurant_details);
+            setContentView(R.layout.activity_restaurant_list);
         }
     }
 }

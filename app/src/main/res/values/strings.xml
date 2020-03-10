@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">CMPT276_Project_Iron</string>
+    <string name="inspection_report">Inspection Report</string>
+    <string name="date_of_inspection">Date of Inspection:</string>
+    <string name="critical_issues_inspection">Critical Issues:</string>
+    <string name="hazard_level">Hazard Level:</string>
+    <string name="inspections">#Inspections</string>
+    <string name="crticalissues">#CrticalIssues</string>
+    <string name="hazard">hazard</string>
+    <string name="non_critical_issues">Non-Critical Issues:</string>
+    <string name="noncrit">#NonCrit</string>
     <string name="restaurantIconDescription">resprents the restaurant icon</string>
     <string name="address_text">Address:</string>
     <string name="coordinates_text">Coordinates:</string>
@@ -11,6 +20,7 @@
     <string name="date_text">Date:</string>
     <string name="hazardIconDescription">displays cur hazard level</string>
     <string name="no_inspection_text">No inspections available</string>
+    <string name="no_violation_text">No violations available</string>
     <string name="restaurantExtension">\'s Details</string>
     <string name="days_text"> days</string>
     <string name="feb_month">February</string>
@@ -78,6 +88,9 @@
     <string name="violation404">Employee smoking close to food</string>
     <string name="violation501">Operator lacks FOODSAFE level 1</string>
     <string name="violation502">Employee lacks FOODSAFE level 1</string>
-    <string name="no_restaurants_text">No Restaurants Found... Try Again Later.</string>
+    <string name="summary">Summary</string>
+    <string name="no_violations">No violations</string>
+    <string name="no_restaurants_text">No Restaurants Found. Please Try Again...</string>
+    <string name="restaurant_list_title">Restaurants</string>
 
 </resources>

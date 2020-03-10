@@ -46,7 +46,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.restaurant_list_item, null);
+        final View view = inflater.inflate(R.layout.restaurant_list_item, null);
         view.setClickable(true);
 
         Restaurant restaurant = restaurants.get(position);
@@ -77,18 +77,14 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         if(hazardLevel.equalsIgnoreCase("Low")){
             hazardIcon.setImageResource(R.drawable.low_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
         }
         else if(hazardLevel.equalsIgnoreCase("Moderate")){
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorModerateHazard));
         }
         else if(hazardLevel.equalsIgnoreCase("High")){
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
-
         }
 
 
@@ -98,14 +94,15 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (view.isVerticalScrollBarEnabled() == false) {
+                    Intent intent = new Intent(context, RestaurantDetails.class);
+                    intent.putExtra("restaurantIndex", position);
 
-                Intent intent = new Intent();
-                intent.putExtra("index", position);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
 
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-
-                Log.i("Position_clicked", position + " ");
+                    Log.i("Position_clicked", position + " ");
+                }
             }
         });
 
