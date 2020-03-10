@@ -114,7 +114,7 @@ public class InspectionDetails extends AppCompatActivity {
 
     private void populateListView() {
         ArrayAdapter<Violation> adapter = new ViolationAdapter();
-        ListView vList = (ListView) findViewById(R.id.listof_violations);
+        ListView vList = findViewById(R.id.listof_violations);
         vList.setAdapter(adapter);
     }
     private class ViolationAdapter extends ArrayAdapter<Violation> {
@@ -133,17 +133,17 @@ public class InspectionDetails extends AppCompatActivity {
 
 
             Violation violation = restaurantInspection.getViolationList().get(position);
-            ImageView vImage = (ImageView)itemView.findViewById(R.id.item_violation_image);
+            ImageView vImage = itemView.findViewById(R.id.item_violation_image);
             vImage.setImageResource(violation.getIconId());
 
             String viol = "violation";
             int id = getResources().getIdentifier(viol + violation.getViolationNum(), "string", getPackageName());
             String setString = getString(id);
 
-            TextView summary = (TextView) itemView.findViewById(R.id.summary);
+            TextView summary = itemView.findViewById(R.id.summary);
 
             summary.setText(setString);
-            ImageView vImageHazard = (ImageView)itemView.findViewById(R.id.item_hazard);
+            ImageView vImageHazard = itemView.findViewById(R.id.item_hazard);
             vImageHazard.setImageResource(violation.getHazIconId());
 
             if(violation.isCritical()) {
