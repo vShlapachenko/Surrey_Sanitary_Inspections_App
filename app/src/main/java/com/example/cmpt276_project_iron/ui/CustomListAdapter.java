@@ -17,7 +17,9 @@ import androidx.core.content.ContextCompat;
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
+import com.example.cmpt276_project_iron.model.Restaurant;
 
+import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.List;
 
@@ -95,14 +97,11 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //currently disabled, however, once the third activity is up and running re-enable to have the data
-                //of the clicked inspection (passed as the Inspection itself) passed into the third activity (rename as needed)
-                //passing index/position as requested
 
-                /*Intent intent = InspectionDetails.getIntent(this, position);
+                Intent intent = InspectionDetails.getIntent(v.getContext(), position, inspections.get(position).getTrackingNumber());
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);*/
+                context.startActivity(intent);
 
                 Log.i("Position_clicked", position + " ");
             }

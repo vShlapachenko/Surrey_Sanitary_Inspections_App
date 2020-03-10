@@ -19,8 +19,6 @@
         android:configChanges="keyboard|orientation|keyboardHidden"
         tools:ignore="GoogleAppIndexingWarning">
 
-
-
         <activity android:name=".ui.RestaurantDetails"
             android:parentActivityName=".ui.RestaurantDetails"> <!--Change to Alex's class name-->
 
