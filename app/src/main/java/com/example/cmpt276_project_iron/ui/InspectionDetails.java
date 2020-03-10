@@ -33,7 +33,10 @@ public class InspectionDetails extends AppCompatActivity {
     private final String TAG = "InspectActivity";
     private Inspection restaurantInspection;
 
-    // index to find inspection in inspection manager must be passed in
+    private final int maxPermitViolationNum = 200;
+    private final int maxTemperatureViolationNum = 300;
+    private final int maxEquipmentViolationNum = 315;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,54 +44,50 @@ public class InspectionDetails extends AppCompatActivity {
         getInspectionIndex();
 
         ActionBar detailsBar = getSupportActionBar();
-        detailsBar.setTitle("Inspection Menu");
+        detailsBar.setTitle("Inspection Details");
 
 
         TextView inspectionDate = findViewById(R.id.inspection_number);
-        DateConversionCalculator date = new DateConversionCalculator();
-        inspectionDate.setText(date.getFormattedDate(this, restaurantInspection.getInspectionDate()) + "  " + restaurantInspection.getInspectionDate().get(Calendar.YEAR));
+
+        inspectionDate.setText(DateConversionCalculator.getFullFormattedDate(this, restaurantInspection.getInspectionDate()));
 
         TextView criticalIssues = findViewById(R.id.num_critical_issues);
-        criticalIssues.setText("" + restaurantInspection.getNumCritical()); // switch to actaul issues when thing is passed in
+        criticalIssues.setText(String.valueOf(restaurantInspection.getNumCritical())); // switch to actaul issues when thing is passed in
 
         TextView nonCriticalIssues = findViewById(R.id.num_nc);
-        nonCriticalIssues.setText("" + restaurantInspection.getNumNonCritical()); // switch to actaul issues when thing is passed in
+        nonCriticalIssues.setText(String.valueOf(restaurantInspection.getNumNonCritical())); // switch to actaul issues when thing is passed in
 
         TextView hazardLevel = findViewById(R.id.haz);
-        hazardLevel.setText("" + restaurantInspection.getHazardLevel()); // switch to actaul issues when thing is passed in
+        hazardLevel.setText(String.valueOf(restaurantInspection.getHazardLevel())); // switch to actaul issues when thing is passed in
         if(restaurantInspection.getNumCritical() > 0 || restaurantInspection.getNumNonCritical() > 0) {
             setViolationIcons();
             populateListView();
             setHazardIcons();
         }
-//        else if(restaurantInspection.getViolationList() == null){ // do later breaking thing right now
-//            noViolations();
-//        }
+        else if(restaurantInspection.getViolationList() == null){ // do later breaking thing right now
+            noViolations();
+        }
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-//    private void noViolations() {
-//        TextView summary = (TextView) findViewById(R.id.no_violations);
-//        summary.setText(getResources().getString(R.string.no_violation_text));
-//    }
+    private void noViolations() {
+        Toast.makeText(getApplicationContext(), "No Violations available", Toast.LENGTH_LONG).show();
+    }
 
     private void setViolationIcons() {
         for(Violation cur : restaurantInspection.getViolationList()) {
-            if(cur.getViolationNum() < 200) {
-                // set operational icon
+            if(cur.getViolationNum() < maxPermitViolationNum) {
                 cur.setIconId(R.drawable.permit);
             }
-            if(cur.getViolationNum() > 200 && cur.getViolationNum() < 300) {
-                // set temperature icon
+            else if(cur.getViolationNum() > maxPermitViolationNum && cur.getViolationNum() < maxTemperatureViolationNum) {
                 cur.setIconId(R.drawable.thermometer);
             }
-            if(cur.getViolationNum() > 300 && cur.getViolationNum() <= 315 && !isPestViolation(cur)) {
-                // set equipment icon
+            else if(cur.getViolationNum() > maxTemperatureViolationNum && cur.getViolationNum() <= maxEquipmentViolationNum && !isPestViolation(cur)) {
                 cur.setIconId(R.drawable.equipment);
             }
-            if(isPestViolation(cur)) {
+            else if(isPestViolation(cur)) {
                 cur.setIconId(R.drawable.pest);
             }
 
@@ -132,9 +131,8 @@ public class InspectionDetails extends AppCompatActivity {
                 itemView = getLayoutInflater().inflate(R.layout.violation_item_list, parent, false);
             }
 
-            // finding the violation
+
             Violation violation = restaurantInspection.getViolationList().get(position);
-            // fill the view
             ImageView vImage = (ImageView)itemView.findViewById(R.id.item_violation_image);
             vImage.setImageResource(violation.getIconId());
 
@@ -143,8 +141,8 @@ public class InspectionDetails extends AppCompatActivity {
             String setString = getString(id);
 
             TextView summary = (TextView) itemView.findViewById(R.id.summary);
-            summary.setText(setString); // switch to summary
 
+            summary.setText(setString);
             ImageView vImageHazard = (ImageView)itemView.findViewById(R.id.item_hazard);
             vImageHazard.setImageResource(violation.getHazIconId());
 
