@@ -103,7 +103,7 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
 
-                //Log.i("Position_clicked", position + " ");
+                Log.i("Position_clicked", position + " ");
             }
         });
 

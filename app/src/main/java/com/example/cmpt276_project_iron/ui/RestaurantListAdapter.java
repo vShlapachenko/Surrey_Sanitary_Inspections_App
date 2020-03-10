@@ -27,7 +27,6 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
     private int resource;
     private List<Restaurant> restaurants;
     private Manager manager;
-    private DateConversionCalculator dateCalculator;
 
 
     public RestaurantListAdapter(Context context, int resource, List<Restaurant> restaurants){
@@ -38,7 +37,6 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         this.restaurants = restaurants;
 
         this.manager = Manager.getInstance();
-        this.dateCalculator = new DateConversionCalculator();
     }
 
     @NonNull
