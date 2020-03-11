@@ -28,6 +28,18 @@ public class Violation {
         this.iconId = iconId;
     }
 
+    @Override
+    public String toString() {
+        return "Violation{" +
+                "violationNum=" + violationNum +
+                ", critical=" + critical +
+                ", problemDescription='" + problemDescription + '\'' +
+                ", repeat=" + repeat +
+                ", iconId=" + iconId +
+                ", hazIconId=" + hazIconId +
+                '}';
+    }
+
     public Violation(int violationNum, boolean critical, String problemDescription, boolean repeat) {
         this.violationNum = violationNum;
         this.critical = critical;
