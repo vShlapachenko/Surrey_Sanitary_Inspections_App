@@ -46,7 +46,6 @@ public class InspectionDetails extends AppCompatActivity {
 
         ActionBar detailsBar = getSupportActionBar();
         detailsBar.setTitle("Inspection Details");
-        logList();
         setText();
 
         if(restaurantInspection.getNumCritical() > 0 || restaurantInspection.getNumNonCritical() > 0) {
@@ -60,11 +59,6 @@ public class InspectionDetails extends AppCompatActivity {
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-    private void logList() {
-        for(Violation v : restaurantInspection.getViolationList()) {
-            Log.e(TAG, v.toString());
-        }
     }
     private void setText() {
 
