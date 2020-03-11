@@ -96,8 +96,6 @@ public class InspectionDetails extends AppCompatActivity {
             }
             else if(isPestViolation(cur)) {
                 cur.setIconId(R.drawable.pest);
-            } else {
-                cur.setIconId(R.drawable.pest);
             }
             else {
                 cur.setIconId(R.drawable.permit);
