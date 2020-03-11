@@ -116,6 +116,8 @@
         android:contentDescription="@string/hazardIconDescription"
         android:paddingBottom="6dp"
         android:textSize="16sp"
+        android:maxHeight="50dp"
+        android:maxWidth="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/alert_dark_frame" />

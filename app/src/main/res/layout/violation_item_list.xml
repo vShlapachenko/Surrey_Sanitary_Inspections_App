@@ -35,7 +35,10 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/summary"
         android:layout_marginStart="16dp"
+        android:adjustViewBounds="true"
         android:layout_marginTop="-16dp"
+        android:maxHeight="50dp"
+        android:maxWidth="50dp"
         android:layout_toEndOf="@id/summary"
         app:srcCompat="@drawable/moderate_hazard" />
 
