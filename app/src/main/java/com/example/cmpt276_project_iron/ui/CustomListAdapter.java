@@ -66,9 +66,8 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         inspectionDate.setText(DateConversionCalculator.getFormattedDate(view.getContext(), inspection.getInspectionDate()));
 
 
-        /**
-         * Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
-         */
+
+        //Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
         String hazardLevel = inspection.getHazardLevel();
         ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
 
@@ -76,24 +75,18 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
             hazardIcon.setImageResource(R.drawable.low_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
-
-        }
-        else if(hazardLevel.equalsIgnoreCase("Moderate")){
+        } else if(hazardLevel.equalsIgnoreCase("Moderate")){
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorModerateHazard));
-        }
-        else if(hazardLevel.equalsIgnoreCase("High")){
+        } else if(hazardLevel.equalsIgnoreCase("High")){
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
 
         }
 
-
-        /**
-         * Set an onclick listener for the individual items such that the third activity can be launched with the necessary info.
-         */
+         //Set an onclick listener for the individual items such that the third activity can be launched with the necessary info.
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,8 +95,6 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
-
-                Log.i("Position_clicked", position + " ");
             }
         });
 

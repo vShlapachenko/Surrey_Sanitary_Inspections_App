@@ -35,30 +35,20 @@ public class RestaurantDetails extends AppCompatActivity {
         displayCorrectLayout();
         setUpBackButton();
 
-
         getIntentData();
-
         placeRestaurantNameText();
-
         placeRestaurantIcon();
-
         placeAddressText();
-
         placeGPScoords();
 
-        /**
-         * Creates and fills the list of inspections with necessary data
-         */
+        //Creates and fills the list of inspections with necessary data
         inflateInspectionList();
-
     }
 
     private void placeRestaurantNameText(){
         ActionBar detailsBar = getSupportActionBar();
         String restaurantTitle = curRestaurant.getName() + getResources().getString(R.string.restaurantExtension);
-
         detailsBar.setTitle(restaurantTitle);
-
     }
 
     private void placeRestaurantIcon(){
@@ -69,64 +59,45 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void placeAddressText(){
         TextView address = findViewById(R.id.restaurantAddress);
-        String restaurantAddress = curRestaurant.getPhysicalCity() + ", " + curRestaurant.getPhysicalAddress();
-
+        String restaurantAddress = getResources().getString(R.string.restaurant_address,
+                curRestaurant.getPhysicalAddress(),curRestaurant.getPhysicalCity());
         address.setText(restaurantAddress);
     }
 
     private void placeGPScoords(){
         TextView coordinates = findViewById(R.id.restaurantCoords);
-        String restaurantCoords = curRestaurant.getLatitude() + ", " + curRestaurant.getLongitude();
+        String restaurantCoords = getResources().getString(R.string.restaurant_coordinates,
+                curRestaurant.getLatitude(), curRestaurant.getLongitude());
         coordinates.setText(restaurantCoords);
     }
 
     private void inflateInspectionList(){
         List<Inspection> inspections = manager.getInspectionMap().get(curRestaurant.getTrackingNumber());
-
         if(inspections == null){
             TextView emptyListText = findViewById(R.id.noInspectionsText);
             emptyListText.setText(getResources().getString(R.string.no_inspection_text));
-        }
-        else {
+        } else {
             ListView inspectionList = findViewById(R.id.inspectionList);
             CustomListAdapter adapter = new CustomListAdapter(this, R.layout.inspection_list_item, inspections);
             adapter.notifyDataSetChanged();
-
             inspectionList.setAdapter(adapter);
         }
     }
 
     private void getIntentData(){
-
-        //curRestaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
-
         int index = getIntent().getIntExtra("restaurantIndex", 1);
         manager = Manager.getInstance();
         curRestaurant = manager.getRestaurantList().get(index);
     }
 
-    /*Intent via pass object
-    public static Intent getIntent(Context context, Restaurant restaurant){
-        // .class (not .this) as it is being created when launched
-        Intent intent = new Intent(context, RestaurantDetails.class);
-
-        //To enable, related classes implement the serializable interface
-        intent.putExtra("restaurant", restaurant);
-
-        return intent;
-    }*/
-
     public static Intent getIntent(Context context, int restaurantIndex){
         Intent intent = new Intent(context, RestaurantDetails.class);
-
         intent.putExtra("restaurantIndex", restaurantIndex);
-
         return intent;
     }
 
     private void setUpBackButton(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     private void displayCorrectLayout(){
@@ -136,7 +107,7 @@ public class RestaurantDetails extends AppCompatActivity {
         int width = dimension.x;
         int height = dimension.y;
 
-        /**
+        /*
          * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
          * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
          */

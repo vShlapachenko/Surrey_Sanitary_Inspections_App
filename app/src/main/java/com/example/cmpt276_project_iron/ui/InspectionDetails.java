@@ -30,13 +30,14 @@ and non critical violations and has a list of violations
  */
 
 public class InspectionDetails extends AppCompatActivity {
-    private final String TAG = "InspectActivity";
-    private Inspection restaurantInspection;
 
+    public static final String CUR_INSPECTION_KEY = "curInspection";
+    public static final String CUR_INSPECTION_T_NUMBER_KEY = "curInspectionTNumber";
     private final int maxPermitViolationNum = 200;
     private final int maxTemperatureViolationNum = 300;
     private final int maxEquipmentViolationNum = 401;
 
+    private Inspection restaurantInspection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,6 @@ public class InspectionDetails extends AppCompatActivity {
         setContentView(R.layout.activity_inspection_details);
         getInspectionIndex();
 
-        ActionBar detailsBar = getSupportActionBar();
-        detailsBar.setTitle("Inspection Details");
         setText();
 
         if(restaurantInspection.getNumCritical() > 0 || restaurantInspection.getNumNonCritical() > 0) {
@@ -53,10 +52,9 @@ public class InspectionDetails extends AppCompatActivity {
             populateListView();
             setHazardIcons();
         }
-        else if(restaurantInspection.getViolationList() == null){ // do later breaking thing right now
+        else if(restaurantInspection.getViolationList() == null){
             noViolations();
         }
-
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -67,17 +65,18 @@ public class InspectionDetails extends AppCompatActivity {
         inspectionDate.setText(DateConversionCalculator.getFullFormattedDate(this, restaurantInspection.getInspectionDate()));
 
         TextView criticalIssues = findViewById(R.id.num_critical_issues);
-        criticalIssues.setText(String.valueOf(restaurantInspection.getNumCritical())); // switch to actaul issues when thing is passed in
+        criticalIssues.setText(String.valueOf(restaurantInspection.getNumCritical()));
 
         TextView nonCriticalIssues = findViewById(R.id.num_nc);
-        nonCriticalIssues.setText(String.valueOf(restaurantInspection.getNumNonCritical())); // switch to actaul issues when thing is passed in
+        nonCriticalIssues.setText(String.valueOf(restaurantInspection.getNumNonCritical()));
 
         TextView hazardLevel = findViewById(R.id.haz);
-        hazardLevel.setText(String.valueOf(restaurantInspection.getHazardLevel())); // switch to actaul issues when thing is passed in
+        hazardLevel.setText(restaurantInspection.getHazardLevel());
     }
 
     private void noViolations() {
-        Toast.makeText(getApplicationContext(), "No Violations available", Toast.LENGTH_LONG).show();
+        String noViolations = getResources().getString(R.string.no_violations_available);
+        Toast.makeText(getApplicationContext(), noViolations, Toast.LENGTH_LONG).show();
     }
 
     private void setViolationIcons() {
@@ -85,10 +84,13 @@ public class InspectionDetails extends AppCompatActivity {
             if(cur.getViolationNum() < maxPermitViolationNum) {
                 cur.setIconId(R.drawable.permit);
             }
-            else if(cur.getViolationNum() > maxPermitViolationNum && cur.getViolationNum() < maxTemperatureViolationNum) {
+            else if(cur.getViolationNum() > maxPermitViolationNum
+                    && cur.getViolationNum() < maxTemperatureViolationNum) {
                 cur.setIconId(R.drawable.thermometer);
             }
-            else if(cur.getViolationNum() > maxTemperatureViolationNum && cur.getViolationNum() <= maxEquipmentViolationNum && !isPestViolation(cur)) {
+            else if(cur.getViolationNum() > maxTemperatureViolationNum
+                    && cur.getViolationNum() <= maxEquipmentViolationNum
+                    && !isPestViolation(cur)) {
                 cur.setIconId(R.drawable.equipment);
             }
             else if(isSanitaryViolation(cur)) {
@@ -96,8 +98,7 @@ public class InspectionDetails extends AppCompatActivity {
             }
             else if(isPestViolation(cur)) {
                 cur.setIconId(R.drawable.pest);
-            }
-            else {
+            } else {
                 cur.setIconId(R.drawable.permit);
             }
 
@@ -105,31 +106,20 @@ public class InspectionDetails extends AppCompatActivity {
     }
 
     private boolean isSanitaryViolation(Violation v) {
-        if(v.getViolationNum() == 402 || v.getViolationNum() == 403 || v.getViolationNum() == 404) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return v.getViolationNum() == 402 || v.getViolationNum() == 403 || v.getViolationNum() == 404;
     }
 
     private void setHazardIcons() {
         for(Violation cur : restaurantInspection.getViolationList()) {
             if(cur.isCritical()) {
                 cur.setHazIconId(R.drawable.high_hazard);
-            }
-            else {
+            } else {
                 cur.setHazIconId(R.drawable.low_hazard);
             }
         }
     }
     private boolean isPestViolation(Violation v) {
-        if(v.getViolationNum() == 304 || v.getViolationNum() == 313) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return v.getViolationNum() == 304 || v.getViolationNum() == 313;
     }
 
     private void populateListView() {
@@ -151,13 +141,13 @@ public class InspectionDetails extends AppCompatActivity {
                 itemView = getLayoutInflater().inflate(R.layout.violation_item_list, parent, false);
             }
 
-
             final Violation violation = restaurantInspection.getViolationList().get(position);
             ImageView vImage = itemView.findViewById(R.id.item_violation_image);
             vImage.setImageResource(violation.getIconId());
 
             String viol = "violation";
-            int id = getResources().getIdentifier(viol + violation.getViolationNum(), "string", getPackageName());
+            int id = getResources().getIdentifier(viol + violation.getViolationNum(),
+                    "string", getPackageName());
             String setString = getString(id);
 
             TextView summary = itemView.findViewById(R.id.summary);
@@ -178,28 +168,22 @@ public class InspectionDetails extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), violation.getProblemDescription(), Toast.LENGTH_LONG).show();
                 }
             });
-
             return itemView;
         }
-
     }
 
     public void getInspectionIndex(){
-        int index = getIntent().getIntExtra("curInspection", 0);
-        String tNumber = getIntent().getStringExtra("curInspectionTNumber");
+        int index = getIntent().getIntExtra(CUR_INSPECTION_KEY, 0);
+        String tNumber = getIntent().getStringExtra(CUR_INSPECTION_T_NUMBER_KEY);
         Manager manager = Manager.getInstance();
         restaurantInspection = manager.getInspectionMap().get(tNumber).get(index);
-
     }
 
 
     public static Intent getIntent(Context context, int index, String tNumber){
         Intent intent = new Intent(context, InspectionDetails.class);
-
-        intent.putExtra("curInspection", index);
-        intent.putExtra("curInspectionTNumber", tNumber);
-
+        intent.putExtra(CUR_INSPECTION_KEY, index);
+        intent.putExtra(CUR_INSPECTION_T_NUMBER_KEY, tNumber);
         return intent;
-
     }
 }
