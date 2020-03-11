@@ -15,6 +15,10 @@ import com.example.cmpt276_project_iron.model.Restaurant;
 
 import java.util.List;
 
+
+/**
+ *  Attains and sets the necessary information for the restaurant's details
+ */
 public class RestaurantList extends AppCompatActivity {
     private Manager manager;
 
