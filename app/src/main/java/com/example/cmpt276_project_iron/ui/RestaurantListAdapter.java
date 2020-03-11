@@ -51,6 +51,10 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         view.setClickable(true);
 
         Restaurant restaurant = restaurants.get(position);
+
+        TextView restaurantName = view.findViewById(R.id.restaurantName);
+        restaurantName.setText(String.valueOf(restaurant.getName()));
+
         if (manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) {
             TextView critIssues = view.findViewById(R.id.numCritIssues);
             critIssues.setText(getContext().getString(R.string.not_applicable_text));
@@ -71,9 +75,6 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         }
         else {
             Inspection recentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
-
-            TextView restaurantName = view.findViewById(R.id.restaurantName);
-            restaurantName.setText(String.valueOf(restaurant.getName()));
 
             TextView critIssues = view.findViewById(R.id.numCritIssues);
             critIssues.setText(String.valueOf(recentInspection.getNumCritical()));
