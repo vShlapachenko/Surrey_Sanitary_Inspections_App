@@ -35,7 +35,8 @@ public class InspectionDetails extends AppCompatActivity {
 
     private final int maxPermitViolationNum = 200;
     private final int maxTemperatureViolationNum = 300;
-    private final int maxEquipmentViolationNum = 315;
+    private final int maxEquipmentViolationNum = 401;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class InspectionDetails extends AppCompatActivity {
 
         ActionBar detailsBar = getSupportActionBar();
         detailsBar.setTitle("Inspection Details");
-
+        logList();
         setText();
 
         if(restaurantInspection.getNumCritical() > 0 || restaurantInspection.getNumNonCritical() > 0) {
@@ -59,6 +60,11 @@ public class InspectionDetails extends AppCompatActivity {
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    private void logList() {
+        for(Violation v : restaurantInspection.getViolationList()) {
+            Log.e(TAG, v.toString());
+        }
     }
     private void setText() {
 
@@ -91,12 +97,28 @@ public class InspectionDetails extends AppCompatActivity {
             else if(cur.getViolationNum() > maxTemperatureViolationNum && cur.getViolationNum() <= maxEquipmentViolationNum && !isPestViolation(cur)) {
                 cur.setIconId(R.drawable.equipment);
             }
+            else if(isSanitaryViolation(cur)) {
+                cur.setIconId(R.drawable.handwash);
+            }
             else if(isPestViolation(cur)) {
                 cur.setIconId(R.drawable.pest);
+            }
+            else {
+                cur.setIconId(R.drawable.permit);
             }
 
         }
     }
+
+    private boolean isSanitaryViolation(Violation v) {
+        if(v.getViolationNum() == 402 || v.getViolationNum() == 403 || v.getViolationNum() == 404) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     private void setHazardIcons() {
         for(Violation cur : restaurantInspection.getViolationList()) {
             if(cur.isCritical()) {
@@ -108,7 +130,7 @@ public class InspectionDetails extends AppCompatActivity {
         }
     }
     private boolean isPestViolation(Violation v) {
-        if(v.getViolationNum() == 304 || v.getViolationNum() == 315) {
+        if(v.getViolationNum() == 304 || v.getViolationNum() == 313) {
             return true;
         }
         else {
