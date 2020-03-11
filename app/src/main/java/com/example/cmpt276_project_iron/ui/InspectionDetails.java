@@ -136,7 +136,7 @@ public class InspectionDetails extends AppCompatActivity {
             }
 
 
-            Violation violation = restaurantInspection.getViolationList().get(position);
+            final Violation violation = restaurantInspection.getViolationList().get(position);
             ImageView vImage = itemView.findViewById(R.id.item_violation_image);
             vImage.setImageResource(violation.getIconId());
 

@@ -9,13 +9,13 @@
     <string name="hazard">hazard</string>
     <string name="non_critical_issues">Non-Critical Issues:</string>
     <string name="noncrit">#NonCrit</string>
-    <string name="restaurantIconDescription">resprents the restaurant icon</string>
+    <string name="restaurantIconDescription">represents the restaurant icon</string>
     <string name="address_text">Address:</string>
     <string name="coordinates_text">Coordinates:</string>
     <string name="inspectionHistoryText">Inspection History:</string>
-    <string name="borderDescription">seperator of list from text</string>
+    <string name="borderDescription">separator of list from text</string>
     <string name="inspection_text">Inspection</string>
-    <string name="crit_text"># Crticial Issues Found:</string>
+    <string name="crit_text"># Critical Issues Found:</string>
     <string name="nonCrit_text"># Non-Critical Issues Found:</string>
     <string name="date_text">Date:</string>
     <string name="hazardIconDescription">displays cur hazard level</string>
@@ -90,5 +90,9 @@
     <string name="violation502">Employee lacks FOODSAFE level 1</string>
     <string name="summary">Summary</string>
     <string name="no_violations">No violations</string>
+    <string name="no_restaurants_text">No Restaurants Found. Please Try Again...</string>
+    <string name="restaurant_list_title">Restaurants</string>
+    <string name="recent_inspection_text">Most Recent Inspection:</string>
+    <string name="not_applicable_text">N/A</string>
 
 </resources>
