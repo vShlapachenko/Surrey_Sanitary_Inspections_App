@@ -43,7 +43,7 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.inspection_list_item, null);
