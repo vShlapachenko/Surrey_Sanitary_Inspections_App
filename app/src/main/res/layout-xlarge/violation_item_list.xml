@@ -32,12 +32,15 @@
 
     <ImageView
         android:id="@+id/item_hazard"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_alignTop="@+id/summary"
         android:layout_marginStart="27dp"
         android:layout_marginTop="-34dp"
         android:layout_toEndOf="@id/summary"
+        android:adjustViewBounds="true"
+        android:maxWidth="200dp"
+        android:maxHeight="200dp"
         app:srcCompat="@drawable/moderate_hazard" />
 
 </RelativeLayout>
