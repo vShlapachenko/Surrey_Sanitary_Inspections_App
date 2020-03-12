@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/hazardIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginTop="92dp"
+        android:layout_width="102dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="260dp"
+        android:layout_marginTop="36dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/hazardIconDescription"
         android:paddingBottom="6dp"
