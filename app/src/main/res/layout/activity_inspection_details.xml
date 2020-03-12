@@ -15,8 +15,8 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="4dp"
         android:text="@string/inspection_report"
-        android:textSize="24sp"
         android:textColor="@color/colorText"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,14 +56,14 @@
     <ListView
         android:id="@+id/listof_violations"
         android:layout_width="400dp"
-        android:layout_height="350dp"
+        android:layout_height="525dp"
         android:textColor="@color/colorText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hazard_level"
-        app:layout_constraintVertical_bias="0.036" />
+        app:layout_constraintVertical_bias="0.296" />
 
     <TextView
         android:id="@+id/inspection_number"
@@ -91,12 +91,12 @@
         android:id="@+id/haz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
         android:text="@string/hazard"
         android:textColor="@color/colorText"
         app:layout_constraintStart_toEndOf="@+id/hazard_level"
-        app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />
+        app:layout_constraintTop_toBottomOf="@+id/num_non_critical_issues" />
 
     <TextView
         android:id="@+id/non_critical"
@@ -110,14 +110,15 @@
         app:layout_constraintTop_toBottomOf="@+id/crit_issues" />
 
     <TextView
-        android:id="@+id/num_nc"
+        android:id="@+id/num_non_critical_issues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/noncrit"
         android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/listof_violations"
         app:layout_constraintStart_toEndOf="@+id/non_critical"
-        app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />
+        app:layout_constraintTop_toBottomOf="@+id/num_critical_issues"
+        app:layout_constraintVertical_bias="0.181" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
