@@ -59,8 +59,8 @@
     <string name="violation302">Not properly washed/sanitized</string>
     <string name="violation303">No resource for sanitary maintenance</string>
     <string name="violation304">Pests</string>
-    <string name="violation305">No pests found, may have in future</string>
-    <string name="violation306">Food premises bad sanitary condition</string>
+    <string name="violation305">Condition observed is not tolerable</string>
+    <string name="violation306">Food premises not maintained</string>
     <string name="violation307">Design/material not suitable</string>
     <string name="violation308">Not good working order</string>
     <string name="violation309">Chemicals stored improperly</string>
