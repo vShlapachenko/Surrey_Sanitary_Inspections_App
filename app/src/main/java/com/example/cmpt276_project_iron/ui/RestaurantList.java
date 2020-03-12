@@ -48,7 +48,7 @@ public class RestaurantList extends AppCompatActivity {
     }
 
     private void setUpBackButton(){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     private void displayCorrectLayout(){
@@ -57,15 +57,21 @@ public class RestaurantList extends AppCompatActivity {
         dimensions.getSize(dimension);
         int width = dimension.x;
         int height = dimension.y;
+        float density = getResources().getDisplayMetrics().density;
 
         /*
          * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
          * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
          */
-        if (width == 480 && height == 800)
-        {
-            setContentView(R.layout.activity_restaurant_list);
-        } else {
+        //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
+        double MDPI_SCREEN_SIZE = 1.0;
+        if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
+            setContentView(R.layout.activity_restaurant_list_custom);
+        }
+        else if(width == 1440 && height == 2560) {
+            setContentView(R.layout.activity_restaurant_list_custom_one);
+        }
+        else{
             setContentView(R.layout.activity_restaurant_list);
         }
     }
