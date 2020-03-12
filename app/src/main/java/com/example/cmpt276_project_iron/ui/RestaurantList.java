@@ -6,7 +6,6 @@ import android.view.Display;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cmpt276_project_iron.R;
@@ -66,8 +65,7 @@ public class RestaurantList extends AppCompatActivity {
         if (width == 480 && height == 800)
         {
             setContentView(R.layout.activity_restaurant_list);
-        }
-        else{
+        } else {
             setContentView(R.layout.activity_restaurant_list);
         }
     }
