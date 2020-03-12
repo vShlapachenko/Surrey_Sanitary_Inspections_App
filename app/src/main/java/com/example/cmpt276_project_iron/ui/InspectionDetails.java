@@ -57,7 +57,7 @@ public class InspectionDetails extends AppCompatActivity {
         else if(restaurantInspection.getViolationList() == null){ // do later breaking thing right now
             noViolations();
         }
-        logData();
+//        logData();
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -218,18 +218,22 @@ public class InspectionDetails extends AppCompatActivity {
         dimensions.getSize(dimension);
         int width = dimension.x;
         int height = dimension.y;
-        /**
-         * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
-         * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
-         */
-        if(width == 480 && height == 800) {
+        float density = getResources().getDisplayMetrics().density;
+
+
+        double MDPI_SCREEN_SIZE = 1.0;
+        if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
             setContentView(R.layout.activity_restaurant_details_custom);
+            Log.e(TAG, "In custom arrangement");
+
         }
         else if(width == 1440 && height == 2560) {
             setContentView(R.layout.activity_inspection_details_custom2);
+            Log.e(TAG, "In custom 2 arrangement");
         }
         else{
             setContentView(R.layout.activity_inspection_details);
+            Log.e(TAG, "In normal arrangement");
         }
     }
 }

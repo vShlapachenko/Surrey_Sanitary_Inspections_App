@@ -55,16 +55,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/non_critical" />
 
-    <ListView
-        android:id="@+id/listof_violations"
-        android:layout_width="475dp"
-        android:layout_height="563dp"
-        android:layout_marginTop="220dp"
-        android:textColor="@color/colorText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/inspection_number"
         android:layout_width="wrap_content"
@@ -124,5 +114,16 @@
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/non_critical"
         app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />
+
+    <ListView
+        android:id="@+id/listof_violations"
+        android:layout_width="450dp"
+        android:layout_height="563dp"
+        android:layout_marginStart="24dp"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.869" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
