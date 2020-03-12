@@ -2,6 +2,7 @@ package com.example.cmpt276_project_iron.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -119,6 +122,16 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
 
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
+
+                    //Using shared preferences to retain the index of the restaurant which is used to address activity two's
+                    //bug with a changing toolbar tittle - Jas
+
+                    SharedPreferences data = context.getSharedPreferences("data", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = data.edit();
+                    editor.putInt("cur_restaurant", position);
+                    editor.apply();
+
+
 
                     Log.i("Position_clicked", position + " ");
                 }

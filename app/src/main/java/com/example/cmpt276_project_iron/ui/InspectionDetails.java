@@ -72,7 +72,6 @@ public class InspectionDetails extends AppCompatActivity {
     private void setText() {
 
         TextView inspectionDate = findViewById(R.id.inspection_number);
-
         inspectionDate.setText(DateConversionCalculator.getFullFormattedDate(this, restaurantInspection.getInspectionDate()));
 
         TextView criticalIssues = findViewById(R.id.num_critical_issues);
@@ -176,10 +175,10 @@ public class InspectionDetails extends AppCompatActivity {
             vImageHazard.setImageResource(violation.getHazIconId());
 
             if(violation.isCritical()) {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
             }
             else {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
             }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
