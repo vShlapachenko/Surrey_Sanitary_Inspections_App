@@ -72,21 +72,21 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         String hazardLevel = inspection.getHazardLevel();
         ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
 
+        view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
+
         if(hazardLevel.equalsIgnoreCase("Low")){
             hazardIcon.setImageResource(R.drawable.low_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
 
         }
         else if(hazardLevel.equalsIgnoreCase("Moderate")){
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorModerateHazard));
+
         }
         else if(hazardLevel.equalsIgnoreCase("High")){
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
 
         }
 

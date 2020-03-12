@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
@@ -53,11 +54,13 @@ public class RestaurantDetails extends AppCompatActivity {
 
     }
 
+
     private void placeRestaurantNameText(){
         ActionBar detailsBar = getSupportActionBar();
-        String restaurantTitle = curRestaurant.getName() + getResources().getString(R.string.restaurantExtension);
+        String restaurantTitle = curRestaurant.getName();
 
         detailsBar.setTitle(restaurantTitle);
+        detailsBar.setSubtitle(getResources().getString(R.string.restaurantExtension));
 
     }
 
@@ -98,27 +101,17 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void getIntentData(){
 
-        //curRestaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
-
-        int index = getIntent().getIntExtra("restaurantIndex", 1);
+        //Using sharedPreferences to address bug where the def value would be called if coming back from third activity
+        //which would set the cur restaurant to the def value. By using SharedPreferences, this data is only changed coming
+        //from the first activity
+        SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
+        int index = getIntent().getIntExtra("restaurantIndex", data.getInt("cur_restaurant", 0));
         manager = Manager.getInstance();
         curRestaurant = manager.getRestaurantList().get(index);
     }
 
-    /*Intent via pass object
-    public static Intent getIntent(Context context, Restaurant restaurant){
-        // .class (not .this) as it is being created when launched
-        Intent intent = new Intent(context, RestaurantDetails.class);
-
-        //To enable, related classes implement the serializable interface
-        intent.putExtra("restaurant", restaurant);
-
-        return intent;
-    }*/
-
     public static Intent getIntent(Context context, int restaurantIndex){
         Intent intent = new Intent(context, RestaurantDetails.class);
-
         intent.putExtra("restaurantIndex", restaurantIndex);
 
         return intent;
@@ -140,12 +133,15 @@ public class RestaurantDetails extends AppCompatActivity {
          * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
          * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
          */
-        if (width == 480 && height == 800)
-        {
+        if(width == 480 && height == 800) {
             setContentView(R.layout.activity_restaurant_details_custom);
+        }
+        else if(width == 1440 && height == 2560) {
+            setContentView(R.layout.activity_restaurant_details_custom_one);
         }
         else{
             setContentView(R.layout.activity_restaurant_details);
         }
     }
+
 }
