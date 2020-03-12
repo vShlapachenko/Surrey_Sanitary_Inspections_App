@@ -60,7 +60,7 @@ public class RestaurantList extends AppCompatActivity {
     }
 
     private void setUpBackButton(){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
     }
 
