@@ -9,9 +9,11 @@
     <ListView
         android:id="@+id/listof_violations"
         android:layout_width="0dp"
-        android:layout_height="950dp"
+        android:layout_height="0dp"
         android:layout_marginTop="276dp"
         android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -122,4 +124,11 @@
         android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.93" />
 </androidx.constraintlayout.widget.ConstraintLayout>
