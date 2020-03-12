@@ -42,6 +42,7 @@ public class InspectionDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection_details);
         getInspectionIndex();
+        setText();
 
         ActionBar detailsBar = getSupportActionBar();
         detailsBar.setTitle("Inspection Details");
@@ -59,18 +60,19 @@ public class InspectionDetails extends AppCompatActivity {
     }
 
     private void setText() {
-
         TextView inspectionDate = findViewById(R.id.inspection_number);
         inspectionDate.setText(DateConversionCalculator.getFullFormattedDate(this, restaurantInspection.getInspectionDate()));
 
-        TextView criticalIssues = findViewById(R.id.num_critical_issues);
-        criticalIssues.setText(String.valueOf(restaurantInspection.getNumCritical())); // switch to actaul issues when thing is passed in
+        if (restaurantInspection != null) {
+            TextView criticalIssues = findViewById(R.id.num_critical_issues);
+            criticalIssues.setText(String.valueOf(restaurantInspection.getNumCritical())); // switch to actaul issues when thing is passed in
 
-        TextView nonCriticalIssues = findViewById(R.id.num_non_critical_issues);
-        nonCriticalIssues.setText(String.valueOf(restaurantInspection.getNumNonCritical())); // switch to actaul issues when thing is passed in
+            TextView nonCriticalIssues = findViewById(R.id.num_non_critical_issues);
+            nonCriticalIssues.setText(String.valueOf(restaurantInspection.getNumNonCritical())); // switch to actaul issues when thing is passed in
 
-        TextView hazardLevel = findViewById(R.id.haz);
-        hazardLevel.setText(String.valueOf(restaurantInspection.getHazardLevel())); // switch to actaul issues when thing is passed in
+            TextView hazardLevel = findViewById(R.id.haz);
+            hazardLevel.setText(String.valueOf(restaurantInspection.getHazardLevel())); // switch to actaul issues when thing is passed in
+        }
     }
 
     private void noViolations() {
