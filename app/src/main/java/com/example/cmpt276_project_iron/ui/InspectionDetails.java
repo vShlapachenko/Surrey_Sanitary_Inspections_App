@@ -35,7 +35,8 @@ public class InspectionDetails extends AppCompatActivity {
 
     private final int maxPermitViolationNum = 200;
     private final int maxTemperatureViolationNum = 300;
-    private final int maxEquipmentViolationNum = 315;
+    private final int maxEquipmentViolationNum = 401;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,6 @@ public class InspectionDetails extends AppCompatActivity {
 
         ActionBar detailsBar = getSupportActionBar();
         detailsBar.setTitle("Inspection Details");
-
         setText();
 
         if(restaurantInspection.getNumCritical() > 0 || restaurantInspection.getNumNonCritical() > 0) {
@@ -63,7 +63,6 @@ public class InspectionDetails extends AppCompatActivity {
     private void setText() {
 
         TextView inspectionDate = findViewById(R.id.inspection_number);
-
         inspectionDate.setText(DateConversionCalculator.getFullFormattedDate(this, restaurantInspection.getInspectionDate()));
 
         TextView criticalIssues = findViewById(R.id.num_critical_issues);
@@ -91,12 +90,28 @@ public class InspectionDetails extends AppCompatActivity {
             else if(cur.getViolationNum() > maxTemperatureViolationNum && cur.getViolationNum() <= maxEquipmentViolationNum && !isPestViolation(cur)) {
                 cur.setIconId(R.drawable.equipment);
             }
+            else if(isSanitaryViolation(cur)) {
+                cur.setIconId(R.drawable.handwash);
+            }
             else if(isPestViolation(cur)) {
                 cur.setIconId(R.drawable.pest);
+            }
+            else {
+                cur.setIconId(R.drawable.permit);
             }
 
         }
     }
+
+    private boolean isSanitaryViolation(Violation v) {
+        if(v.getViolationNum() == 402 || v.getViolationNum() == 403 || v.getViolationNum() == 404) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     private void setHazardIcons() {
         for(Violation cur : restaurantInspection.getViolationList()) {
             if(cur.isCritical()) {
@@ -108,7 +123,7 @@ public class InspectionDetails extends AppCompatActivity {
         }
     }
     private boolean isPestViolation(Violation v) {
-        if(v.getViolationNum() == 304 || v.getViolationNum() == 315) {
+        if(v.getViolationNum() == 304 || v.getViolationNum() == 313) {
             return true;
         }
         else {
@@ -136,7 +151,7 @@ public class InspectionDetails extends AppCompatActivity {
             }
 
 
-            Violation violation = restaurantInspection.getViolationList().get(position);
+            final Violation violation = restaurantInspection.getViolationList().get(position);
             ImageView vImage = itemView.findViewById(R.id.item_violation_image);
             vImage.setImageResource(violation.getIconId());
 
@@ -151,10 +166,10 @@ public class InspectionDetails extends AppCompatActivity {
             vImageHazard.setImageResource(violation.getHazIconId());
 
             if(violation.isCritical()) {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
             }
             else {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
             }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

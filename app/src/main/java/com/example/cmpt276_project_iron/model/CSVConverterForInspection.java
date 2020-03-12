@@ -129,7 +129,7 @@ public class CSVConverterForInspection {
         return result;
     }
 
-//    private void convertListToMap() {
+    //    private void convertListToMap() {
 //        Map<String, List<Inspection>> map = new HashMap<>();
 //        Collections.sort(inspectionList, new Comparator<Inspection>() {
 //            @Override
@@ -154,14 +154,15 @@ public class CSVConverterForInspection {
 //        }
 //        inspectionList.clear();
 //    }
-private void convertListToMap() {
-    manager.setInspectionMap(inspectionList
-            .stream()
-            .collect(Collectors.groupingBy(Inspection::getTrackingNumber)));
-    for (Map.Entry<String, List<Inspection>> entry : manager.getInspectionMap().entrySet()) {
-        Collections.sort(entry.getValue());
+    private void convertListToMap() {
+        manager.setInspectionMap(inspectionList
+                .stream()
+                .collect(Collectors.groupingBy(Inspection::getTrackingNumber)));
+        for (Map.Entry<String, List<Inspection>> entry : manager.getInspectionMap().entrySet()) {
+            Collections.sort(entry.getValue());
+        }
+        inspectionList.clear();
     }
-    inspectionList.clear();
-}
 
 }
+

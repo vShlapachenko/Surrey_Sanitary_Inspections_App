@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
@@ -53,6 +54,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
     }
 
+
     private void placeRestaurantNameText(){
         ActionBar detailsBar = getSupportActionBar();
         String restaurantTitle = curRestaurant.getName();
@@ -98,7 +100,12 @@ public class RestaurantDetails extends AppCompatActivity {
     }
 
     private void getIntentData(){
-        int index = getIntent().getIntExtra("restaurantIndex", 0);
+
+        //Using sharedPreferences to address bug where the def value would be called if coming back from third activity
+        //which would set the cur restaurant to the def value. By using SharedPreferences, this data is only changed coming
+        //from the first activity
+        SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
+        int index = getIntent().getIntExtra("restaurantIndex", data.getInt("cur_restaurant", 0));
         manager = Manager.getInstance();
         curRestaurant = manager.getRestaurantList().get(index);
     }
@@ -136,4 +143,5 @@ public class RestaurantDetails extends AppCompatActivity {
             setContentView(R.layout.activity_restaurant_details);
         }
     }
+
 }

@@ -43,7 +43,7 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.inspection_list_item, null);
@@ -72,21 +72,21 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         String hazardLevel = inspection.getHazardLevel();
         ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
 
+        view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
+
         if(hazardLevel.equalsIgnoreCase("Low")){
             hazardIcon.setImageResource(R.drawable.low_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
 
         }
         else if(hazardLevel.equalsIgnoreCase("Moderate")){
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorModerateHazard));
+
         }
         else if(hazardLevel.equalsIgnoreCase("High")){
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
 
         }
 
