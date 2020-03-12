@@ -26,17 +26,17 @@
 
         <activity android:name=".ui.RestaurantList"
         android:parentActivityName=".ui.RestaurantList">
-
-
-        </activity>
-
-        <activity android:name=".ui.RestaurantDetails"
-            android:parentActivityName=".ui.RestaurantList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+
+        <activity android:name=".ui.RestaurantDetails"
+            android:parentActivityName=".ui.RestaurantList">
+
 
         </activity>
 
