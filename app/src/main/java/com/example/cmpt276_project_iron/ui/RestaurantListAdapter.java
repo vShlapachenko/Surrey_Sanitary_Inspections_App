@@ -27,18 +27,13 @@ import java.util.List;
  */
 public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
     private Context context;
-    private int resource;
     private List<Restaurant> restaurants;
     private Manager manager;
 
-
     public RestaurantListAdapter(Context context, int resource, List<Restaurant> restaurants){
         super(context, resource, restaurants);
-
         this.context = context;
-        this.resource = resource;
         this.restaurants = restaurants;
-
         this.manager = Manager.getInstance();
     }
 
@@ -56,58 +51,10 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         restaurantName.setText(String.valueOf(restaurant.getName()));
 
         if (manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) {
-            TextView critIssues = view.findViewById(R.id.numCritIssues);
-            critIssues.setText(getContext().getString(R.string.not_applicable_text));
-
-            TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
-            nonCritIssues.setText(getContext().getString(R.string.not_applicable_text));
-
-            TextView inspectionDate = view.findViewById(R.id.inspectionDate);
-            inspectionDate.setText(getContext().getString(R.string.not_applicable_text));
-
-            ImageView restaurantIcon = view.findViewById(R.id.restaurantIcon);
-            restaurantIcon.setImageResource(R.drawable.restaurant_icon);
-            restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-
-            ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
-            hazardIcon.setVisibility(View.INVISIBLE);
-
+            initializeLayoutNoInspection(view);
         }
         else {
-            Inspection recentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
-
-            TextView critIssues = view.findViewById(R.id.numCritIssues);
-            critIssues.setText(String.valueOf(recentInspection.getNumCritical()));
-
-            TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
-            nonCritIssues.setText(String.valueOf(recentInspection.getNumNonCritical()));
-
-            TextView inspectionDate = view.findViewById(R.id.inspectionDate);
-            inspectionDate.setText(DateConversionCalculator.getFormattedDate(view.getContext(), recentInspection.getInspectionDate()));
-
-            ImageView restaurantIcon = view.findViewById(R.id.restaurantIcon);
-            restaurantIcon.setImageResource(R.drawable.restaurant_icon);
-            restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-
-            /**
-             * Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
-             */
-            String hazardLevel = recentInspection.getHazardLevel();
-            ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
-
-            if(hazardLevel.equalsIgnoreCase("Low")){
-                hazardIcon.setImageResource(R.drawable.low_hazard);
-                hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            }
-            else if(hazardLevel.equalsIgnoreCase("Moderate")){
-                hazardIcon.setImageResource(R.drawable.moderate_hazard);
-                hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            }
-            else if(hazardLevel.equalsIgnoreCase("High")){
-                hazardIcon.setImageResource(R.drawable.high_hazard);
-                hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            }
-
+            initializeLayoutWithInspection(restaurant, view);
         }
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -119,12 +66,64 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
 
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
-
-                    Log.i("Position_clicked", position + " ");
                 }
             }
         });
 
         return view;
+    }
+
+    private void initializeLayoutNoInspection(View view) {
+        TextView critIssues = view.findViewById(R.id.numCritIssues);
+        critIssues.setText(getContext().getString(R.string.not_applicable_text));
+
+        TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
+        nonCritIssues.setText(getContext().getString(R.string.not_applicable_text));
+
+        TextView inspectionDate = view.findViewById(R.id.inspectionDate);
+        inspectionDate.setText(getContext().getString(R.string.not_applicable_text));
+
+        ImageView restaurantIcon = view.findViewById(R.id.restaurantIcon);
+        restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
+        hazardIcon.setVisibility(View.INVISIBLE);
+    }
+
+    private void initializeLayoutWithInspection(Restaurant restaurant, View view) {
+        Inspection recentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
+
+        TextView critIssues = view.findViewById(R.id.numCritIssues);
+        critIssues.setText(String.valueOf(recentInspection.getNumCritical()));
+
+        TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
+        nonCritIssues.setText(String.valueOf(recentInspection.getNumNonCritical()));
+
+        TextView inspectionDate = view.findViewById(R.id.inspectionDate);
+        inspectionDate.setText(DateConversionCalculator.getFormattedDate(view.getContext(), recentInspection.getInspectionDate()));
+
+        ImageView restaurantIcon = view.findViewById(R.id.restaurantIcon);
+        restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        String hazardLevel = recentInspection.getHazardLevel();
+        ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
+        initializeHazardIcon(hazardLevel, hazardIcon);
+    }
+
+    private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon) {
+        if(hazardLevel.equalsIgnoreCase("Low")){
+            hazardIcon.setImageResource(R.drawable.low_hazard);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        }
+        else if(hazardLevel.equalsIgnoreCase("Moderate")){
+            hazardIcon.setImageResource(R.drawable.moderate_hazard);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        }
+        else if(hazardLevel.equalsIgnoreCase("High")){
+            hazardIcon.setImageResource(R.drawable.high_hazard);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        }
     }
 }

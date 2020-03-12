@@ -32,7 +32,6 @@ public class RestaurantList extends AppCompatActivity {
         manager = Manager.getInstance();
 
         inflateRestaurantList();
-
     }
 
     private void inflateRestaurantList(){
