@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorTint"
     tools:context=".ui.InspectionDetails">
 
     <TextView
@@ -13,6 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
         android:text="@string/inspection_report"
+        android:textColor="@color/colorText"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,6 +26,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/date_of_inspection"
+        android:textColor="@color/colorText"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inspection" />
@@ -33,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:textColor="@color/colorText"
         android:layout_marginTop="12dp"
         android:text="@string/critical_issues_inspection"
         android:textSize="18sp"
@@ -45,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
+        android:textColor="@color/colorText"
         android:text="@string/hazard_level"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,9 +57,10 @@
 
     <ListView
         android:id="@+id/listof_violations"
-        android:layout_width="409dp"
+        android:layout_width="475dp"
         android:layout_height="563dp"
         android:layout_marginTop="220dp"
+        android:textColor="@color/colorText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,6 +68,7 @@
         android:id="@+id/inspection_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
         android:layout_marginTop="8dp"
         android:text="@string/inspections"
         android:textSize="18sp"
@@ -74,6 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="@string/crticalissues"
+        android:textColor="@color/colorText"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/crit_issues"
         app:layout_constraintTop_toBottomOf="@+id/inspection_number" />
@@ -82,11 +90,12 @@
         android:id="@+id/haz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="12dp"
         android:text="@string/hazard"
+        android:textColor="@color/colorText"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/hazard_level"
-        app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />
+        app:layout_constraintTop_toBottomOf="@+id/num_non_critical_issues" />
 
     <TextView
         android:id="@+id/non_critical"
@@ -95,15 +104,18 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/non_critical_issues"
+        android:textColor="@color/colorText"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/crit_issues" />
 
     <TextView
-        android:id="@+id/num_nc"
+        android:id="@+id/num_non_critical_issues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:textColor="@color/colorText"
         android:text="@string/noncrit"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/non_critical"

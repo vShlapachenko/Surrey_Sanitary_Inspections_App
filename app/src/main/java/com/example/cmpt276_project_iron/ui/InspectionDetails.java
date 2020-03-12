@@ -2,7 +2,9 @@ package com.example.cmpt276_project_iron.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -62,8 +64,8 @@ public class InspectionDetails extends AppCompatActivity {
         TextView criticalIssues = findViewById(R.id.num_critical_issues);
         criticalIssues.setText(String.valueOf(restaurantInspection.getNumCritical()));
 
-        TextView nonCriticalIssues = findViewById(R.id.num_nc);
-        nonCriticalIssues.setText(String.valueOf(restaurantInspection.getNumNonCritical()));
+        TextView nonCriticalIssues = findViewById(R.id.num_non_critical_issues);
+        nonCriticalIssues.setText(String.valueOf(restaurantInspection.getNumNonCritical())); // switch to actaul issues when thing is passed in
 
         TextView hazardLevel = findViewById(R.id.haz);
         hazardLevel.setText(restaurantInspection.getHazardLevel());
@@ -180,5 +182,25 @@ public class InspectionDetails extends AppCompatActivity {
         intent.putExtra(CUR_INSPECTION_KEY, index);
         intent.putExtra(CUR_INSPECTION_T_NUMBER_KEY, tNumber);
         return intent;
+
+    }
+
+    private void displayCorrectLayout() {
+        Display dimensions = getWindowManager().getDefaultDisplay();
+        Point dimension = new Point();
+        dimensions.getSize(dimension);
+        int width = dimension.x;
+        int height = dimension.y;
+        /**
+         * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
+         * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
+         */
+        if (width == 480 && height == 800) {
+            setContentView(R.layout.activity_restaurant_details_custom);
+        } else if (width == 1440 && height == 2560) {
+            setContentView(R.layout.activity_inspection_details_custom2);
+        } else {
+            setContentView(R.layout.activity_inspection_details);
+        }
     }
 }
