@@ -19,26 +19,27 @@
         android:configChanges="keyboard|orientation|keyboardHidden"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".ui.InspectionDetails"
-            android:parentActivityName=".ui.RestaurantDetails">
-
-        </activity>
 
         <activity android:name=".ui.RestaurantList"
-        android:parentActivityName=".ui.RestaurantList">
+            android:parentActivityName=".ui.RestaurantList"
+            android:label="@string/restaurant_list_title">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
-        <activity android:name=".ui.RestaurantDetails"
+        <activity
+            android:name=".ui.RestaurantDetails"
             android:parentActivityName=".ui.RestaurantList">
-
-
         </activity>
+
+        <activity android:name=".ui.InspectionDetails"
+            android:parentActivityName=".ui.RestaurantDetails"
+            android:label="@string/inspection_detail_title"/>
+
 
     </application>
 

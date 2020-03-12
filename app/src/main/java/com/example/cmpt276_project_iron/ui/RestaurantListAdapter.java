@@ -92,9 +92,8 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
             restaurantIcon.setImageResource(R.drawable.restaurant_icon);
             restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
-            /**
-             * Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
-             */
+
+            //Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
             String hazardLevel = recentInspection.getHazardLevel();
             ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
 

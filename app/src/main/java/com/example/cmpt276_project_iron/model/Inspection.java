@@ -58,6 +58,6 @@ public class Inspection implements Comparable<Inspection> {
 
     @Override
     public int compareTo(Inspection other) {
-        return -(this.inspectionDate.compareTo(other.inspectionDate));
+        return other.inspectionDate.compareTo(this.inspectionDate);
     }
 }

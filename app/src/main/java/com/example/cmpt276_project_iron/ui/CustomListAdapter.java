@@ -2,7 +2,6 @@ package com.example.cmpt276_project_iron.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,7 @@ import androidx.core.content.ContextCompat;
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
-import com.example.cmpt276_project_iron.model.Restaurant;
 
-import java.time.YearMonth;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -66,9 +62,8 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         inspectionDate.setText(DateConversionCalculator.getFormattedDate(view.getContext(), inspection.getInspectionDate()));
 
 
-        /**
-         * Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
-         */
+
+        //Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
         String hazardLevel = inspection.getHazardLevel();
         ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
 
@@ -78,22 +73,17 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
             hazardIcon.setImageResource(R.drawable.low_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
-        }
-        else if(hazardLevel.equalsIgnoreCase("Moderate")){
+        } else if (hazardLevel.equalsIgnoreCase("Moderate")) {
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
-        }
-        else if(hazardLevel.equalsIgnoreCase("High")){
+        } else if (hazardLevel.equalsIgnoreCase("High")) {
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         }
 
-
-        /**
-         * Set an onclick listener for the individual items such that the third activity can be launched with the necessary info.
-         */
+         //Set an onclick listener for the individual items such that the third activity can be launched with the necessary info.
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,8 +92,6 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
-
-                Log.i("Position_clicked", position + " ");
             }
         });
 
