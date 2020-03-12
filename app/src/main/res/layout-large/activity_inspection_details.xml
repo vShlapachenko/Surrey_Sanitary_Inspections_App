@@ -48,12 +48,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
-        android:textColor="@color/colorText"
+        android:layout_marginTop="8dp"
         android:text="@string/hazard_level"
+        android:textColor="@color/colorText"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/crit_issues" />
+        app:layout_constraintTop_toBottomOf="@+id/non_critical" />
 
     <ListView
         android:id="@+id/listof_violations"
@@ -61,6 +61,7 @@
         android:layout_height="563dp"
         android:layout_marginTop="220dp"
         android:textColor="@color/colorText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,9 +69,10 @@
         android:id="@+id/inspection_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorText"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:text="@string/inspections"
+        android:textColor="@color/colorText"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/inspection_date"
         app:layout_constraintTop_toBottomOf="@+id/inspection" />
@@ -79,6 +81,7 @@
         android:id="@+id/num_critical_issues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:text="@string/crticalissues"
         android:textColor="@color/colorText"
@@ -91,6 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
         android:text="@string/hazard"
         android:textColor="@color/colorText"
         android:textSize="18sp"
@@ -113,10 +117,10 @@
         android:id="@+id/num_non_critical_issues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        android:textColor="@color/colorText"
         android:text="@string/noncrit"
+        android:textColor="@color/colorText"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/non_critical"
         app:layout_constraintTop_toBottomOf="@+id/num_critical_issues" />

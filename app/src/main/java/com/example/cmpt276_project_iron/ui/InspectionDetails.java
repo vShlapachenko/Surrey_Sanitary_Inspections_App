@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class InspectionDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        displayCorrectLayout();
         setContentView(R.layout.activity_inspection_details);
         getInspectionIndex();
 
@@ -55,10 +57,18 @@ public class InspectionDetails extends AppCompatActivity {
         else if(restaurantInspection.getViolationList() == null){ // do later breaking thing right now
             noViolations();
         }
+        logData();
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+    private void logData() {
+        for(Violation c : restaurantInspection.getViolationList()) {
+            Log.e(TAG, c.toString());
+        }
+    }
+
     private void setText() {
 
         TextView inspectionDate = findViewById(R.id.inspection_number);
@@ -187,7 +197,9 @@ public class InspectionDetails extends AppCompatActivity {
         int index = getIntent().getIntExtra("curInspection", 0);
         String tNumber = getIntent().getStringExtra("curInspectionTNumber");
         Manager manager = Manager.getInstance();
-        restaurantInspection = manager.getInspectionMap().get(tNumber).get(index);
+        if(manager.getInspectionMap() != null) {
+            restaurantInspection = manager.getInspectionMap().get(tNumber).get(index);
+        }
 
     }
 

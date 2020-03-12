@@ -24,7 +24,7 @@
         android:id="@+id/inspection_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:text="@string/date_of_inspection"
         android:textColor="@color/colorText"
@@ -47,11 +47,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="4dp"
         android:text="@string/hazard_level"
         android:textColor="@color/colorText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/crit_issues" />
+        app:layout_constraintTop_toBottomOf="@+id/non_critical" />
 
     <ListView
         android:id="@+id/listof_violations"
@@ -60,10 +60,10 @@
         android:textColor="@color/colorText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hazard_level"
-        app:layout_constraintVertical_bias="0.296" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.82" />
 
     <TextView
         android:id="@+id/inspection_number"
@@ -92,11 +92,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:text="@string/hazard"
         android:textColor="@color/colorText"
         app:layout_constraintStart_toEndOf="@+id/hazard_level"
-        app:layout_constraintTop_toBottomOf="@+id/num_non_critical_issues" />
+        app:layout_constraintTop_toBottomOf="@+id/non_critical" />
 
     <TextView
         android:id="@+id/non_critical"
