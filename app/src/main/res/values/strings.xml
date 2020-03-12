@@ -82,5 +82,9 @@
     <string name="restaurant_list_title">Restaurants</string>
     <string name="recent_inspection_text">Most Recent Inspection:</string>
     <string name="not_applicable_text">N/A</string>
+    <string name="restaurant_address">%1s, %2s, BC, Canada</string>
+    <string name="restaurant_coordinates">%1f, %2f</string>
+    <string name="inspection_detail_title">Inspection Details</string>
+    <string name="no_violations_available">No violations available</string>
 
 </resources>

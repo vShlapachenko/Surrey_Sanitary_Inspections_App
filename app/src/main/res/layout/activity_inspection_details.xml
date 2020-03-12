@@ -55,15 +55,14 @@
 
     <ListView
         android:id="@+id/listof_violations"
-        android:layout_width="400dp"
-        android:layout_height="525dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:textColor="@color/colorText"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hazard_level"
-        app:layout_constraintVertical_bias="0.296" />
+        app:layout_constraintTop_toBottomOf="@+id/hazard_level" />
 
     <TextView
         android:id="@+id/inspection_number"
@@ -120,5 +119,12 @@
         app:layout_constraintStart_toEndOf="@+id/non_critical"
         app:layout_constraintTop_toBottomOf="@+id/num_critical_issues"
         app:layout_constraintVertical_bias="0.181" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.93" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
