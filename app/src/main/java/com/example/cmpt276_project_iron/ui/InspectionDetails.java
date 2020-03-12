@@ -1,15 +1,8 @@
 package com.example.cmpt276_project_iron.ui;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,13 +11,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Violation;
-
-import java.util.Calendar;
 /*activity that deals with the inspection details such as date, hazard level, critical
 and non critical violations and has a list of violations
  */
@@ -61,7 +57,6 @@ public class InspectionDetails extends AppCompatActivity {
     private void setText() {
 
         TextView inspectionDate = findViewById(R.id.inspection_number);
-
         inspectionDate.setText(DateConversionCalculator.getFullFormattedDate(this, restaurantInspection.getInspectionDate()));
 
         TextView criticalIssues = findViewById(R.id.num_critical_issues);
@@ -157,10 +152,10 @@ public class InspectionDetails extends AppCompatActivity {
             vImageHazard.setImageResource(violation.getHazIconId());
 
             if(violation.isCritical()) {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
             }
             else {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
             }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

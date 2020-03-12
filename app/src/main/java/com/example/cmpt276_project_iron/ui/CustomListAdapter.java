@@ -2,7 +2,6 @@ package com.example.cmpt276_project_iron.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,7 @@ import androidx.core.content.ContextCompat;
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
-import com.example.cmpt276_project_iron.model.Restaurant;
 
-import java.time.YearMonth;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -71,18 +67,19 @@ public class CustomListAdapter extends ArrayAdapter<Inspection> {
         String hazardLevel = inspection.getHazardLevel();
         ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
 
+        view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
+
         if(hazardLevel.equalsIgnoreCase("Low")){
             hazardIcon.setImageResource(R.drawable.low_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLowHazard));
-        } else if(hazardLevel.equalsIgnoreCase("Moderate")){
+
+        } else if (hazardLevel.equalsIgnoreCase("Moderate")) {
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorModerateHazard));
-        } else if(hazardLevel.equalsIgnoreCase("High")){
+
+        } else if (hazardLevel.equalsIgnoreCase("High")) {
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHighHazard));
 
         }
 

@@ -1,16 +1,17 @@
 package com.example.cmpt276_project_iron.ui;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
@@ -43,12 +44,17 @@ public class RestaurantDetails extends AppCompatActivity {
 
         //Creates and fills the list of inspections with necessary data
         inflateInspectionList();
+
     }
+
 
     private void placeRestaurantNameText(){
         ActionBar detailsBar = getSupportActionBar();
-        String restaurantTitle = curRestaurant.getName() + getResources().getString(R.string.restaurantExtension);
+        String restaurantTitle = curRestaurant.getName();
+
         detailsBar.setTitle(restaurantTitle);
+        detailsBar.setSubtitle(getResources().getString(R.string.restaurantExtension));
+
     }
 
     private void placeRestaurantIcon(){
@@ -85,7 +91,12 @@ public class RestaurantDetails extends AppCompatActivity {
     }
 
     private void getIntentData(){
-        int index = getIntent().getIntExtra("restaurantIndex", 1);
+
+        //Using sharedPreferences to address bug where the def value would be called if coming back from third activity
+        //which would set the cur restaurant to the def value. By using SharedPreferences, this data is only changed coming
+        //from the first activity
+        SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
+        int index = getIntent().getIntExtra("restaurantIndex", data.getInt("cur_restaurant", 0));
         manager = Manager.getInstance();
         curRestaurant = manager.getRestaurantList().get(index);
     }
@@ -111,11 +122,11 @@ public class RestaurantDetails extends AppCompatActivity {
          * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
          * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
          */
-        if (width == 480 && height == 800)
-        {
+        if (width == 480 && height == 800) {
             setContentView(R.layout.activity_restaurant_details_custom);
-        }
-        else{
+        } else if (width == 1440 && height == 2560) {
+            setContentView(R.layout.activity_restaurant_details_custom_one);
+        } else{
             setContentView(R.layout.activity_restaurant_details);
         }
     }
