@@ -15,7 +15,6 @@
         android:background="@color/colorTint"
         android:clickable="true"
         android:focusable="true"
-        android:stateListAnimator="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/restaurantList"
         app:srcCompat="@drawable/googleg_standard_color_18" />
@@ -46,5 +45,6 @@
         android:layout_height="match_parent">
 
     </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
