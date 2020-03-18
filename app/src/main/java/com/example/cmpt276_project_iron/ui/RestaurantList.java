@@ -39,12 +39,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         manager = Manager.getInstance();
 
         //Used for launching the map fragment
-        setUpMapOpen();
         inflateRestaurantList();
     }
 
 
-    private void setUpMapOpen(){
+    public void setUpMapOpen(View view){
         FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapContainer = findViewById(R.id.mapContainer);
 
@@ -52,43 +51,35 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //will appear when the user tries to click on the map button
         final int NO_GOOGLE_PLAY = 9001; //Value returned by method we're using if no Google play
 
-        mapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantList.this)
-                    == NO_GOOGLE_PLAY){
-                    Log.i("invalid_google_services", "User does not have the required " +
-                            "Google Play Services to launch map");
-                    Toast.makeText(RestaurantList.this, "Invalid Google Play SDK",
-                                    Toast.LENGTH_SHORT).show();
-                }else {
 
-                    //Note*: Since a fragment is in use, these two parameters are for the second activity
-                    //for their respective lat/long and for now 'empty' are passed in - J
-                    MapFragment fragment = MapFragment.newInstance(0.0, 0.0);
-                    FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
+        if(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantList.this)
+                == NO_GOOGLE_PLAY){
+            Log.i("invalid_google_services", "User does not have the required " +
+                    "Google Play Services to launch map");
+            Toast.makeText(RestaurantList.this, "Invalid Google Play SDK",
+                    Toast.LENGTH_SHORT).show();
+        }else {
+            //Note*: Since a fragment is in use, these two parameters are for the second activity
+            //for their respective lat/long and for now 'empty' are passed in - J
+            MapFragment fragment = MapFragment.newInstance();
+            FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
+            //Before 'opening' the fragment, hide the fpb (floating-btn) as it may leak through,
+            //Since we're putting the instances of the fragment on the stack, when coming back
+            //we override the onBackPressed method such that it makes the fqb reappear
+            mapButton.hide();
+            /**
+             * Note: When a toolbar is set up for the map, it must be tasked with making the
+             *       button reappear
+             */
+            //First two parameters are for entry, the last two are for exit (animations)
+            transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
+                    R.anim.swipe_left, R.anim.swipe_right);
+            //Only want the fragment to close (not the activity), therefore
+            //explicitly add it to the stack
+            transactor.addToBackStack("fragInstance");
+            transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+        }
 
-                    //Before 'opening' the fragment, hide the fpb (floating-btn) as it may leak through,
-                    //Since we're putting the instances of the fragment on the stack, when coming back
-                    //we override the onBackPressed method such that it makes the fqb reappear
-                    mapButton.hide();
-
-                    /**
-                     * Note: When a toolbar is set up for the map, it must be tasked with making the
-                     *       button reappear
-                     */
-
-                    //First two parameters are for entry, the last two are for exit (animations)
-                    transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
-                            R.anim.swipe_left, R.anim.swipe_right);
-
-                    //Only want the fragment to close (not the activity), therefore
-                    //explicitly add it to the stack
-                    transactor.addToBackStack("fragInstance");
-                    transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
-                }
-            }
-        });
     }
 
     private void inflateRestaurantList(){
@@ -147,4 +138,5 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     public void onPointerCaptureChanged(boolean hasCapture) {
         //Do nothing
     }
+
 }

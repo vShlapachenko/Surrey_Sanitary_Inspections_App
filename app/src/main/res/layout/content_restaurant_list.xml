@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:background="@color/colorTint"
-        android:clickable="true"
-        android:focusable="true"
+        android:onClick="setUpMapOpen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/restaurantList"
         app:srcCompat="@drawable/googleg_standard_color_18" />

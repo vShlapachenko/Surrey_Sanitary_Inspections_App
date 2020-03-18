@@ -61,8 +61,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private static final String LONG = "long";
 
     // TODO: Rename and change types of parameters
-    private double inLAT;
-    private double inLONG;
+    private double inLAT = 0.0;
+    private double inLONG = 0.0;
 
     private boolean permissionsGrantedFlag = false;
 
@@ -81,12 +81,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
+    //Used if incoming from coords click
     public static MapFragment newInstance(double latitude, double longitude) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         args.putDouble(LAT, latitude);
         args.putDouble(LONG, longitude);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    //Used for first screen / regular switch
+    public static MapFragment newInstance() {
+        MapFragment fragment = new MapFragment();
+        Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
