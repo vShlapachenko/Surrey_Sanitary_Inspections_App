@@ -168,3 +168,8 @@ public class RestaurantDetails extends AppCompatActivity {
         }
     }
 }
+
+/** Map API key
+ *
+ * >>> AIzaSyAgT7B_BEOp16f_nB5zscZr0OgmyYUiZSs <<< 
+ */
