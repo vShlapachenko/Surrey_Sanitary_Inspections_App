@@ -6,12 +6,18 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
@@ -29,6 +35,8 @@ public class RestaurantDetails extends AppCompatActivity {
     private Restaurant curRestaurant;
     private Manager manager;
 
+   // private FrameLayout mapContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +49,32 @@ public class RestaurantDetails extends AppCompatActivity {
         placeAddressText();
         placeGPScoords();
 
+        //setUpMapOpen()
+
         //Creates and fills the list of inspections with necessary data
         inflateInspectionList();
 
     }
 
+
+    /*//Used for opening map <--- Rework once certain point reached
+    private void setUpMapOpen(){
+        Button mapButton = findViewById(R.id.temporaryButton);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapFragment fragment = new MapFragment(); //****
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
+                        R.anim.swipe_left, R.anim.swipe_right);
+
+                //Only want the fragment to close (Not the activity), therefore
+                //explicitly add it to the stack
+                ft.addToBackStack(null);
+                ft.add(R.id.mapContainer, fragment, "mapFrag").commit();
+            }
+        });
+    }*/
 
     private void placeRestaurantNameText(){
         ActionBar detailsBar = getSupportActionBar();
