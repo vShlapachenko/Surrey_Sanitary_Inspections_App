@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -11,14 +12,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.List;
 
@@ -26,10 +32,12 @@ import java.util.List;
  *  Attains and sets the necessary information for the restaurant's details
  */
 
-public class RestaurantDetails extends AppCompatActivity {
+public class RestaurantDetails extends AppCompatActivity implements MapFragment.OnFragmentInteractionListener{
 
     private Restaurant curRestaurant;
     private Manager manager;
+
+   // private FrameLayout mapContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,6 @@ public class RestaurantDetails extends AppCompatActivity {
         inflateInspectionList();
 
     }
-
 
     private void placeRestaurantNameText(){
         ActionBar detailsBar = getSupportActionBar();
@@ -94,6 +101,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void setUpGPScoordsClick(){
         TextView coordinates = findViewById(R.id.restaurantCoords);
+        final int NO_GOOGLE_PLAY = 9001;
 
         coordinates.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,13 +109,35 @@ public class RestaurantDetails extends AppCompatActivity {
                 Log.i("coordinates_clicked", "Coordinates: " + curRestaurant.getLatitude()
                         + ", " + curRestaurant.getLongitude());
 
-                /**
-                 * (Activity yet to be created) Add the activity to launch / switch to the map
-                 * activity/fragment here ***
-                 * Possible to pass in two data sets, one for the latitude, and one for the longitude
-                 */
+                if(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantDetails.this)
+                        == NO_GOOGLE_PLAY){
+                    Log.i("invalid_google_services", "User does not have the required " +
+                            "Google Play Services to launch map");
+                    Toast.makeText(RestaurantDetails.this, "Invalid Google Play SDK",
+                            Toast.LENGTH_SHORT).show();
+                }else {
+                    //Once the coordinates are clicked, open the fragment with the necessary data being
+                    //passed in
+                    MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
+                            curRestaurant.getLatitude());
+                    FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
+                    transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
+                            R.anim.swipe_left, R.anim.swipe_right);
+                    transactor.addToBackStack("fragInstance");
+                    transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+                }
             }
         });
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //Do nothing
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        //Do nothing
     }
 
     private void inflateInspectionList(){
@@ -167,9 +197,5 @@ public class RestaurantDetails extends AppCompatActivity {
             setContentView(R.layout.activity_restaurant_details);
         }
     }
-}
 
-/** Map API key
- *
- * >>> AIzaSyAgT7B_BEOp16f_nB5zscZr0OgmyYUiZSs <<< 
- */
+}
