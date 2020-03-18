@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,6 +42,7 @@ public class RestaurantDetails extends AppCompatActivity {
         placeRestaurantIcon();
         placeAddressText();
         placeGPScoords();
+        setUpGPScoordsClick();
 
         //Creates and fills the list of inspections with necessary data
         inflateInspectionList();
@@ -73,7 +76,38 @@ public class RestaurantDetails extends AppCompatActivity {
         TextView coordinates = findViewById(R.id.restaurantCoords);
         String restaurantCoords = getResources().getString(R.string.restaurant_coordinates,
                 curRestaurant.getLatitude(), curRestaurant.getLongitude());
+
         coordinates.setText(restaurantCoords);
+
+        //Add an underline to make it apparent that it is clickable, using an underlying textView to
+        //provide an impression of an underline
+        TextView underline = findViewById(R.id.coordUnderline);
+        StringBuilder underlineAmount = new StringBuilder();
+
+        //Creating an underline such that it is the same size as the string of coordinates
+        for(int i = 0; i <= restaurantCoords.length() + 1; i++){
+            underlineAmount.append("_");
+        }
+
+        underline.setText(underlineAmount.toString());
+    }
+
+    private void setUpGPScoordsClick(){
+        TextView coordinates = findViewById(R.id.restaurantCoords);
+
+        coordinates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("coordinates_clicked", "Coordinates: " + curRestaurant.getLatitude()
+                        + ", " + curRestaurant.getLongitude());
+
+                /**
+                 * (Activity yet to be created) Add the activity to launch / switch to the map
+                 * activity/fragment here ***
+                 * Possible to pass in two data sets, one for the latitude, and one for the longitude
+                 */
+            }
+        });
     }
 
     private void inflateInspectionList(){

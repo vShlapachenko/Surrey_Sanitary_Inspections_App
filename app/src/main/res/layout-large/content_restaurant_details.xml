@@ -69,14 +69,29 @@
         android:id="@+id/restaurantCoords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
         android:layout_marginStart="8dp"
-        android:textColor="@color/colorText"
         android:layout_marginTop="16dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/colorText"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintStart_toEndOf="@+id/coordsText"
         app:layout_constraintTop_toBottomOf="@+id/restaurantAddress" />
+
+    <TextView
+        android:id="@+id/coordUnderline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="18dp"
+        android:textColor="@color/colorText"
+        android:textSize="16sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintStart_toEndOf="@+id/coordsText"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantAddress"
+        android:fontFamily="serif"/>
 
     <TextView
         android:id="@+id/inspectionText"
