@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -81,22 +82,11 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
     private void placeGPScoords(){
         TextView coordinates = findViewById(R.id.restaurantCoords);
-        String restaurantCoords = getResources().getString(R.string.restaurant_coordinates,
-                curRestaurant.getLatitude(), curRestaurant.getLongitude());
 
-        coordinates.setText(restaurantCoords);
+        //Add an underline to make it apparent that it is clickable
+        coordinates.setText(HtmlCompat.fromHtml(getString(R.string.restaurant_coordinates,
+                curRestaurant.getLatitude(), curRestaurant.getLongitude()), HtmlCompat.FROM_HTML_MODE_LEGACY));
 
-        //Add an underline to make it apparent that it is clickable, using an underlying textView to
-        //provide an impression of an underline
-        TextView underline = findViewById(R.id.coordUnderline);
-        StringBuilder underlineAmount = new StringBuilder();
-
-        //Creating an underline such that it is the same size as the string of coordinates
-        for(int i = 0; i <= restaurantCoords.length() + 1; i++){
-            underlineAmount.append("_");
-        }
-
-        underline.setText(underlineAmount.toString());
     }
 
     private void setUpGPScoordsClick(){

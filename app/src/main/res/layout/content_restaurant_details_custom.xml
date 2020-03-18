@@ -82,18 +82,6 @@
         app:layout_constraintStart_toEndOf="@+id/coordsText"
         app:layout_constraintTop_toBottomOf="@+id/restaurantAddress" />
 
-    <TextView
-        android:id="@+id/coordUnderline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/colorText"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/coordsText"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantAddress"
-        android:fontFamily="serif"/>
 
     <TextView
         android:id="@+id/inspectionText"
