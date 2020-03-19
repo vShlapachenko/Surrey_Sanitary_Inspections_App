@@ -86,5 +86,8 @@
     <string name="restaurant_coordinates">%1f, %2f</string>
     <string name="inspection_detail_title">Inspection Details</string>
     <string name="no_violations_available">No violations available</string>
+    <string name="violation_header">Violation type</string>
+    <string name="summary_header">Summary</string>
+    <string name="hazard_header">Hazard level</string>
 
 </resources>
