@@ -97,7 +97,6 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
             public void onClick(View v) {
                 Log.i("coordinates_clicked", "Coordinates: " + curRestaurant.getLatitude()
                         + ", " + curRestaurant.getLongitude());
-
                 if(gServicesFlag){
                     //Once the coordinates are clicked, open the fragment with the necessary data being
                     //passed in
@@ -108,6 +107,10 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
                             R.anim.swipe_left, R.anim.swipe_right);
                     transactor.addToBackStack("fragInstance");
                     transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Must have Google Play Services to " +
+                            "launch map", Toast.LENGTH_SHORT).show();
                 }
             }
         });
