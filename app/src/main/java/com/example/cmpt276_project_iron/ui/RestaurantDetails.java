@@ -17,8 +17,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmpt276_project_iron.R;
@@ -37,6 +35,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
     private Restaurant curRestaurant;
     private Manager manager;
+    private boolean gServicesFlag;
 
    // private FrameLayout mapContainer;
 
@@ -99,13 +98,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
                 Log.i("coordinates_clicked", "Coordinates: " + curRestaurant.getLatitude()
                         + ", " + curRestaurant.getLongitude());
 
-                if(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantDetails.this)
-                        == NO_GOOGLE_PLAY){
-                    Log.i("invalid_google_services", "User does not have the required " +
-                            "Google Play Services to launch map");
-                    Toast.makeText(RestaurantDetails.this, "Invalid Google Play SDK",
-                            Toast.LENGTH_SHORT).show();
-                }else {
+                if(gServicesFlag){
                     //Once the coordinates are clicked, open the fragment with the necessary data being
                     //passed in
                     MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
@@ -137,7 +130,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
             emptyListText.setText(getResources().getString(R.string.no_inspection_text));
         } else {
             ListView inspectionList = findViewById(R.id.inspectionList);
-            CustomListAdapter adapter = new CustomListAdapter(this, R.layout.inspection_list_item, inspections);
+            DetailsListAdapter adapter = new DetailsListAdapter(this, R.layout.inspection_list_item, inspections);
             adapter.notifyDataSetChanged();
             inspectionList.setAdapter(adapter);
         }
@@ -150,6 +143,9 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
         //from the first activity
         SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
         int index = getIntent().getIntExtra("restaurantIndex", data.getInt("cur_restaurant", 2));
+        gServicesFlag = data.getBoolean("goog_services", false);
+
+
         manager = Manager.getInstance();
         curRestaurant = manager.getRestaurantList().get(index);
     }

@@ -1,5 +1,6 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -50,7 +51,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Checks if the user has Google Play Services that is required for maps, if not, a message
         //will appear when the user tries to click on the map button
         final int NO_GOOGLE_PLAY = 9001; //Value returned by method we're using if no Google play
-
+        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
 
         if(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantList.this)
                 == NO_GOOGLE_PLAY){
@@ -58,9 +60,18 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                     "Google Play Services to launch map");
             Toast.makeText(RestaurantList.this, "Invalid Google Play SDK",
                     Toast.LENGTH_SHORT).show();
+
+            //Since this check should not be repeated (as is the case with the second activity), we
+            //can check once and then store into preferences
+
+            //Note: Would want to start the second activity for result but in the current structure
+            //it would not provide any advantages as the second activity is launched from the list adapter
+            //and this same code would have to be relayed there as well (thus, again duplicate)
+            //Also, we don't want to block access to the second activity as it still serves different
+            //purposes so it is stored into data and then the boolean is checked before launching maps
+            editor.putBoolean("goog_services", false);
+
         }else {
-            //Note*: Since a fragment is in use, these two parameters are for the second activity
-            //for their respective lat/long and for now 'empty' are passed in - J
             MapFragment fragment = MapFragment.newInstance();
             FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
             //Before 'opening' the fragment, hide the fpb (floating-btn) as it may leak through,
@@ -78,8 +89,9 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             //explicitly add it to the stack
             transactor.addToBackStack("fragInstance");
             transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+            editor.putBoolean("goog_services", true);
         }
-
+        editor.apply();
     }
 
     private void inflateRestaurantList(){
