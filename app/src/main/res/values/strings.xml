@@ -83,8 +83,12 @@
     <string name="recent_inspection_text">Most Recent Inspection:</string>
     <string name="not_applicable_text">N/A</string>
     <string name="restaurant_address">%1s, %2s, BC, Canada</string>
-    <string name="restaurant_coordinates">%1f, %2f</string>
+    <string name="restaurant_coordinates">&lt;u>%1f, %2f&lt;/u></string>
     <string name="inspection_detail_title">Inspection Details</string>
     <string name="no_violations_available">No violations available</string>
+    <string name="title_activity_maps_framework">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
