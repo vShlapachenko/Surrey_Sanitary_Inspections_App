@@ -1,49 +1,50 @@
 package com.example.cmpt276_project_iron.model;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Converts Restaurant CSV to sorted RestaurantList
  */
 
-public class CSVConverterForRestaurant {
+public class CsvRestaurantReader {
 
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
 
-    private Manager manager = Manager.getInstance();
-
-    public void convertRestaurantCSVToList() {
-        convertToList();
-        Collections.sort(manager.getRestaurantList());
+    public List<Restaurant> read(String restaurantFilePath) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(restaurantFilePath)))) {
+            return reader.lines()
+                    .skip(1)
+                    .map(this::convertLine)
+                    .sorted()
+                    .collect(toList());
+        } catch (IOException e) {
+            throw new IllegalArgumentException(restaurantFilePath +
+                    " : File was not provided correctly", e);
+        }
     }
 
-    private void convertToList() {
-        String file = "res/raw/restaurants_itr1.csv";
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream(file);
-        Scanner scanner = new Scanner(in);
-        scanner.nextLine();
-        while (scanner.hasNext()) {
-            List<String> line = parseLine(scanner.nextLine());
-            manager.addRestaurant(line.get(0), line.get(1), line.get(2), line.get(3), line.get(4),
-                    Double.parseDouble(line.get(5)), Double.parseDouble(line.get(6)));
-        }
-        try {
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        scanner.close();
+    private Restaurant convertLine(String line1) {
+        List<String> lineParameters = parseLine(line1);
+        return new Restaurant(
+                lineParameters.get(0),
+                lineParameters.get(1),
+                lineParameters.get(2),
+                lineParameters.get(3),
+                lineParameters.get(4),
+                Double.parseDouble(lineParameters.get(5)),
+                Double.parseDouble(lineParameters.get(6)));
     }
 
     private static List<String> parseLine(String cvsLine) {
         List<String> result = new ArrayList<>();
-        if (cvsLine == null && cvsLine.isEmpty()) {
+        if (cvsLine == null || cvsLine.isEmpty()) {
             return result;
         }
         StringBuffer curVal = new StringBuffer();

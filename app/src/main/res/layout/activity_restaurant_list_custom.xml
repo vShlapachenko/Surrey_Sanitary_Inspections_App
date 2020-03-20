@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.RestaurantList">
 
-    <include layout="@layout/content_restaurant_list" />
+    <include layout="@layout/content_restaurant_list_custom" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

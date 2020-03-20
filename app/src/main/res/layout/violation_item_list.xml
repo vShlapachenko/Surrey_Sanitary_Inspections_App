@@ -22,24 +22,27 @@
     <TextView
         android:id="@+id/summary"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignBottom="@+id/item_violation_image"
-        android:layout_marginStart="3dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_toStartOf="@id/item_hazard"
         android:layout_toEndOf="@+id/item_violation_image"
-        android:text="@string/summary" />
+        android:text="@string/summary"
+        android:textAlignment="center" />
 
     <ImageView
         android:id="@+id/item_hazard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/summary"
-        android:layout_marginStart="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="8dp"
         android:adjustViewBounds="true"
-        android:layout_marginTop="-16dp"
-        android:maxHeight="50dp"
         android:maxWidth="50dp"
-        android:layout_toEndOf="@id/summary"
+        android:maxHeight="50dp"
         app:srcCompat="@drawable/moderate_hazard" />
 
 </RelativeLayout>

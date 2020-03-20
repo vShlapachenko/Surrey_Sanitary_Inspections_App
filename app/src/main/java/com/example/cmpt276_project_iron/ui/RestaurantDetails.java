@@ -1,8 +1,5 @@
 package com.example.cmpt276_project_iron.ui;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +9,9 @@ import android.view.Display;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
@@ -35,20 +35,13 @@ public class RestaurantDetails extends AppCompatActivity {
         displayCorrectLayout();
         setUpBackButton();
 
-
         getIntentData();
-
         placeRestaurantNameText();
-
         placeRestaurantIcon();
-
         placeAddressText();
-
         placeGPScoords();
 
-        /**
-         * Creates and fills the list of inspections with necessary data
-         */
+        //Creates and fills the list of inspections with necessary data
         inflateInspectionList();
 
     }
@@ -71,29 +64,27 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void placeAddressText(){
         TextView address = findViewById(R.id.restaurantAddress);
-        String restaurantAddress = curRestaurant.getPhysicalCity() + ", " + curRestaurant.getPhysicalAddress();
-
+        String restaurantAddress = getResources().getString(R.string.restaurant_address,
+                curRestaurant.getPhysicalAddress(),curRestaurant.getPhysicalCity());
         address.setText(restaurantAddress);
     }
 
     private void placeGPScoords(){
         TextView coordinates = findViewById(R.id.restaurantCoords);
-        String restaurantCoords = curRestaurant.getLatitude() + ", " + curRestaurant.getLongitude();
+        String restaurantCoords = getResources().getString(R.string.restaurant_coordinates,
+                curRestaurant.getLatitude(), curRestaurant.getLongitude());
         coordinates.setText(restaurantCoords);
     }
 
     private void inflateInspectionList(){
         List<Inspection> inspections = manager.getInspectionMap().get(curRestaurant.getTrackingNumber());
-
         if(inspections == null){
             TextView emptyListText = findViewById(R.id.noInspectionsText);
             emptyListText.setText(getResources().getString(R.string.no_inspection_text));
-        }
-        else {
+        } else {
             ListView inspectionList = findViewById(R.id.inspectionList);
             CustomListAdapter adapter = new CustomListAdapter(this, R.layout.inspection_list_item, inspections);
             adapter.notifyDataSetChanged();
-
             inspectionList.setAdapter(adapter);
         }
     }
@@ -112,13 +103,11 @@ public class RestaurantDetails extends AppCompatActivity {
     public static Intent getIntent(Context context, int restaurantIndex){
         Intent intent = new Intent(context, RestaurantDetails.class);
         intent.putExtra("restaurantIndex", restaurantIndex);
-
         return intent;
     }
 
     private void setUpBackButton(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     private void displayCorrectLayout(){
@@ -130,21 +119,18 @@ public class RestaurantDetails extends AppCompatActivity {
         float density = getResources().getDisplayMetrics().density;
 
 
-        /**
+        /*
          * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
          * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
          */
         //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
         double MDPI_SCREEN_SIZE = 1.0;
-        if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
+        if (width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
             setContentView(R.layout.activity_restaurant_details_custom);
-        }
-        else if(width == 1440 && height == 2560) {
+        } else if (width == 1440 && height == 2560) {
             setContentView(R.layout.activity_restaurant_details_custom_one);
-        }
-        else{
+        } else{
             setContentView(R.layout.activity_restaurant_details);
         }
     }
-
 }

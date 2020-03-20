@@ -6,7 +6,6 @@ import android.view.Display;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cmpt276_project_iron.R;
@@ -26,13 +25,11 @@ public class RestaurantList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
-        placeActionBarText();
         setUpBackButton();
 
         manager = Manager.getInstance();
 
         inflateRestaurantList();
-
     }
 
     private void inflateRestaurantList(){
@@ -41,27 +38,17 @@ public class RestaurantList extends AppCompatActivity {
         if(restaurants == null){
             TextView emptyListText = findViewById(R.id.noRestaurantsText);
             emptyListText.setText(getResources().getString(R.string.no_restaurants_text));
-        }
-        else {
+        } else {
             ListView restaurantList = findViewById(R.id.restaurantList);
-            RestaurantListAdapter adapter = new RestaurantListAdapter(this, R.layout.restaurant_list_item, restaurants);
+            RestaurantListAdapter adapter = new RestaurantListAdapter(this,
+                    R.layout.restaurant_list_item, restaurants);
             adapter.notifyDataSetChanged();
-
             restaurantList.setAdapter(adapter);
         }
     }
 
-    private void placeActionBarText(){
-        ActionBar detailsBar = getSupportActionBar();
-        String restaurantTitle = getResources().getString(R.string.restaurant_list_title);
-
-        detailsBar.setTitle(restaurantTitle);
-
-    }
-
     private void setUpBackButton(){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     private void displayCorrectLayout(){
@@ -70,14 +57,19 @@ public class RestaurantList extends AppCompatActivity {
         dimensions.getSize(dimension);
         int width = dimension.x;
         int height = dimension.y;
+        float density = getResources().getDisplayMetrics().density;
 
-        /**
+        /*
          * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
          * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
          */
-        if (width == 480 && height == 800)
-        {
-            setContentView(R.layout.activity_restaurant_list);
+        //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
+        double MDPI_SCREEN_SIZE = 1.0;
+        if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
+            setContentView(R.layout.activity_restaurant_list_custom);
+        }
+        else if(width == 1440 && height == 2560) {
+            setContentView(R.layout.activity_restaurant_list_custom_one);
         }
         else{
             setContentView(R.layout.activity_restaurant_list);
