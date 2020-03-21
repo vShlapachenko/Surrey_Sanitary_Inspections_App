@@ -3,6 +3,8 @@ package com.example.cmpt276_project_iron.ui;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.cmpt276_project_iron.R;
@@ -29,15 +32,23 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,6 +71,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private static final String LAT = "lat";
     private static final String LONG = "long";
 
+    private EditText mSearchText;
+
     // TODO: Rename and change types of parameters
     private double inLAT = 0.0;
     private double inLONG = 0.0;
@@ -76,6 +89,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private OnFragmentInteractionListener mListener;
 
     private static final float ZOOM_AMNT = 15f;
+
+    private final String TAG = "Maps";
 
     public MapFragment() {
         // Required empty public constructor
@@ -142,6 +157,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
     }
 
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -182,8 +199,63 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
+//        placePeg(map);
+        moveCamera(new LatLng(49.032923, -0123.076007), ZOOM_AMNT, "Papa Johns");
+
     }
 
+    private void placePeg(GoogleMap googleMap) {
+//        49.0370
+        LatLng latLng = new LatLng(49.0370, 123.0875); // lat lang will be changed to current restaurant being passed in
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)); // change to hazard icon
+        markerOptions.title("Test");
+        markerOptions.snippet("Testing testing");
+        map.moveCamera(CameraUpdateFactory.newLatLng(latLng)); // sets to center of your screen
+        map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+        map.addMarker(markerOptions);
+    }
+
+    private void moveCamera(LatLng latLng, float zoom, String restaurantName) {
+
+//        Task location = locationProvider.getLastLocation();
+//        Location curLocation = (Location) location.getResult();
+//        LatLng loc = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)); // change to hazard icon
+        markerOptions.title(restaurantName);
+
+        map.addMarker(markerOptions);
+
+    }
+//    private void geoLocate(){
+//        Log.d(TAG, "geoLocate: geolocating");
+//
+//        String searchString = mSearchText.getText().toString();
+//
+//        Geocoder geocoder = new Geocoder(this);
+//        List<Address> list = new ArrayList<>();
+//        try{
+//            list = geocoder.getFromLocationName(searchString, 1);
+//        }catch (IOException e){
+//            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+//        }
+//
+//        if(list.size() > 0){
+//            Address address = list.get(0);
+//
+//            Log.d(TAG, "geoLocate: found a location: " + address.toString());
+//            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+//
+//            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), ZOOM_AMNT,
+//                    address.getAddressLine(0));
+//        }
+//    }
     private void placeGPSPosition() {
 
         //Below needs to be tested for functionality
