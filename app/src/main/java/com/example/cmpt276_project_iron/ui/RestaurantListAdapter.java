@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
@@ -28,7 +29,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  *  List adapter used for the restaurant list activity
  */
-public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
+public class RestaurantListAdapter extends RecyclerView.Adapter<Restaurant> {
     private Context context;
     private List<Restaurant> restaurants;
     private Manager manager;
