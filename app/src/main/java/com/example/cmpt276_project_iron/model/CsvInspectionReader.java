@@ -1,5 +1,7 @@
 package com.example.cmpt276_project_iron.model;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,8 +26,30 @@ public class CsvInspectionReader {
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
     private static final int NUM_FIELDS_IN_VIOL = 4;
-
+    private int violL;
+    private int hazardRating;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+
+
+    public CsvInspectionReader(String inspectionFilePath) {
+        try (BufferedReader reader = getReader(inspectionFilePath)) {
+            String line = reader.readLine();
+            String[] fields = line.split(",");
+            for (int i = 0; i < fields.length; i++) {
+                fields[i] = fields[i].replace("\"", "");
+            }
+            if (fields[6].equalsIgnoreCase("ViolLump")) {
+                this.hazardRating = 5;
+                this.violL = 6;
+            } else if (fields[5].equalsIgnoreCase("ViolLump")) {
+                Log.e("FIELDS [6] : ", fields[6]);
+                this.hazardRating = 6;
+                this.violL = 5;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Map<String, List<Inspection>> read(String inspectionFilePath) {
         try (BufferedReader reader = getReader(inspectionFilePath)) {
@@ -47,14 +71,26 @@ public class CsvInspectionReader {
         List<String> lineParameters = parseLine(line);
         Calendar cal = convertToCalendar(lineParameters.get(1));
 
-        return new Inspection(
-                lineParameters.get(0),
-                cal,
-                lineParameters.get(2),
-                Integer.parseInt(lineParameters.get(3)),
-                Integer.parseInt(lineParameters.get(4)),
-                lineParameters.get(5),
-                convertToViolList(lineParameters.get(6)));
+        if (violL == 6) {
+            return new Inspection(
+                    lineParameters.get(0),
+                    cal,
+                    lineParameters.get(2),
+                    Integer.parseInt(lineParameters.get(3)),
+                    Integer.parseInt(lineParameters.get(4)),
+                    lineParameters.get(hazardRating),
+                    convertToViolList(lineParameters.get(violL)));
+        } else if (violL == 5) {
+            return new Inspection(
+                    lineParameters.get(0),
+                    cal,
+                    lineParameters.get(2),
+                    Integer.parseInt(lineParameters.get(3)),
+                    Integer.parseInt(lineParameters.get(4)),
+                    lineParameters.get(hazardRating),
+                    convertToViolList(lineParameters.get(violL)));
+        }
+        return null;
     }
 
     private Calendar convertToCalendar(String csvDate) {

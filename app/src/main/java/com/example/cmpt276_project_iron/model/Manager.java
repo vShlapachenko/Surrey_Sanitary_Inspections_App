@@ -24,7 +24,7 @@ public class Manager {
 
     public static Manager getInstance() {
         if (instance == null) {
-            CsvInspectionReader inspectionReader = new CsvInspectionReader();
+            CsvInspectionReader inspectionReader = new CsvInspectionReader(INSPECTION_FILE_PATH);
             Map<String, List<Inspection>> inspectionMap = inspectionReader.read(INSPECTION_FILE_PATH);
             CsvRestaurantReader restaurantReader = new CsvRestaurantReader();
             List<Restaurant> restaurantList = restaurantReader.read(RESTAURANT_FILE_PATH);
