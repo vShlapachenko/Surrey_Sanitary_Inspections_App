@@ -41,9 +41,14 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
         //Used for launching the map fragment
         inflateRestaurantList();
+
+        //Only after the necessary processing of the first activity has been completed should the
+        //map be displayed (as default first screen)
+        firstLaunchIndicator();
+        setUpMapOpen(getWindow().getDecorView().getRootView());
     }
 
-
+    //Made public so it can be launched from xml (non-dynamic)
     public void setUpMapOpen(View view){
         FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapContainer = findViewById(R.id.mapContainer);
@@ -137,9 +142,35 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        /**
+         * REMOVE ONCE BOTTOM NAVIGATION BAR IS ADDED (just bottom 2 lines of code)
+         */
         FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapButton.show();
+
+        //Indicator used to exit if launched for first time (def map view)
+        /**
+         * UNCOMMENT ONCE BOTTOM NAVIGATION BAR HAS BEEN ADDED
+         */
+        /*SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
+        if(data.getBoolean("first_launch", false)){
+            finish();
+        }
+        else{
+            super.onBackPressed();
+        }*/
     }
+
+    private void firstLaunchIndicator(){
+        //since it's a fragment it must be launched from an activity, however, it is also
+        //the default screen, and therefore the default structure would result in complications
+        //as in going to the list activity instead of exiting if launched for the first time
+        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
+        editor.putBoolean("first_launch", true);
+        editor.apply();
+    }
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {

@@ -10,15 +10,19 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -61,8 +65,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private static final String LONG = "long";
 
     // TODO: Rename and change types of parameters
-    private double inLAT = 0.0;
-    private double inLONG = 0.0;
+    private Double inLAT = null;
+    private Double inLONG = null;
 
     private boolean permissionsGrantedFlag = false;
 
@@ -182,6 +186,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
+
+        Log.i("data_check", "latitude: " + inLAT + " | " + "longitude: " + inLONG);
     }
 
     private void placeGPSPosition() {
@@ -219,7 +225,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         //Places marker on the user's position
         map.setMyLocationEnabled(true);
-
     }
 
     private void updateGPSPosition() {
@@ -277,32 +282,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         gpsChangeListener = onLocationChangedListener;
     }
 
-    @Override
-    public void deactivate() {
-        gpsChangeListener = null;
-    }
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        //Do nothing
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        //Do nothing
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        //Do nothing
-    }
-
 
     private void setMapFeatures(){
         map.getUiSettings().setAllGesturesEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
-        //map.getUiSettings().setCompassEnabled(true);
+        map.getUiSettings().setCompassEnabled(true);
     }
 
 
@@ -363,5 +347,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
     }
 
+    @Override
+    public void deactivate() {
+        gpsChangeListener = null;
+    }
+
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        //Do nothing
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        //Do nothing
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        //Do nothing
+    }
 
 }
