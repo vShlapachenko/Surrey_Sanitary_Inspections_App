@@ -75,8 +75,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorText"
         android:textSize="12sp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintStart_toEndOf="@+id/coordsText"
         app:layout_constraintTop_toBottomOf="@+id/restaurantAddress" />
+
 
     <TextView
         android:id="@+id/inspectionText"

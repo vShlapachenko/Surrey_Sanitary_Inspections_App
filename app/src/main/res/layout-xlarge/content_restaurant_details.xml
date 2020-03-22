@@ -72,11 +72,14 @@
         android:layout_marginStart="8dp"
         android:textSize="28sp"
         android:textColor="@color/colorText"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="18dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintStart_toEndOf="@+id/coordsText"
         app:layout_constraintTop_toBottomOf="@+id/restaurantAddress" />
+
 
     <TextView
         android:id="@+id/inspectionText"

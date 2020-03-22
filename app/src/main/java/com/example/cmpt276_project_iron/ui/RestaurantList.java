@@ -1,16 +1,26 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -18,18 +28,70 @@ import java.util.List;
 /**
  *  Attains and sets the necessary information for the restaurant's details
  */
-public class RestaurantList extends AppCompatActivity {
+public class RestaurantList extends AppCompatActivity implements MapFragment.OnFragmentInteractionListener {
     private Manager manager;
+    private FrameLayout mapContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
         setUpBackButton();
-
         manager = Manager.getInstance();
 
+        //Used for launching the map fragment
         inflateRestaurantList();
+    }
+
+
+    public void setUpMapOpen(View view){
+        FloatingActionButton mapButton = findViewById(R.id.mapButton);
+        mapContainer = findViewById(R.id.mapContainer);
+
+        //Checks if the user has Google Play Services that is required for maps, if not, a message
+        //will appear when the user tries to click on the map button
+        final int NO_GOOGLE_PLAY = 9001; //Value returned by method we're using if no Google play
+        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
+
+        if(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantList.this)
+                == NO_GOOGLE_PLAY){
+            Log.i("invalid_google_services", "User does not have the required " +
+                    "Google Play Services to launch map");
+            Toast.makeText(RestaurantList.this, "Invalid Google Play SDK",
+                    Toast.LENGTH_SHORT).show();
+
+            //Since this check should not be repeated (as is the case with the second activity), we
+            //can check once and then store into preferences
+
+            //Note: Would want to start the second activity for result but in the current structure
+            //it would not provide any advantages as the second activity is launched from the list adapter
+            //and this same code would have to be relayed there as well (thus, again duplicate)
+            //Also, we don't want to block access to the second activity as it still serves different
+            //purposes so it is stored into data and then the boolean is checked before launching maps
+            editor.putBoolean("goog_services", false);
+
+        }else {
+            MapFragment fragment = MapFragment.newInstance();
+            FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
+            //Before 'opening' the fragment, hide the fpb (floating-btn) as it may leak through,
+            //Since we're putting the instances of the fragment on the stack, when coming back
+            //we override the onBackPressed method such that it makes the fqb reappear
+            mapButton.hide();
+            /**
+             * Note: When a toolbar is set up for the map, it must be tasked with making the
+             *       button reappear
+             */
+            //First two parameters are for entry, the last two are for exit (animations)
+            transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
+                    R.anim.swipe_left, R.anim.swipe_right);
+            //Only want the fragment to close (not the activity), therefore
+            //explicitly add it to the stack
+            transactor.addToBackStack("fragInstance");
+            transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+            editor.putBoolean("goog_services", true);
+        }
+        editor.apply();
     }
 
     private void inflateRestaurantList(){
@@ -59,10 +121,6 @@ public class RestaurantList extends AppCompatActivity {
         int height = dimension.y;
         float density = getResources().getDisplayMetrics().density;
 
-        /*
-         * Android will automatically choose best layout in accordance to normal/large/xlarge (already custom xmls),
-         * however, phones such as the Nexus S do not choose this correctly and therefore setting a special case
-         */
         //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
         double MDPI_SCREEN_SIZE = 1.0;
         if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
@@ -75,4 +133,22 @@ public class RestaurantList extends AppCompatActivity {
             setContentView(R.layout.activity_restaurant_list);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        FloatingActionButton mapButton = findViewById(R.id.mapButton);
+        mapButton.show();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //Do nothing
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        //Do nothing
+    }
+
 }
