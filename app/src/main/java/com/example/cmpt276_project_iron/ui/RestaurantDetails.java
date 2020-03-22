@@ -1,5 +1,6 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -100,11 +102,13 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
                 if(gServicesFlag){
                     //Once the coordinates are clicked, open the fragment with the necessary data being
                     //passed in
+
                     MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
                             curRestaurant.getLatitude());
                     FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
                     transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
                             R.anim.swipe_left, R.anim.swipe_right);
+                    //Adding to stack will be used to exit the fragment
                     transactor.addToBackStack("fragInstance");
                     transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
                 }
@@ -161,6 +165,28 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
     private void setUpBackButton(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    //For the toolbar back button, since a fragment will be launched from this activity which will share
+    //the same toolbar, when back is pressed we want it to go back and remove the fragment, NOT close the
+    //activity
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        //If the back button of the action bar is clicked
+        if(item.getItemId() == android.R.id.home){
+            //if the FragmentManager is != null and consist of some fragments, it will close those
+            //first, then when it's clicked again, it will close this activity
+            FragmentManager manager = getFragmentManager();
+            if (manager.getBackStackEntryCount() > 0) {
+                manager.popBackStack();
+            } else {
+                //If there are no fragments, act as normal
+                super.onBackPressed();
+            }
+        }
+
+        return true;
     }
 
     private void displayCorrectLayout(){
