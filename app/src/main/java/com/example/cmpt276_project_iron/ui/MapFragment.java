@@ -3,6 +3,8 @@ package com.example.cmpt276_project_iron.ui;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -27,6 +29,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.Inspection;
+import com.example.cmpt276_project_iron.model.Manager;
+import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -41,6 +46,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,6 +55,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,9 +96,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private SupportMapFragment mapFragment;
     private OnFragmentInteractionListener mListener;
 
+    private  List<MarkerOptions> markers = new ArrayList<>();
+
     private static final float ZOOM_AMNT = 15f;
 
     private final String TAG = "Maps";
+    private Manager manager;
 
     public MapFragment() {
         // Required empty public constructor
@@ -199,63 +210,81 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
-//        placePeg(map);
-        moveCamera(new LatLng(49.032923, -0123.076007), ZOOM_AMNT, "Papa Johns");
+//        placePeg(new LatLng(49.032923, -0123.076007), ZOOM_AMNT, "Papa Johns");
+        manager = Manager.getInstance();
+
+        List<Restaurant> restaurantList = manager.getRestaurantList();
+
+        for(Restaurant cur : restaurantList) {
+
+            placePeg(cur, ZOOM_AMNT);
+        }
+
 
     }
 
-    private void placePeg(GoogleMap googleMap) {
-//        49.0370
-        LatLng latLng = new LatLng(49.0370, 123.0875); // lat lang will be changed to current restaurant being passed in
+    private void placePeg(Restaurant res, float zoom) {
 
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)); // change to hazard icon
-        markerOptions.title("Test");
-        markerOptions.snippet("Testing testing");
-        map.moveCamera(CameraUpdateFactory.newLatLng(latLng)); // sets to center of your screen
-        map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        if(manager.getInspectionMap().get(res.getTrackingNumber()) == null) {
 
-        map.addMarker(markerOptions);
+        }
+        else {
+            Inspection mostRecentInspection = manager.getInspectionMap().get(res.getTrackingNumber()).get(0);
+
+            Log.e(TAG, "restaurant haz level " + mostRecentInspection.getHazardLevel());
+
+            LatLng latLng = new LatLng(res.getLatitude(), res.getLongitude());
+
+            int height = 100;
+            int width = 100;
+
+            MarkerOptions marker;
+
+            if (mostRecentInspection.getHazardLevel().equals("Low")) {
+
+                // got from stack overflow https://stackoverflow.com/questions/35718103/how-to-specify-the-size-of-the-icon-on-the-marker-in-google-maps-v2-android
+                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.low_hazard);
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+                marker = new MarkerOptions()
+                        .position(latLng)
+                        .title(res.getName() + ", " + res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
+                map.addMarker(marker);
+                markers.add(marker);
+
+            } else if (mostRecentInspection.getHazardLevel().equals("Moderate")) {
+                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.moderate_hazard);
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+                marker = new MarkerOptions()
+                        .position(latLng)
+                        .title(res.getName() + ", " + res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
+                map.addMarker(marker);
+                markers.add(marker);
+
+            } else {
+                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.high_hazard);
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+                marker = new MarkerOptions()
+                        .position(latLng)
+                        .title(res.getName() + ", " + res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
+                map.addMarker(marker);
+                markers.add(marker);
+            }
+        }
+
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String restaurantName) {
-
-//        Task location = locationProvider.getLastLocation();
-//        Location curLocation = (Location) location.getResult();
-//        LatLng loc = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
-
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)); // change to hazard icon
-        markerOptions.title(restaurantName);
-
-        map.addMarker(markerOptions);
-
-    }
-//    private void geoLocate(){
-//        Log.d(TAG, "geoLocate: geolocating");
-//
-//        String searchString = mSearchText.getText().toString();
-//
-//        Geocoder geocoder = new Geocoder(this);
-//        List<Address> list = new ArrayList<>();
-//        try{
-//            list = geocoder.getFromLocationName(searchString, 1);
-//        }catch (IOException e){
-//            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
-//        }
-//
-//        if(list.size() > 0){
-//            Address address = list.get(0);
-//
-//            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-//            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-//
-//            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), ZOOM_AMNT,
-//                    address.getAddressLine(0));
-//        }
-//    }
     private void placeGPSPosition() {
 
         //Below needs to be tested for functionality
