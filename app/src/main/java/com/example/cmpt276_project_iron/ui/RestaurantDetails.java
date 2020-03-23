@@ -186,6 +186,10 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
                 ActionBar detailsBar = getSupportActionBar();
                 detailsBar.setSubtitle(getResources().getString(R.string.restaurantExtension));
             } else {
+
+                ActionBar detailsBar = getSupportActionBar();
+                detailsBar.setSubtitle(getResources().getString(R.string.restaurantExtension));
+
                 //If there are no fragments, act as normal
                 super.onBackPressed();
             }
