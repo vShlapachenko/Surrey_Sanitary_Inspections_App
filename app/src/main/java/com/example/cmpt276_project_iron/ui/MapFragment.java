@@ -15,14 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -41,7 +39,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +48,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  * Use the {@link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 
 //Note: Depending on from where this activity is launched, pass data accordingly from which extra
 //features will be deployed
@@ -79,7 +77,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private SupportMapFragment mapFragment;
     private OnFragmentInteractionListener mListener;
 
-    private static final float ZOOM_AMNT = 15f;
+    private static final float ZOOM_AMNT = 17f;
 
     public MapFragment() {
         // Required empty public constructor
@@ -109,6 +107,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         //Explicitly asks the user for permission for the required services
         getRequiredPermissions();
+
+        //Tracks the user's location
         updateGPSPosition();
 
 
@@ -188,6 +188,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         setMapFeatures();
 
         Log.i("data_check", "latitude: " + inLAT + " | " + "longitude: " + inLONG);
+        //If launched from the second activity (via coordinates), the toolbar subtitle is changed to
+        //confine to the map fragment context
+        if(inLAT != 0.0 && inLONG != 0.0) {
+            changeToolbarText();
+        }
     }
 
     private void placeGPSPosition() {
@@ -207,9 +212,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                             //Gets the location, which is then used to move the view to
                             Location curLocation = (Location) task.getResult();
 
-                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
-                                            (curLocation.getLatitude(), curLocation.getLongitude()),
-                                    ZOOM_AMNT));
+                            //If the map fragment was launched from the second activity (via the coordinates click)
+                            //Then the view will move to that restaurants location
+
+                            //First check if launched from second activity
+                            if(inLAT != 0.0 && inLONG != 0.0){
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                                (inLAT, inLONG),
+                                        ZOOM_AMNT));
+
+                            }
+                            else {
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                                (curLocation.getLatitude(), curLocation.getLongitude()),
+                                        ZOOM_AMNT));
+                            }
 
                         } else {
                             Toast.makeText(getContext(), "Unable to track user",
@@ -244,7 +261,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
          * Two ways need to be tested: Current deployment of locationListener+ and the
          * below sequence
          */
-        /*locationProvider = LocationServices.getFusedLocationProviderClient(this.getContext());
+        locationProvider = LocationServices.getFusedLocationProviderClient(this.getContext());
         //Higher priority == greater accuracy of coords on map
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -345,6 +362,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                     }
                 }
         }
+    }
+
+    private void changeToolbarText(){
+        ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        toolbar.setSubtitle("Location");
     }
 
     @Override
