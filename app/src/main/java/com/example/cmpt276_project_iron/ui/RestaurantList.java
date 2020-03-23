@@ -1,5 +1,6 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmpt276_project_iron.R;
@@ -44,7 +44,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
         //Only after the necessary processing of the first activity has been completed should the
         //map be displayed (as default first screen)
-        firstLaunchIndicator();
         setUpMapOpen(getWindow().getDecorView().getRootView());
     }
 
@@ -148,29 +147,16 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapButton.show();
 
-        //Indicator used to exit if launched for first time (def map view)
-        /**
-         * UNCOMMENT ONCE BOTTOM NAVIGATION BAR HAS BEEN ADDED
-         */
-        /*SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
-        if(data.getBoolean("first_launch", false)){
+        //In accordance with the user stories, any one of the selections of the map or restaurant
+        //will result in an exit of the application
+        /*FragmentManager manager = getFragmentManager();
+        if (manager.getBackStackEntryCount() > 0) {
             finish();
-        }
-        else{
+        } else {
+            //If no fragments -> on restaurant screen -> exit application -> normal behaviour
             super.onBackPressed();
         }*/
     }
-
-    private void firstLaunchIndicator(){
-        //since it's a fragment it must be launched from an activity, however, it is also
-        //the default screen, and therefore the default structure would result in complications
-        //as in going to the list activity instead of exiting if launched for the first time
-        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = data.edit();
-        editor.putBoolean("first_launch", true);
-        editor.apply();
-    }
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {
