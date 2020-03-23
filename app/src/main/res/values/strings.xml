@@ -90,7 +90,7 @@
     <string name="summary_header">Summary</string>
     <string name="hazard_header">Hazard level</string>
     <string-array name="custom_icon_restaurants">
-        <item>McDonald's</item>
+        <item>McDonald</item>
         <item>Freshslice</item>
         <item>Subway</item>
         <item>Panago</item>
