@@ -119,12 +119,59 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         inspectionDate.setText(DateConversionCalculator.getFormattedDate(view.getContext(), recentInspection.getInspectionDate()));
 
         ImageView restaurantIcon = view.findViewById(R.id.restaurantIcon);
-        restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        initializeRestaurantIcon(restaurant, restaurantIcon);
         restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         String hazardLevel = recentInspection.getHazardLevel();
         ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
         initializeHazardIcon(hazardLevel, hazardIcon);
+    }
+
+    private void initializeRestaurantIcon(Restaurant restaurant, ImageView restaurantIcon) {
+        String resName = restaurant.getName();
+        String[] resNameArray = context.getResources().getStringArray(R.array.custom_icon_restaurants);
+        for (String name : resNameArray) {
+            if(resName.contains(name)) {
+                setCustomRestaurantIcon(restaurant, restaurantIcon);
+                return;
+            }
+        }
+        restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        return;
+    }
+
+    private void setCustomRestaurantIcon(Restaurant restaurant, ImageView restaurantIcon) {
+        String resName = restaurant.getName();
+        if (resName.contains("McDonald's")) {
+            restaurantIcon.setImageResource(R.drawable.mcdonalds);
+        }
+        else if (resName.contains("Freshslice")) {
+            restaurantIcon.setImageResource(R.drawable.freshslice);
+        }
+        else if (resName.contains("Subway")) {
+            restaurantIcon.setImageResource(R.drawable.subway);
+        }
+        else if (resName.contains("Panago")) {
+            restaurantIcon.setImageResource(R.drawable.panago);
+        }
+        else if (resName.contains("Starbucks")) {
+            restaurantIcon.setImageResource(R.drawable.starbucks);
+        }
+        else if (resName.contains("Blenz")) {
+            restaurantIcon.setImageResource(R.drawable.blenz);
+        }
+        else if (resName.contains("Tim Hortons")) {
+            restaurantIcon.setImageResource(R.drawable.timbos);
+        }
+        else if (resName.contains("Booster Juice")) {
+            restaurantIcon.setImageResource(R.drawable.boosterjuice);
+        }
+        else if (resName.contains("Freshii")) {
+            restaurantIcon.setImageResource(R.drawable.freshii);
+        }
+        else if (resName.contains("KFC")) {
+            restaurantIcon.setImageResource(R.drawable.kfc);
+        }
     }
 
     private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon) {
