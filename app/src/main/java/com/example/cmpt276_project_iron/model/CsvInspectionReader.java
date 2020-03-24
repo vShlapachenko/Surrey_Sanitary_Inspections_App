@@ -82,7 +82,7 @@ public class CsvInspectionReader {
     private Inspection convertLine(String line) {
         List<String> lineParameters = parseLine(line);
 
-        if (lineParameters.get(0).equalsIgnoreCase("")) {
+        if (lineParameters.get(0).equals("")) {
             return null;
         }
         Calendar cal = convertToCalendar(lineParameters.get(1));
