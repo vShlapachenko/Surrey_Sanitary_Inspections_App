@@ -8,20 +8,21 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmpt276_project_iron.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -37,7 +38,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,11 +48,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  * create an instance of this fragment.
  */
 
+
 //Note: Depending on from where this activity is launched, pass data accordingly from which extra
 //features will be deployed
 //Parameters are passed via the .add method casted upon the fragment AND/OR the newInstance method
 
-//Note: Location needs to be tested on a real phone <-------
+//Note: Location (+ clicked restaurant coords then moving) needs to be tested on a real phone <-------
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, LocationListener, LocationSource {
     // TODO: Rename parameter arguments, choose names that match
@@ -75,7 +76,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private SupportMapFragment mapFragment;
     private OnFragmentInteractionListener mListener;
 
-    private static final float ZOOM_AMNT = 15f;
+    private static final float ZOOM_AMNT = 17f;
 
     public MapFragment() {
         // Required empty public constructor
@@ -105,6 +106,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         //Explicitly asks the user for permission for the required services
         getRequiredPermissions();
+
+        //Tracks the user's location
         updateGPSPosition();
 
 
@@ -182,6 +185,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
+
+        Log.i("data_check", "latitude: " + inLAT + " | " + "longitude: " + inLONG);
+        //If launched from the second activity (via coordinates), the toolbar subtitle is changed to
+        //confine to the map fragment context
+        if (inLAT != 0.0 && inLONG != 0.0) {
+            changeToolbarText();
+        }
     }
 
     private void placeGPSPosition() {
@@ -201,9 +211,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                             //Gets the location, which is then used to move the view to
                             Location curLocation = (Location) task.getResult();
 
-                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
-                                            (curLocation.getLatitude(), curLocation.getLongitude()),
-                                    ZOOM_AMNT));
+                            //If the map fragment was launched from the second activity (via the coordinates click)
+                            //Then the view will move to that restaurants location
+
+                            //First check if launched from second activity
+                            if (inLAT != 0.0 && inLONG != 0.0) {
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                                (inLAT, inLONG),
+                                        ZOOM_AMNT));
+
+                            } else {
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                                (curLocation.getLatitude(), curLocation.getLongitude()),
+                                        ZOOM_AMNT));
+                            }
 
                         } else {
                             Toast.makeText(getContext(), "Unable to track user",
@@ -219,7 +240,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         //Places marker on the user's position
         map.setMyLocationEnabled(true);
-
     }
 
     private void updateGPSPosition() {
@@ -239,17 +259,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
          * Two ways need to be tested: Current deployment of locationListener+ and the
          * below sequence
          */
-        /*locationProvider = LocationServices.getFusedLocationProviderClient(this.getContext());
+        locationProvider = LocationServices.getFusedLocationProviderClient(this.getContext());
         //Higher priority == greater accuracy of coords on map
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         //To shorten the amount of battery usage and taking into account the usage of the application,
-        //the interval is set t0 4 seconds for the regular interval
+        //the interval is set to 4 seconds for the regular interval
         locationRequest.setFastestInterval(2000);
-        locationRequest.setInterval(3000);
+        locationRequest.setInterval(4000);
 
-        locationProvider.requestLocationUpdates(locationRequest, new LocationCallback(){
+        locationProvider.requestLocationUpdates(locationRequest, new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
@@ -259,9 +279,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     }
 
     @Override
-    public void onLocationChanged(Location location)
-    {
-        if( gpsChangeListener != null ) {
+    public void onLocationChanged(Location location) {
+        if (gpsChangeListener != null) {
             gpsChangeListener.onLocationChanged(location);
 
             //Move the camera to the user's location once it's available!
@@ -277,54 +296,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         gpsChangeListener = onLocationChangedListener;
     }
 
-    @Override
-    public void deactivate() {
-        gpsChangeListener = null;
-    }
 
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        //Do nothing
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        //Do nothing
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        //Do nothing
-    }
-
-
-    private void setMapFeatures(){
+    private void setMapFeatures() {
         map.getUiSettings().setAllGesturesEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
-        //map.getUiSettings().setCompassEnabled(true);
+        map.getUiSettings().setCompassEnabled(true);
     }
 
 
-    private void getRequiredPermissions(){
+    private void getRequiredPermissions() {
         String[] req_permissons = {Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION};
 
         //Once the permissions have been displayed, check what the user's selection was
         //More specifically, make sure that it is correct
-        if(ContextCompat.checkSelfPermission(this.getContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this.getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            if(ContextCompat.checkSelfPermission(this.getContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            if (ContextCompat.checkSelfPermission(this.getContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 permissionsGrantedFlag = true;
-            }
-            else{
+            } else {
                 //If the permissions were not granted already (via the settings), ask for them
                 ActivityCompat.requestPermissions(this.getActivity(), req_permissons, 0);
             }
-        }
-        else{
+        } else {
             ActivityCompat.requestPermissions(this.getActivity(), req_permissons, 0);
         }
 
@@ -336,11 +332,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         permissionsGrantedFlag = false;
 
-        switch(requestCode){
+        switch (requestCode) {
             case 0:
                 //If the grantResults length is > 0, it implies that some permission (at least)
                 //was granted
-                if(grantResults.length > 0){
+                if (grantResults.length > 0) {
 
                     //Since there may be multiple grant results, we loop to make sure that they're
                     //all true
@@ -363,5 +359,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
     }
 
+    private void changeToolbarText() {
+        ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        toolbar.setSubtitle("Location");
+    }
+
+    @Override
+    public void deactivate() {
+        gpsChangeListener = null;
+    }
+
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        //Do nothing
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        //Do nothing
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        //Do nothing
+    }
 
 }

@@ -1,6 +1,12 @@
 package com.example.cmpt276_project_iron.model;
 
+import android.content.Context;
+
+import com.example.cmpt276_project_iron.R;
+
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -17,15 +23,23 @@ public class CsvRestaurantReader {
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
 
-    public List<Restaurant> read(String restaurantFilePath) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(restaurantFilePath)))) {
+    private Context context;
+    private final String downloadedFile;
+
+    public CsvRestaurantReader(Context context, String downloadedFile) {
+        this.context = context;
+        this.downloadedFile = downloadedFile;
+    }
+
+    public List<Restaurant> read() {
+        try (BufferedReader reader = getReader()) {
             return reader.lines()
                     .skip(1)
                     .map(this::convertLine)
                     .sorted()
                     .collect(toList());
         } catch (IOException e) {
-            throw new IllegalArgumentException(restaurantFilePath +
+            throw new IllegalArgumentException("Native restaurant file" +
                     " : File was not provided correctly", e);
         }
     }
@@ -72,5 +86,19 @@ public class CsvRestaurantReader {
         }
         result.add(curVal.toString());
         return result;
+    }
+
+    private BufferedReader getReader() {
+        File file = context.getFileStreamPath(downloadedFile);
+        if (file.exists()) {
+            try {
+                return new BufferedReader(new InputStreamReader(context.openFileInput(downloadedFile)));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return new BufferedReader(new InputStreamReader(context
+                .getResources()
+                .openRawResource(R.raw.restaurants_itr1)));
     }
 }

@@ -35,7 +35,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     public RestaurantListAdapter(Context context, List<Restaurant> restaurants){
         this.context = context;
         this.restaurants = restaurants;
-        this.manager = Manager.getInstance();
+        this.manager = Manager.getInstance(context);
     }
 
     @NonNull

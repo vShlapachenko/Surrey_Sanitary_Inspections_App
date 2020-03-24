@@ -2,16 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.cmpt276_project_iron">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <supports-screens
         android:largeScreens="true"
@@ -28,7 +27,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -46,20 +44,23 @@
 
         <activity
             android:name=".ui.MapsFramework"
-            android:label="@string/title_activity_maps_framework"></activity>
+            android:label="@string/title_activity_maps_framework" />
         <activity
-            android:name=".ui.RestaurantList"
-            android:label="@string/restaurant_list_title"
-            android:parentActivityName=".ui.RestaurantList">
+            android:name=".ui.InitialBoot"
+            android:label="@string/initial_boot_title"
+            android:parentActivityName=".ui.InitialBoot">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.RestaurantList"
+            android:label="@string/restaurant_list_title"
+            android:parentActivityName=".ui.RestaurantList" />
+        <activity
             android:name=".ui.RestaurantDetails"
-            android:parentActivityName=".ui.RestaurantList"></activity>
+            android:parentActivityName=".ui.RestaurantList" />
         <activity
             android:name=".ui.InspectionDetails"
             android:label="@string/inspection_detail_title"

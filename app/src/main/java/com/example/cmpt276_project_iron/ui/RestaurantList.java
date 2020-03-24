@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,14 +37,18 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
         setUpBackButton();
-        manager = Manager.getInstance();
+        manager = Manager.getInstance(this);
 
         //Used for launching the map fragment
         inflateRestaurantList();
+
+        //Only after the necessary processing of the first activity has been completed should the
+        //map be displayed (as default first screen)
+        setUpMapOpen(getWindow().getDecorView().getRootView());
     }
 
-
-    public void setUpMapOpen(View view){
+    //Made public so it can be launched from xml (non-dynamic)
+    public void setUpMapOpen(View view) {
         FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapContainer = findViewById(R.id.mapContainer);
 
@@ -55,8 +58,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
 
-        if(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantList.this)
-                == NO_GOOGLE_PLAY){
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantList.this)
+                == NO_GOOGLE_PLAY) {
             Log.i("invalid_google_services", "User does not have the required " +
                     "Google Play Services to launch map");
             Toast.makeText(RestaurantList.this, "Invalid Google Play SDK",
@@ -72,7 +75,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             //purposes so it is stored into data and then the boolean is checked before launching maps
             editor.putBoolean("goog_services", false);
 
-        }else {
+        } else {
             MapFragment fragment = MapFragment.newInstance();
             FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
             //Before 'opening' the fragment, hide the fpb (floating-btn) as it may leak through,
@@ -138,8 +141,21 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        /**
+         * REMOVE ONCE BOTTOM NAVIGATION BAR IS ADDED (just bottom 2 lines of code)
+         */
         FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapButton.show();
+
+        //In accordance with the user stories, any one of the selections of the map or restaurant
+        //will result in an exit of the application
+        /*FragmentManager manager = getFragmentManager();
+        if (manager.getBackStackEntryCount() > 0) {
+            finish();
+        } else {
+            //If no fragments -> on restaurant screen -> exit application -> normal behaviour
+            super.onBackPressed();
+        }*/
     }
 
     @Override

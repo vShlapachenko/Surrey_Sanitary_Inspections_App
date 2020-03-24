@@ -86,9 +86,16 @@
     <string name="restaurant_coordinates">&lt;u>%1f, %2f&lt;/u></string>
     <string name="inspection_detail_title">Inspection Details</string>
     <string name="no_violations_available">No violations available</string>
+    <string name="violation_header">Violation type</string>
+    <string name="summary_header">Summary</string>
+    <string name="hazard_header">Hazard level</string>
+    <string name="initial_boot_title">Initial Boot</string>
     <string name="title_activity_maps_framework">Map</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>
