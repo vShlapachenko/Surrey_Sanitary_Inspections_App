@@ -1,7 +1,9 @@
 package com.example.cmpt276_project_iron.ui;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cmpt276_project_iron.R;
@@ -102,6 +105,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     private final String TAG = "Maps";
     private Manager manager;
+    Dialog popUp;
 
     public MapFragment() {
         // Required empty public constructor
@@ -210,18 +214,42 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
-//        placePeg(new LatLng(49.032923, -0123.076007), ZOOM_AMNT, "Papa Johns");
+
         manager = Manager.getInstance();
 
         List<Restaurant> restaurantList = manager.getRestaurantList();
 
         for(Restaurant cur : restaurantList) {
-
             placePeg(cur, ZOOM_AMNT);
         }
 
+//        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//               popUp = new Dialog(getContext());
+//
+//               ShowRestaurantDetails(getView());
+//               return true;
+//            }
+//        });
+
 
     }
+
+    private void ShowRestaurantDetails(View v) {
+        TextView txtClose;
+        popUp.setContentView(R.layout.custom_marker_layout);
+        txtClose = popUp.findViewById(R.id.txtclose);
+        txtClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUp.dismiss();
+            }
+        });
+
+        // add in button to goto restaurant details
+    }
+
 
     private void placePeg(Restaurant res, float zoom) {
 

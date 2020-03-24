@@ -6,8 +6,10 @@
     <color name="colorSeperator">#2196F3</color>
 
     <color name="colorHazard">#C0BCBC</color>
-
+    <color name="white">#fff</color>
+<!--    <color name="orange">#eeadd43</color>-->
+    <color name="bluelight">#49acd5</color>
+    <color name="green">#45bc62</color>
     <color name="colorTint">#C9000000</color>
-
     <color name="colorText">#F7FFFFFF</color>
 </resources>
