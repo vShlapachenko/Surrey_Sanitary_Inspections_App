@@ -8,13 +8,14 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Manager;
@@ -101,11 +102,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             TextView emptyListText = findViewById(R.id.noRestaurantsText);
             emptyListText.setText(getResources().getString(R.string.no_restaurants_text));
         } else {
-            ListView restaurantList = findViewById(R.id.restaurantList);
-            RestaurantListAdapter adapter = new RestaurantListAdapter(this,
-                    R.layout.restaurant_list_item, restaurants);
+            RecyclerView restaurantList = findViewById(R.id.restaurantList);
+            RestaurantListAdapter adapter = new RestaurantListAdapter(this, restaurants);
             adapter.notifyDataSetChanged();
             restaurantList.setAdapter(adapter);
+            restaurantList.setLayoutManager(new LinearLayoutManager(this));
         }
     }
 

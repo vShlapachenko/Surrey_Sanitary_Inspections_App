@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
-    </ListView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <FrameLayout
         android:id="@+id/mapContainer"
