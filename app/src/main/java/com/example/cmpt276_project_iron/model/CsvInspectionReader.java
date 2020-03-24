@@ -40,7 +40,6 @@ public class CsvInspectionReader {
 
 
     public CsvInspectionReader(Context context, String downloadedFile) {
-        Log.e("2222222222222", downloadedFile);
         this.downloadedFile = downloadedFile;
         this.context = context;
         try (BufferedReader reader = getReader()) {
