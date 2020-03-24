@@ -239,25 +239,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     }
 
 
-    private void placePeg(Restaurant res, float zoom) {
+    private void placePeg(Restaurant restaurant, float zoom) {
 
-        if(manager.getInspectionMap().get(res.getTrackingNumber()) == null) {
-
-        }
-        else {
-            Inspection mostRecentInspection = manager.getInspectionMap().get(res.getTrackingNumber()).get(0);
+        if(!(manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null)) {
+            Inspection mostRecentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
 
             Log.e(TAG, "restaurant haz level " + mostRecentInspection.getHazardLevel());
 
-            LatLng latLng = new LatLng(res.getLatitude(), res.getLongitude());
+            LatLng latLng = new LatLng(restaurant.getLatitude(), restaurant.getLongitude());
 
-            int height = 100;
-            int width = 100;
+            final int height = 100;
+            final int width = 100;
 
             MarkerOptions marker;
             Marker curMarker;
 
-            if (mostRecentInspection.getHazardLevel().equals("Low")) {
+            if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Low")) {
 
                 // got from stack overflow https://stackoverflow.com/questions/35718103/how-to-specify-the-size-of-the-icon-on-the-marker-in-google-maps-v2-android
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.low_hazard);
@@ -266,14 +263,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
                 curMarker = map.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title(res.getName())
-                        .snippet(res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
                         .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                 );
                 Log.e(TAG, curMarker.getId());
                 markers.add(curMarker);
 
-            } else if (mostRecentInspection.getHazardLevel().equals("Moderate")) {
+            } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Moderate")) {
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.moderate_hazard);
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
@@ -281,8 +278,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
                 curMarker = map.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title(res.getName())
-                        .snippet(res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
                         .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                 );
                 Log.e(TAG, curMarker.getId());
@@ -295,8 +292,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
                 curMarker = map.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title(res.getName())
-                        .snippet(res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
                         .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                 );
 
@@ -315,7 +312,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
                 String id = removeMFromId(arg0.getId()); // removing the m from the id so it can be converted into an int
                 int index = Integer.parseInt(id);
-                Log.e(TAG, "" + index);
+                Log.e(TAG, String.valueOf(index));
                 Intent gotoRestaurant = RestaurantDetails.getIntent(getContext(), index);
                 startActivity(gotoRestaurant);
             }
