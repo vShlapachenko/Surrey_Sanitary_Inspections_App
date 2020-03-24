@@ -16,6 +16,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -53,7 +55,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ import static android.webkit.ConsoleMessage.MessageLevel.LOG;
  * create an instance of this fragment.
  */
 
+
 //Note: Depending on from where this activity is launched, pass data accordingly from which extra
 //features will be deployed
 //Parameters are passed via the .add method casted upon the fragment AND/OR the newInstance method
@@ -85,6 +87,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private EditText mSearchText;
 
     // TODO: Rename and change types of parameters
+
     private double inLAT = 0.0;
     private double inLONG = 0.0;
 
@@ -99,9 +102,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private SupportMapFragment mapFragment;
     private OnFragmentInteractionListener mListener;
 
-    private  List<MarkerOptions> markers = new ArrayList<>();
+    private  List<Marker> markers = new ArrayList<>();
 
-    private static final float ZOOM_AMNT = 15f;
+
+    private static final float ZOOM_AMNT = 17f;
 
     private final String TAG = "Maps";
     private Manager manager;
@@ -135,6 +139,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         //Explicitly asks the user for permission for the required services
         getRequiredPermissions();
+
+        //Tracks the user's location
         updateGPSPosition();
 
 
@@ -215,6 +221,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         placeGPSPosition();
         setMapFeatures();
 
+        Log.i("data_check", "latitude: " + inLAT + " | " + "longitude: " + inLONG);
+        //If launched from the second activity (via coordinates), the toolbar subtitle is changed to
+        //confine to the map fragment context
+        if(inLAT != 0.0 && inLONG != 0.0) {
+            changeToolbarText();
+        }
+
         manager = Manager.getInstance();
 
         List<Restaurant> restaurantList = manager.getRestaurantList();
@@ -222,32 +235,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         for(Restaurant cur : restaurantList) {
             placePeg(cur, ZOOM_AMNT);
         }
-
-//        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//               popUp = new Dialog(getContext());
-//
-//               ShowRestaurantDetails(getView());
-//               return true;
-//            }
-//        });
-
-
-    }
-
-    private void ShowRestaurantDetails(View v) {
-        TextView txtClose;
-        popUp.setContentView(R.layout.custom_marker_layout);
-        txtClose = popUp.findViewById(R.id.txtclose);
-        txtClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popUp.dismiss();
-            }
-        });
-
-        // add in button to goto restaurant details
+        makeMarkerTextClickable();
     }
 
 
@@ -267,6 +255,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             int width = 100;
 
             MarkerOptions marker;
+            Marker curMarker;
 
             if (mostRecentInspection.getHazardLevel().equals("Low")) {
 
@@ -275,42 +264,70 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-                marker = new MarkerOptions()
+                curMarker = map.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title(res.getName() + ", " + res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-
-                map.addMarker(marker);
-                markers.add(marker);
+                        .title(res.getName())
+                        .snippet(res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                );
+                Log.e(TAG, curMarker.getId());
+                markers.add(curMarker);
 
             } else if (mostRecentInspection.getHazardLevel().equals("Moderate")) {
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.moderate_hazard);
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-                marker = new MarkerOptions()
-                        .position(latLng)
-                        .title(res.getName() + ", " + res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
 
-                map.addMarker(marker);
-                markers.add(marker);
+                curMarker = map.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(res.getName())
+                        .snippet(res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                );
+                Log.e(TAG, curMarker.getId());
+                markers.add(curMarker);
 
             } else {
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.high_hazard);
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-                marker = new MarkerOptions()
+                curMarker = map.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title(res.getName() + ", " + res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                        .title(res.getName())
+                        .snippet(res.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                );
 
-                map.addMarker(marker);
-                markers.add(marker);
+                Log.e(TAG, curMarker.getId());
+                markers.add(curMarker);
             }
         }
 
+    }
+
+    private void makeMarkerTextClickable() {
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+            @Override
+            public void onInfoWindowClick(Marker arg0) {
+
+                String id = removeMFromId(arg0.getId()); // removing the m from the id so it can be converted into an int
+                int index = Integer.parseInt(id);
+                Log.e(TAG, "" + index);
+                Intent gotoRestaurant = RestaurantDetails.getIntent(getContext(), index);
+                startActivity(gotoRestaurant);
+            }
+        });
+    }
+
+    private String removeMFromId(String id) {
+        String result = "";
+        for(int i=1; i<id.length(); i++) {
+            result += id.charAt(i);
+        }
+        return result;
     }
 
     private void placeGPSPosition() {
@@ -330,9 +347,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                             //Gets the location, which is then used to move the view to
                             Location curLocation = (Location) task.getResult();
 
-                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
-                                            (curLocation.getLatitude(), curLocation.getLongitude()),
-                                    ZOOM_AMNT));
+                            //If the map fragment was launched from the second activity (via the coordinates click)
+                            //Then the view will move to that restaurants location
+
+                            //First check if launched from second activity
+                            if(inLAT != 0.0 && inLONG != 0.0){
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                                (inLAT, inLONG),
+                                        ZOOM_AMNT));
+
+                            }
+                            else {
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                                (curLocation.getLatitude(), curLocation.getLongitude()),
+                                        ZOOM_AMNT));
+                            }
 
                         } else {
                             Toast.makeText(getContext(), "Unable to track user",
@@ -348,7 +377,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         //Places marker on the user's position
         map.setMyLocationEnabled(true);
-
     }
 
     private void updateGPSPosition() {
@@ -368,7 +396,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
          * Two ways need to be tested: Current deployment of locationListener+ and the
          * below sequence
          */
-        /*locationProvider = LocationServices.getFusedLocationProviderClient(this.getContext());
+        locationProvider = LocationServices.getFusedLocationProviderClient(this.getContext());
         //Higher priority == greater accuracy of coords on map
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -406,32 +434,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         gpsChangeListener = onLocationChangedListener;
     }
 
-    @Override
-    public void deactivate() {
-        gpsChangeListener = null;
-    }
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        //Do nothing
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        //Do nothing
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        //Do nothing
-    }
-
 
     private void setMapFeatures(){
         map.getUiSettings().setAllGesturesEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
-        //map.getUiSettings().setCompassEnabled(true);
+        map.getUiSettings().setCompassEnabled(true);
     }
 
 
@@ -492,5 +499,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
     }
 
+    private void changeToolbarText(){
+        ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        toolbar.setSubtitle("Location");
+    }
+
+    @Override
+    public void deactivate() {
+        gpsChangeListener = null;
+    }
+
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        //Do nothing
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        //Do nothing
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        //Do nothing
+    }
 
 }

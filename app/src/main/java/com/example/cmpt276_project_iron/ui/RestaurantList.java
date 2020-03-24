@@ -1,5 +1,6 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmpt276_project_iron.R;
@@ -41,9 +41,13 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
         //Used for launching the map fragment
         inflateRestaurantList();
+
+        //Only after the necessary processing of the first activity has been completed should the
+        //map be displayed (as default first screen)
+        setUpMapOpen(getWindow().getDecorView().getRootView());
     }
 
-
+    //Made public so it can be launched from xml (non-dynamic)
     public void setUpMapOpen(View view){
         FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapContainer = findViewById(R.id.mapContainer);
@@ -137,8 +141,21 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        /**
+         * REMOVE ONCE BOTTOM NAVIGATION BAR IS ADDED (just bottom 2 lines of code)
+         */
         FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapButton.show();
+
+        //In accordance with the user stories, any one of the selections of the map or restaurant
+        //will result in an exit of the application
+        /*FragmentManager manager = getFragmentManager();
+        if (manager.getBackStackEntryCount() > 0) {
+            finish();
+        } else {
+            //If no fragments -> on restaurant screen -> exit application -> normal behaviour
+            super.onBackPressed();
+        }*/
     }
 
     @Override

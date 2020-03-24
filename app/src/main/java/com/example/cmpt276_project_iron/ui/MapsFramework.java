@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Note: This class is primarily integrated such that the Google Maps framework
- * can be used throughout such as in a fragment. - J
+ * can be used throughout such as in a fragment.
  */
 public class MapsFramework extends FragmentActivity implements OnMapReadyCallback {
 
