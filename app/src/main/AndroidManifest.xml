@@ -27,9 +27,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".ui.BottomNavigationBar"
-            android:label="@string/title_activity_bottom_navigation_bar"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
