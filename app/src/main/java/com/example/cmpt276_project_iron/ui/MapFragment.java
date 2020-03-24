@@ -54,7 +54,7 @@ import com.google.android.gms.tasks.Task;
 //features will be deployed
 //Parameters are passed via the .add method casted upon the fragment AND/OR the newInstance method
 
-//Note: Location needs to be tested on a real phone <-------
+//Note: Location (+ clicked restaurant coords then moving) needs to be tested on a real phone <-------
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, LocationListener, LocationSource {
     // TODO: Rename parameter arguments, choose names that match
@@ -63,8 +63,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private static final String LONG = "long";
 
     // TODO: Rename and change types of parameters
-    private Double inLAT = null;
-    private Double inLONG = null;
+    private double inLAT = 0.0;
+    private double inLONG = 0.0;
 
     private boolean permissionsGrantedFlag = false;
 
@@ -267,9 +267,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         //To shorten the amount of battery usage and taking into account the usage of the application,
-        //the interval is set t0 4 seconds for the regular interval
+        //the interval is set to 4 seconds for the regular interval
         locationRequest.setFastestInterval(2000);
-        locationRequest.setInterval(3000);
+        locationRequest.setInterval(4000);
 
         locationProvider.requestLocationUpdates(locationRequest, new LocationCallback(){
             @Override
