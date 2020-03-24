@@ -251,7 +251,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             final int height = 100;
             final int width = 100;
 
-            MarkerOptions marker;
             Marker curMarker;
 
             if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Low")) {
