@@ -32,6 +32,8 @@ public class CsvInspectionReader {
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
     private static final int NUM_FIELDS_IN_VIOL = 4;
+    private static final int INDEX_SIX_INSPECTION_FILE = 6;
+    private static final int INDEX_FIVE_INSPECTION_FILE = 5;
     private int violLump;
     private int hazardRating;
     private Context context;
@@ -40,7 +42,6 @@ public class CsvInspectionReader {
 
 
     public CsvInspectionReader(Context context, String downloadedFile) {
-        Log.e("2222222222222", downloadedFile);
         this.downloadedFile = downloadedFile;
         this.context = context;
         try (BufferedReader reader = getReader()) {
@@ -82,11 +83,11 @@ public class CsvInspectionReader {
     private Inspection convertLine(String line) {
         List<String> lineParameters = parseLine(line);
 
-        if (lineParameters.get(0).equalsIgnoreCase("")) {
+        if (lineParameters.get(0).equals("")) {
             return null;
         }
         Calendar cal = convertToCalendar(lineParameters.get(1));
-        if (violLump == 6) {
+        if (violLump == INDEX_SIX_INSPECTION_FILE) {
             return new Inspection(
                     lineParameters.get(0),
                     cal,
@@ -95,7 +96,7 @@ public class CsvInspectionReader {
                     Integer.parseInt(lineParameters.get(4)),
                     lineParameters.get(hazardRating),
                     convertToViolList(lineParameters.get(violLump)));
-        } else if (violLump == 5) {
+        } else if (violLump == INDEX_FIVE_INSPECTION_FILE) {
             return new Inspection(
                     lineParameters.get(0),
                     cal,

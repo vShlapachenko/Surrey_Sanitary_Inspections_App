@@ -1,7 +1,6 @@
 package com.example.cmpt276_project_iron.model;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.cmpt276_project_iron.R;
 
@@ -57,7 +56,6 @@ public class DateConversionCalculator {
     public static long getDifferenceInHours(Calendar current, Calendar past) {
         long millisBetween = current.getTimeInMillis() - past.getTimeInMillis();
         long hoursBetween = millisBetween / MILLISECONDS_IN_SECOND / SECONDS_IN_MINUTE / MINUTES_IN_HOUR;
-        Log.e(Long.toString(hoursBetween), "IDK");
         return hoursBetween;
     }
 }
