@@ -1,16 +1,13 @@
 package com.example.cmpt276_project_iron.ui;
 
-import androidx.fragment.app.FragmentActivity;
-
 import android.os.Bundle;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.cmpt276_project_iron.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Note: This class is primarily integrated such that the Google Maps framework

@@ -29,7 +29,7 @@ public class DetailsListAdapter extends ArrayAdapter<Inspection> {
     private List<Inspection> inspections;
 
 
-    public DetailsListAdapter(Context context, int resource, List<Inspection> inspections){
+    public DetailsListAdapter(Context context, int resource, List<Inspection> inspections) {
         super(context, resource, inspections);
 
         this.context = context;

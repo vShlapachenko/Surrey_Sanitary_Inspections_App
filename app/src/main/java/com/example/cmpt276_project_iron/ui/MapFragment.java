@@ -14,6 +14,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -23,6 +29,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 
 import android.os.Looper;
 import android.util.Log;
@@ -224,11 +231,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         Log.i("data_check", "latitude: " + inLAT + " | " + "longitude: " + inLONG);
         //If launched from the second activity (via coordinates), the toolbar subtitle is changed to
         //confine to the map fragment context
-        if(inLAT != 0.0 && inLONG != 0.0) {
+        if (inLAT != 0.0 && inLONG != 0.0) {
             changeToolbarText();
         }
 
-        manager = Manager.getInstance();
+        manager = Manager.getInstance(getContext());
 
         List<Restaurant> restaurantList = manager.getRestaurantList();
 
@@ -348,13 +355,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                             //Then the view will move to that restaurants location
 
                             //First check if launched from second activity
-                            if(inLAT != 0.0 && inLONG != 0.0){
+                            if (inLAT != 0.0 && inLONG != 0.0) {
                                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
                                                 (inLAT, inLONG),
                                         ZOOM_AMNT));
 
-                            }
-                            else {
+                            } else {
                                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
                                                 (curLocation.getLatitude(), curLocation.getLongitude()),
                                         ZOOM_AMNT));
@@ -403,7 +409,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         locationRequest.setFastestInterval(2000);
         locationRequest.setInterval(3000);
 
-        locationProvider.requestLocationUpdates(locationRequest, new LocationCallback(){
+        locationProvider.requestLocationUpdates(locationRequest, new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
@@ -413,9 +419,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     }
 
     @Override
-    public void onLocationChanged(Location location)
-    {
-        if( gpsChangeListener != null ) {
+    public void onLocationChanged(Location location) {
+        if (gpsChangeListener != null) {
             gpsChangeListener.onLocationChanged(location);
 
             //Move the camera to the user's location once it's available!
@@ -432,32 +437,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     }
 
 
-    private void setMapFeatures(){
+    private void setMapFeatures() {
         map.getUiSettings().setAllGesturesEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setCompassEnabled(true);
     }
 
 
-    private void getRequiredPermissions(){
+    private void getRequiredPermissions() {
         String[] req_permissons = {Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION};
 
         //Once the permissions have been displayed, check what the user's selection was
         //More specifically, make sure that it is correct
-        if(ContextCompat.checkSelfPermission(this.getContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this.getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            if(ContextCompat.checkSelfPermission(this.getContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            if (ContextCompat.checkSelfPermission(this.getContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 permissionsGrantedFlag = true;
-            }
-            else{
+            } else {
                 //If the permissions were not granted already (via the settings), ask for them
                 ActivityCompat.requestPermissions(this.getActivity(), req_permissons, 0);
             }
-        }
-        else{
+        } else {
             ActivityCompat.requestPermissions(this.getActivity(), req_permissons, 0);
         }
 
@@ -469,11 +472,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         permissionsGrantedFlag = false;
 
-        switch(requestCode){
+        switch (requestCode) {
             case 0:
                 //If the grantResults length is > 0, it implies that some permission (at least)
                 //was granted
-                if(grantResults.length > 0){
+                if (grantResults.length > 0) {
 
                     //Since there may be multiple grant results, we loop to make sure that they're
                     //all true
@@ -496,7 +499,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
     }
 
-    private void changeToolbarText(){
+    private void changeToolbarText() {
         ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         toolbar.setSubtitle("Location");
     }
