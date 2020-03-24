@@ -1,8 +1,13 @@
 package com.example.cmpt276_project_iron.model;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.example.cmpt276_project_iron.R;
+
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
@@ -11,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -26,13 +32,18 @@ public class CsvInspectionReader {
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
     private static final int NUM_FIELDS_IN_VIOL = 4;
-    private int violL;
+    private int violLump;
     private int hazardRating;
+    private Context context;
+    private final String downloadedFile;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 
 
-    public CsvInspectionReader(String inspectionFilePath) {
-        try (BufferedReader reader = getReader(inspectionFilePath)) {
+    public CsvInspectionReader(Context context, String downloadedFile) {
+        Log.e("2222222222222", downloadedFile);
+        this.downloadedFile = downloadedFile;
+        this.context = context;
+        try (BufferedReader reader = getReader()) {
             String line = reader.readLine();
             String[] fields = line.split(",");
             for (int i = 0; i < fields.length; i++) {
@@ -40,38 +51,42 @@ public class CsvInspectionReader {
             }
             if (fields[6].equalsIgnoreCase("ViolLump")) {
                 this.hazardRating = 5;
-                this.violL = 6;
+                this.violLump = 6;
             } else if (fields[5].equalsIgnoreCase("ViolLump")) {
                 Log.e("FIELDS [6] : ", fields[6]);
                 this.hazardRating = 6;
-                this.violL = 5;
+                this.violLump = 5;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Map<String, List<Inspection>> read(String inspectionFilePath) {
-        try (BufferedReader reader = getReader(inspectionFilePath)) {
+    public Map<String, List<Inspection>> read() {
+        try (BufferedReader reader = getReader()) {
             return reader.lines()
                     .skip(1)
                     .map(this::convertLine)
+                    .filter(Objects::nonNull)
                     .collect(groupingBy(Inspection::getTrackingNumber))
                     .entrySet().stream()
                     .collect(toMap(Map.Entry::getKey, entry -> entry.getValue().stream()
                             .sorted()
                             .collect(toList())));
         } catch (IOException e) {
-            throw new IllegalArgumentException(inspectionFilePath +
+            throw new IllegalArgumentException("In native CSV file" +
                     " : File was not provided correctly", e);
         }
     }
 
     private Inspection convertLine(String line) {
         List<String> lineParameters = parseLine(line);
-        Calendar cal = convertToCalendar(lineParameters.get(1));
 
-        if (violL == 6) {
+        if (lineParameters.get(0).equalsIgnoreCase("")) {
+            return null;
+        }
+        Calendar cal = convertToCalendar(lineParameters.get(1));
+        if (violLump == 6) {
             return new Inspection(
                     lineParameters.get(0),
                     cal,
@@ -79,8 +94,8 @@ public class CsvInspectionReader {
                     Integer.parseInt(lineParameters.get(3)),
                     Integer.parseInt(lineParameters.get(4)),
                     lineParameters.get(hazardRating),
-                    convertToViolList(lineParameters.get(violL)));
-        } else if (violL == 5) {
+                    convertToViolList(lineParameters.get(violLump)));
+        } else if (violLump == 5) {
             return new Inspection(
                     lineParameters.get(0),
                     cal,
@@ -88,7 +103,7 @@ public class CsvInspectionReader {
                     Integer.parseInt(lineParameters.get(3)),
                     Integer.parseInt(lineParameters.get(4)),
                     lineParameters.get(hazardRating),
-                    convertToViolList(lineParameters.get(violL)));
+                    convertToViolList(lineParameters.get(violLump)));
         }
         return null;
     }
@@ -173,8 +188,19 @@ public class CsvInspectionReader {
         return result;
     }
 
-    private BufferedReader getReader(String inspectionFilePath) {
-        return new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(inspectionFilePath)));
+    private BufferedReader getReader() {
+        File file = context.getFileStreamPath(downloadedFile);
+        if (file.exists()) {
+            try {
+                Log.e("In ger reader", "inspection");
+                return new BufferedReader(new InputStreamReader(context.openFileInput(downloadedFile)));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return new BufferedReader(new InputStreamReader(context
+                .getResources()
+                .openRawResource(R.raw.inspectionreports_itr1)));
     }
 }
 

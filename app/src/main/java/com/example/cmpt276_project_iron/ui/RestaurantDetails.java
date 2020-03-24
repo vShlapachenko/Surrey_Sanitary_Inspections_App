@@ -96,7 +96,7 @@ public class RestaurantDetails extends AppCompatActivity {
         //from the first activity
         SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
         int index = getIntent().getIntExtra("restaurantIndex", data.getInt("cur_restaurant", 2));
-        manager = Manager.getInstance();
+        manager = Manager.getInstance(this);
         curRestaurant = manager.getRestaurantList().get(index);
     }
 

@@ -89,5 +89,6 @@
     <string name="violation_header">Violation type</string>
     <string name="summary_header">Summary</string>
     <string name="hazard_header">Hazard level</string>
+    <string name="initial_boot_title">Initial Boot</string>
 
 </resources>

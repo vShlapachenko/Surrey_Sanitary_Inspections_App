@@ -27,7 +27,7 @@ public class RestaurantList extends AppCompatActivity {
         displayCorrectLayout();
         setUpBackButton();
 
-        manager = Manager.getInstance();
+        manager = Manager.getInstance(this);
 
         inflateRestaurantList();
     }
