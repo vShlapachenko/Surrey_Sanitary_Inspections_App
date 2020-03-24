@@ -321,7 +321,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     private String removeMFromId(String id) {
         String result = "";
-        for(int i=1; i<id.length(); i++) {
+        final int startOfIdNumber = 1;
+        for(int i=startOfIdNumber; i<id.length(); i++) {
             result += id.charAt(i);
         }
         return result;
