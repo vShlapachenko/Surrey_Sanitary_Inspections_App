@@ -37,7 +37,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         super(context, resource, restaurants);
         this.context = context;
         this.restaurants = restaurants;
-        this.manager = Manager.getInstance();
+        this.manager = Manager.getInstance(context);
     }
 
     @NonNull

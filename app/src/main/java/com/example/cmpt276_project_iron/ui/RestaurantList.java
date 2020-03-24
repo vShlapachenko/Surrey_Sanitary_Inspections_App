@@ -1,6 +1,5 @@
 package com.example.cmpt276_project_iron.ui;
 
-import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
@@ -37,7 +36,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
         setUpBackButton();
-        manager = Manager.getInstance();
+        manager = Manager.getInstance(this);
 
         //Used for launching the map fragment
         inflateRestaurantList();
@@ -48,7 +47,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     }
 
     //Made public so it can be launched from xml (non-dynamic)
-    public void setUpMapOpen(View view){
+    public void setUpMapOpen(View view) {
         FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapContainer = findViewById(R.id.mapContainer);
 
@@ -58,8 +57,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
 
-        if(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantList.this)
-                == NO_GOOGLE_PLAY){
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(RestaurantList.this)
+                == NO_GOOGLE_PLAY) {
             Log.i("invalid_google_services", "User does not have the required " +
                     "Google Play Services to launch map");
             Toast.makeText(RestaurantList.this, "Invalid Google Play SDK",
@@ -75,7 +74,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             //purposes so it is stored into data and then the boolean is checked before launching maps
             editor.putBoolean("goog_services", false);
 
-        }else {
+        } else {
             MapFragment fragment = MapFragment.newInstance();
             FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
             //Before 'opening' the fragment, hide the fpb (floating-btn) as it may leak through,

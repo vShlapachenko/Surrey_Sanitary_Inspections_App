@@ -25,7 +25,6 @@ import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.List;
 
@@ -33,13 +32,13 @@ import java.util.List;
  *  Attains and sets the necessary information for the restaurant's details
  */
 
-public class RestaurantDetails extends AppCompatActivity implements MapFragment.OnFragmentInteractionListener{
+public class RestaurantDetails extends AppCompatActivity implements MapFragment.OnFragmentInteractionListener {
 
     private Restaurant curRestaurant;
     private Manager manager;
     private boolean gServicesFlag;
 
-   // private FrameLayout mapContainer;
+    // private FrameLayout mapContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +89,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
     }
 
-    private void setUpGPScoordsClick(){
+    private void setUpGPScoordsClick() {
         TextView coordinates = findViewById(R.id.restaurantCoords);
         final int NO_GOOGLE_PLAY = 9001;
 
@@ -99,7 +98,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
             public void onClick(View v) {
                 Log.i("coordinates_clicked", "Coordinates: " + curRestaurant.getLatitude()
                         + ", " + curRestaurant.getLongitude());
-                if(gServicesFlag){
+                if (gServicesFlag) {
                     //Once the coordinates are clicked, open the fragment with the necessary data being
                     //passed in
 
@@ -111,8 +110,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
                     //Adding to stack will be used to exit the fragment
                     transactor.addToBackStack("fragInstance");
                     transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
-                }
-                else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Must have Google Play Services to " +
                             "launch map", Toast.LENGTH_SHORT).show();
                 }
@@ -150,10 +148,11 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
         //from the first activity
         SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
         int index = getIntent().getIntExtra("restaurantIndex", data.getInt("cur_restaurant", 2));
+        manager = Manager.getInstance(this);
         gServicesFlag = data.getBoolean("goog_services", false);
 
 
-        manager = Manager.getInstance();
+        manager = Manager.getInstance(this);
         curRestaurant = manager.getRestaurantList().get(index);
     }
 
@@ -174,7 +173,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
     public boolean onOptionsItemSelected(MenuItem item) {
 
         //If the back button of the action bar is clicked
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             //if the FragmentManager is != null and consist of some fragments, it will close those
             //first, then when it's clicked again, it will close this activity
             FragmentManager manager = getFragmentManager();
