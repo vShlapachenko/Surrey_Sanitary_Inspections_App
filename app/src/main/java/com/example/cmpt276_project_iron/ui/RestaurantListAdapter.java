@@ -128,7 +128,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         return restaurants.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView restaurantName;
         private TextView critIssues;
         private TextView nonCritIssues;
