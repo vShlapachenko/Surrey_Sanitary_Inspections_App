@@ -1,17 +1,25 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
@@ -24,10 +32,13 @@ import java.util.List;
  *  Attains and sets the necessary information for the restaurant's details
  */
 
-public class RestaurantDetails extends AppCompatActivity {
+public class RestaurantDetails extends AppCompatActivity implements MapFragment.OnFragmentInteractionListener {
 
     private Restaurant curRestaurant;
     private Manager manager;
+    private boolean gServicesFlag;
+
+    // private FrameLayout mapContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +51,12 @@ public class RestaurantDetails extends AppCompatActivity {
         placeRestaurantIcon();
         placeAddressText();
         placeGPScoords();
+        setUpGPScoordsClick();
 
         //Creates and fills the list of inspections with necessary data
         inflateInspectionList();
 
     }
-
 
     private void placeRestaurantNameText(){
         ActionBar detailsBar = getSupportActionBar();
@@ -71,9 +82,50 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void placeGPScoords(){
         TextView coordinates = findViewById(R.id.restaurantCoords);
-        String restaurantCoords = getResources().getString(R.string.restaurant_coordinates,
-                curRestaurant.getLatitude(), curRestaurant.getLongitude());
-        coordinates.setText(restaurantCoords);
+
+        //Add an underline to make it apparent that it is clickable
+        coordinates.setText(HtmlCompat.fromHtml(getString(R.string.restaurant_coordinates,
+                curRestaurant.getLatitude(), curRestaurant.getLongitude()), HtmlCompat.FROM_HTML_MODE_LEGACY));
+
+    }
+
+    private void setUpGPScoordsClick() {
+        TextView coordinates = findViewById(R.id.restaurantCoords);
+        final int NO_GOOGLE_PLAY = 9001;
+
+        coordinates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("coordinates_clicked", "Coordinates: " + curRestaurant.getLatitude()
+                        + ", " + curRestaurant.getLongitude());
+                if (gServicesFlag) {
+                    //Once the coordinates are clicked, open the fragment with the necessary data being
+                    //passed in
+
+                    MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
+                            curRestaurant.getLongitude());
+                    FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
+                    transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
+                            R.anim.swipe_left, R.anim.swipe_right);
+                    //Adding to stack will be used to exit the fragment
+                    transactor.addToBackStack("fragInstance");
+                    transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Must have Google Play Services to " +
+                            "launch map", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //Do nothing
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        //Do nothing
     }
 
     private void inflateInspectionList(){
@@ -83,7 +135,7 @@ public class RestaurantDetails extends AppCompatActivity {
             emptyListText.setText(getResources().getString(R.string.no_inspection_text));
         } else {
             ListView inspectionList = findViewById(R.id.inspectionList);
-            CustomListAdapter adapter = new CustomListAdapter(this, R.layout.inspection_list_item, inspections);
+            DetailsListAdapter adapter = new DetailsListAdapter(this, R.layout.inspection_list_item, inspections);
             adapter.notifyDataSetChanged();
             inspectionList.setAdapter(adapter);
         }
@@ -97,6 +149,10 @@ public class RestaurantDetails extends AppCompatActivity {
         SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
         int index = getIntent().getIntExtra("restaurantIndex", data.getInt("cur_restaurant", 2));
         manager = Manager.getInstance(this);
+        gServicesFlag = data.getBoolean("goog_services", false);
+
+
+        manager = Manager.getInstance(this);
         curRestaurant = manager.getRestaurantList().get(index);
     }
 
@@ -108,6 +164,37 @@ public class RestaurantDetails extends AppCompatActivity {
 
     private void setUpBackButton(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    //For the toolbar back button, since a fragment will be launched from this activity which will share
+    //the same toolbar, when back is pressed we want it to go back and remove the fragment, NOT close the
+    //activity
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        //If the back button of the action bar is clicked
+        if (item.getItemId() == android.R.id.home) {
+            //if the FragmentManager is != null and consist of some fragments, it will close those
+            //first, then when it's clicked again, it will close this activity
+            FragmentManager manager = getFragmentManager();
+            if (manager.getBackStackEntryCount() > 0) {
+                manager.popBackStack();
+
+                //Since the toolbar subtitle is changed when launching the map fragment, it has to be reset when coming
+                //back
+                ActionBar detailsBar = getSupportActionBar();
+                detailsBar.setSubtitle(getResources().getString(R.string.restaurantExtension));
+            } else {
+
+                ActionBar detailsBar = getSupportActionBar();
+                detailsBar.setSubtitle(getResources().getString(R.string.restaurantExtension));
+
+                //If there are no fragments, act as normal
+                super.onBackPressed();
+            }
+        }
+
+        return true;
     }
 
     private void displayCorrectLayout(){
@@ -131,6 +218,24 @@ public class RestaurantDetails extends AppCompatActivity {
             setContentView(R.layout.activity_restaurant_details_custom_one);
         } else{
             setContentView(R.layout.activity_restaurant_details);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        //To prevent from changing when going to the previous activity (once the fragment has been closed)
+        //Check if any fragment currently open
+        FragmentManager manager = getFragmentManager();
+        if (manager.getBackStackEntryCount() == 0) {
+            manager.popBackStack();
+
+            ActionBar detailsBar = getSupportActionBar();
+            detailsBar.setSubtitle(getResources().getString(R.string.restaurantExtension));
+        } else {
+            //If there are no fragments, act as normal
+            super.onBackPressed();
         }
     }
 }

@@ -22,14 +22,14 @@ import java.util.List;
 /**
  * Custom adapter for the list of inspections for the second screen, required for formatting with multiple data in a single item
  */
-public class CustomListAdapter extends ArrayAdapter<Inspection> {
+public class DetailsListAdapter extends ArrayAdapter<Inspection> {
 
     private Context context;
     private int resource;
     private List<Inspection> inspections;
 
 
-    public CustomListAdapter(Context context, int resource, List<Inspection> inspections){
+    public DetailsListAdapter(Context context, int resource, List<Inspection> inspections) {
         super(context, resource, inspections);
 
         this.context = context;

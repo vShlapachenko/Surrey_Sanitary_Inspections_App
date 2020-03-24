@@ -48,11 +48,14 @@ public class InitialBoot extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_boot);
         txtJson = findViewById(R.id.textView);
-        getFileStreamPath(RESTAURANTS_FILE_TIME_STAMP).delete();
-        getFileStreamPath(RESTAURANTS_FILE).delete();
-        getFileStreamPath(INSPECTIONS_FILE).delete();
+
+        //Uncomment these lines to wipe internal data
+
 //        getFileStreamPath(RESTAURANTS_FILE_TIME_STAMP).delete();
-        getFileStreamPath(JSON_RESTAURANTS_LAST_MODIFIED).delete();
+//        getFileStreamPath(RESTAURANTS_FILE).delete();
+//        getFileStreamPath(INSPECTIONS_FILE).delete();
+//        getFileStreamPath(JSON_RESTAURANTS_LAST_MODIFIED).delete();
+//        getFileStreamPath(INSPECTIONS_FILE).delete();
         downloadCsvFiles();
     }
 
