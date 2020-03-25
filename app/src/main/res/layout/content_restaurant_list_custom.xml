@@ -7,6 +7,24 @@
     android:background="#00000000"
     tools:context=".ui.RestaurantList">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mapButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="@color/colorTint"
+        android:onClick="setUpMapOpen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/restaurantList"
+        app:srcCompat="@drawable/googleg_standard_color_18" />
+
+    <FrameLayout
+        android:id="@+id/mapContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
     <TextView
         android:id="@+id/noRestaurantsText"
         android:layout_width="wrap_content"

@@ -89,6 +89,18 @@
     <string name="violation_header">Violation type</string>
     <string name="summary_header">Summary</string>
     <string name="hazard_header">Hazard level</string>
+    <string-array name="custom_icon_restaurants">
+        <item>McDonald</item>
+        <item>Freshslice</item>
+        <item>Subway</item>
+        <item>Panago</item>
+        <item>Starbucks</item>
+        <item>Blenz</item>
+        <item>Tim Hortons</item>
+        <item>Booster Juice</item>
+        <item>Freshii</item>
+        <item>KFC</item>
+    </string-array>
     <string name="initial_boot_title">Initial Boot</string>
     <string name="title_activity_maps_framework">Map</string>
 

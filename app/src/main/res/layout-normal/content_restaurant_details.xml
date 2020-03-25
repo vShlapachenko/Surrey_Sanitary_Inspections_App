@@ -71,12 +71,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorText"
         android:textSize="14sp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintStart_toEndOf="@+id/coordsText"
         app:layout_constraintTop_toBottomOf="@+id/restaurantAddress" />
 
