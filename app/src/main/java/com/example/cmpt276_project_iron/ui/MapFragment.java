@@ -239,14 +239,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         List<Restaurant> restaurantList = manager.getRestaurantList();
 
-        for(Restaurant cur : restaurantList) {
-            placePeg(cur, ZOOM_AMNT);
+        for(int i=0; i<restaurantList.size(); i++) {
+            placePeg(restaurantList.get(i),ZOOM_AMNT, i);
         }
         makeMarkerTextClickable();
     }
 
 
-    private void placePeg(Restaurant restaurant, float zoom) {
+    private void placePeg(Restaurant restaurant, float zoom, int index) {
 
         if(!(manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null)) {
             Inspection mostRecentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
@@ -273,7 +273,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                         .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
                         .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                 );
-                Log.e(TAG, curMarker.getId());
+                curMarker.setTag(index);
+
+                Log.e(TAG, manager.getRestaurantList().get(index).getName());
+                Log.e(TAG, restaurant.getName());
+                Log.e(TAG, String.valueOf(index));
                 markers.add(curMarker);
 
             } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Moderate")) {
@@ -288,7 +292,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                         .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
                         .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                 );
-                Log.e(TAG, curMarker.getId());
+                curMarker.setTag(index);
+                Log.e(TAG, manager.getRestaurantList().get(index).getName());
+                Log.e(TAG, restaurant.getName());
+                Log.e(TAG, String.valueOf(index));
                 markers.add(curMarker);
 
             } else {
@@ -303,7 +310,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                         .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                 );
 
-                Log.e(TAG, curMarker.getId());
+                curMarker.setTag(index);
+                Log.e(TAG, manager.getRestaurantList().get(index).getName());
+                Log.e(TAG, restaurant.getName());
+                Log.e(TAG, String.valueOf(index));
                 markers.add(curMarker);
             }
         }
@@ -315,10 +325,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
             @Override
             public void onInfoWindowClick(Marker arg0) {
+                int index = (int) arg0.getTag();
 
-                String id = removeMFromId(arg0.getId()); // removing the m from the id so it can be converted into an int
-                int index = Integer.parseInt(id);
-                Log.e(TAG, String.valueOf(index));
                 Intent gotoRestaurant = RestaurantDetails.getIntent(getContext(), index);
                 startActivity(gotoRestaurant);
             }
