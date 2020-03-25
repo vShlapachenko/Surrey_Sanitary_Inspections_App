@@ -10,11 +10,12 @@
         android:id="@+id/inspectionNumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="serif"
-        android:textSize="16sp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-black"
         android:text="@string/inspection_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,10 +24,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="16sp"
-        android:fontFamily="serif"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-black"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/inspectionNumText"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/nonCritText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="100dp"
+        android:fontFamily="serif"
+        android:text="@string/nonCrit_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -34,11 +49,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="32dp"
-        android:textSize="16sp"
+        android:layout_marginTop="76dp"
         android:fontFamily="serif"
         android:text="@string/crit_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,24 +62,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:textSize="16sp"
+        android:layout_marginTop="76dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/critText"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/nonCritText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="68dp"
-        android:textSize="16sp"
-        android:fontFamily="serif"
-        android:text="@string/nonCrit_text"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -72,10 +74,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="68dp"
-        android:textSize="16sp"
+        android:layout_marginTop="100dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/nonCritText"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,13 +85,13 @@
         android:id="@+id/date_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="104dp"
-        android:textSize="16sp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="52dp"
         android:fontFamily="serif"
         android:paddingBottom="10dp"
         android:text="@string/date_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -97,12 +99,12 @@
         android:id="@+id/inspection_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:textSize="16sp"
-        android:layout_marginTop="104dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="52dp"
         android:fontFamily="serif"
         android:paddingBottom="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/date_text"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -110,14 +112,14 @@
         android:id="@+id/hazardIcon"
         android:layout_width="68dp"
         android:layout_height="64dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="120dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="76dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/hazardIconDescription"
+        android:maxWidth="50dp"
+        android:maxHeight="50dp"
         android:paddingBottom="6dp"
         android:textSize="16sp"
-        android:maxHeight="50dp"
-        android:maxWidth="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/alert_dark_frame" />

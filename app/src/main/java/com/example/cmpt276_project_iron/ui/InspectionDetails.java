@@ -88,7 +88,7 @@ public class InspectionDetails extends AppCompatActivity {
     public void getInspectionIndex(){
         int index = getIntent().getIntExtra(CUR_INSPECTION_KEY, 0);
         String tNumber = getIntent().getStringExtra(CUR_INSPECTION_T_NUMBER_KEY);
-        Manager manager = Manager.getInstance();
+        Manager manager = Manager.getInstance(this);
         restaurantInspection = manager.getInspectionMap().get(tNumber).get(index);
     }
 
