@@ -19,7 +19,6 @@ import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
