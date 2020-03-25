@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.Restaurant;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -56,23 +58,29 @@ public class InquiryFragment extends AppCompatDialogFragment {
                 .setPositiveButton(android.R.string.ok, listener)
                 .setNegativeButton(android.R.string.cancel, listener)
                 .create();
-
-
     }
 
     private DialogInterface.OnClickListener getOnClickListener() {
         return (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    new CsvTask().execute(jsonRestaurantUrl, jsonInspectionUrl);
+                    new CsvTask(context).execute(jsonRestaurantUrl, jsonInspectionUrl);
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
+                    Intent intent = new Intent(context, RestaurantList.class);
+                    startActivity(intent);
                     break;
             }
         };
     }
 
     private class CsvTask extends AsyncTask<String, String, String> {
+
+        Context context;
+
+        public CsvTask (Context context){
+            this.context = context;
+        }
 
         @Override
         protected void onPreExecute() {
