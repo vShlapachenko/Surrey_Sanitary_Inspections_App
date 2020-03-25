@@ -99,7 +99,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         inspectionDate.setText(getContext().getString(R.string.not_applicable_text));
 
         ImageView restaurantIcon = view.findViewById(R.id.restaurantIcon);
-        restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
         restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
@@ -119,7 +119,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         inspectionDate.setText(DateConversionCalculator.getFormattedDate(view.getContext(), recentInspection.getInspectionDate()));
 
         ImageView restaurantIcon = view.findViewById(R.id.restaurantIcon);
-        restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
         restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         String hazardLevel = recentInspection.getHazardLevel();
