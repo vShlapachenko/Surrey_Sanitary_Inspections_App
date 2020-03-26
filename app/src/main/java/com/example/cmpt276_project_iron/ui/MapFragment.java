@@ -1,8 +1,14 @@
 package com.example.cmpt276_project_iron.ui;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,20 +30,44 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+
+import android.os.Looper;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.Inspection;
+import com.example.cmpt276_project_iron.model.Manager;
+import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,7 +83,7 @@ import com.google.android.gms.tasks.Task;
 //features will be deployed
 //Parameters are passed via the .add method casted upon the fragment AND/OR the newInstance method
 
-//Note: Location (+ clicked restaurant coords then moving) needs to be tested on a real phone <-------
+//Note: Location needs to be tested on a real phone <-------
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, LocationListener, LocationSource {
     // TODO: Rename parameter arguments, choose names that match
@@ -61,7 +91,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private static final String LAT = "lat";
     private static final String LONG = "long";
 
+    private EditText mSearchText;
+
     // TODO: Rename and change types of parameters
+
     private double inLAT = 0.0;
     private double inLONG = 0.0;
 
@@ -76,7 +109,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private SupportMapFragment mapFragment;
     private OnFragmentInteractionListener mListener;
 
+    private  List<Marker> markers = new ArrayList<>();
+
+
     private static final float ZOOM_AMNT = 17f;
+
+    private final String TAG = "Maps";
+    private Manager manager;
+    Dialog popUp;
 
     public MapFragment() {
         // Required empty public constructor
@@ -145,6 +185,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
     }
 
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -192,6 +234,112 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         if (inLAT != 0.0 && inLONG != 0.0) {
             changeToolbarText();
         }
+
+        manager = Manager.getInstance(getContext());
+
+        List<Restaurant> restaurantList = manager.getRestaurantList();
+
+        for(int i=0; i<restaurantList.size(); i++) {
+            placePeg(restaurantList.get(i),ZOOM_AMNT, i);
+        }
+        makeMarkerTextClickable();
+    }
+
+
+    private void placePeg(Restaurant restaurant, float zoom, int index) {
+
+        if(!(manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null)) {
+            Inspection mostRecentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
+
+            Log.e(TAG, "restaurant haz level " + mostRecentInspection.getHazardLevel());
+
+            LatLng latLng = new LatLng(restaurant.getLatitude(), restaurant.getLongitude());
+
+            final int height = 100;
+            final int width = 100;
+
+            Marker curMarker;
+
+            if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Low")) {
+
+                // got from stack overflow https://stackoverflow.com/questions/35718103/how-to-specify-the-size-of-the-icon-on-the-marker-in-google-maps-v2-android
+                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.low_hazard);
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+                curMarker = map.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                );
+                curMarker.setTag(index);
+
+                Log.e(TAG, manager.getRestaurantList().get(index).getName());
+                Log.e(TAG, restaurant.getName());
+                Log.e(TAG, String.valueOf(index));
+                markers.add(curMarker);
+
+            } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Moderate")) {
+                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.moderate_hazard);
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+
+                curMarker = map.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                );
+                curMarker.setTag(index);
+                Log.e(TAG, manager.getRestaurantList().get(index).getName());
+                Log.e(TAG, restaurant.getName());
+                Log.e(TAG, String.valueOf(index));
+                markers.add(curMarker);
+
+            } else {
+                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.high_hazard);
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+                curMarker = map.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                );
+
+                curMarker.setTag(index);
+                Log.e(TAG, manager.getRestaurantList().get(index).getName());
+                Log.e(TAG, restaurant.getName());
+                Log.e(TAG, String.valueOf(index));
+                markers.add(curMarker);
+            }
+        }
+
+    }
+
+    private void makeMarkerTextClickable() {
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+            @Override
+            public void onInfoWindowClick(Marker arg0) {
+                int index = (int) arg0.getTag();
+
+                Intent gotoRestaurant = RestaurantDetails.getIntent(getContext(), index);
+                startActivity(gotoRestaurant);
+            }
+        });
+    }
+
+    private String removeMFromId(String id) {
+        String result = "";
+        final int startOfIdNumber = 1;
+        for(int i=startOfIdNumber; i<id.length(); i++) {
+            result += id.charAt(i);
+        }
+        return result;
     }
 
     private void placeGPSPosition() {
@@ -265,9 +413,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         //To shorten the amount of battery usage and taking into account the usage of the application,
-        //the interval is set to 4 seconds for the regular interval
+        //the interval is set t0 4 seconds for the regular interval
         locationRequest.setFastestInterval(2000);
-        locationRequest.setInterval(4000);
+        locationRequest.setInterval(3000);
 
         locationProvider.requestLocationUpdates(locationRequest, new LocationCallback() {
             @Override

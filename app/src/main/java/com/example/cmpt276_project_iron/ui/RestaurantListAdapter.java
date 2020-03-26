@@ -123,7 +123,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                 return;
             }
         }
-        restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
     }
 
     private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon) {

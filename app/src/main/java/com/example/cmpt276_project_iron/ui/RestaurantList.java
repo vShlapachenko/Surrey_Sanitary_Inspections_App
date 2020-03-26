@@ -53,7 +53,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
     //Made public so it can be launched from xml (non-dynamic)
     public void setUpMapOpen(View view) {
-        FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapContainer = findViewById(R.id.mapContainer);
 
         //Checks if the user has Google Play Services that is required for maps, if not, a message
@@ -82,10 +81,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         } else {
             MapFragment fragment = MapFragment.newInstance();
             FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
-            //Before 'opening' the fragment, hide the fpb (floating-btn) as it may leak through,
-            //Since we're putting the instances of the fragment on the stack, when coming back
-            //we override the onBackPressed method such that it makes the fqb reappear
-            mapButton.hide();
             /**
              * Note: When a toolbar is set up for the map, it must be tasked with making the
              *       button reappear
@@ -126,12 +121,25 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         navMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+                SharedPreferences.Editor editor = data.edit();
+                boolean isMapOpen = false;
                 if (item.getItemId() == R.id.navigation_resList) {
-                    // on favorites clicked
-                    return true;
+                    if (isMapOpen) {
+                        getSupportFragmentManager().popBackStackImmediate();
+                        isMapOpen = false;
+                        return true;
+                    }
                 } else if (item.getItemId() == R.id.navigation_map) {
-
-                    return true;
+                    if (!isMapOpen) {
+                        MapFragment fragment = MapFragment.newInstance();
+                        FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
+                        transactor.addToBackStack("fragInstance");
+                        transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+                        editor.putBoolean("goog_services", true);
+                        isMapOpen = true;
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -165,8 +173,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         /**
          * REMOVE ONCE BOTTOM NAVIGATION BAR IS ADDED (just bottom 2 lines of code)
          */
-        FloatingActionButton mapButton = findViewById(R.id.mapButton);
-        mapButton.show();
 
         //In accordance with the user stories, any one of the selections of the map or restaurant
         //will result in an exit of the application
