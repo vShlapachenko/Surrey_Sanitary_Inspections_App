@@ -17,8 +17,6 @@ import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 /**
