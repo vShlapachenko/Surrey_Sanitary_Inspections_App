@@ -54,7 +54,6 @@ public class CsvInspectionReader {
                 this.hazardRating = 5;
                 this.violLump = 6;
             } else if (fields[5].equalsIgnoreCase("ViolLump")) {
-                Log.e("FIELDS [6] : ", fields[6]);
                 this.hazardRating = 6;
                 this.violLump = 5;
             }
@@ -193,7 +192,6 @@ public class CsvInspectionReader {
         File file = context.getFileStreamPath(downloadedFile);
         if (file.exists()) {
             try {
-                Log.e("In ger reader", "inspection");
                 return new BufferedReader(new InputStreamReader(context.openFileInput(downloadedFile)));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

@@ -24,8 +24,8 @@
     <string name="restaurantExtension">Restaurant Details</string>
     <string name="days_text"> days</string>
     <string-array name="months">
-        <item>February</item>
         <item>January</item>
+        <item>February</item>
         <item>March</item>
         <item>April</item>
         <item>May</item>
@@ -97,5 +97,12 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="hazard_not_found_message">Hazard level not found</string>
+
+
+    <string name="data_download_inquire">Do you want to download data?</string>
+    <string name="yes_positive">YES</string>
+    <string name="negative_update">UPDATE NEXT TIME</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
