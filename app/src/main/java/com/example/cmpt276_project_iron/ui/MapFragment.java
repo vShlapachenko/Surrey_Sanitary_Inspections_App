@@ -172,7 +172,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public boolean onClusterClick(Cluster<RestaurantMarkerCluster> cluster) {
 
-        if (cluster == null) return false;
+        if (cluster == null) {return false;};
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (RestaurantMarkerCluster restaurant : cluster.getItems())
             builder.include(restaurant.getPosition());
