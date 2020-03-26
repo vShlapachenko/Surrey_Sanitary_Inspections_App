@@ -18,13 +18,13 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
 
-public class MarkerClusterRenderer extends DefaultClusterRenderer<RestaurantMarkerCluster> {   // 1
+public class MarkerCluster extends DefaultClusterRenderer<RestaurantMarkerCluster> {   // 1
     private static final int MARKER_DIMENSION = 48;  // 2
     private final IconGenerator iconGenerator;
     private final ImageView markerImageView;
 
 
-    public MarkerClusterRenderer(Context context, GoogleMap map, ClusterManager<RestaurantMarkerCluster> clusterManager) {
+    public MarkerCluster(Context context, GoogleMap map, ClusterManager<RestaurantMarkerCluster> clusterManager) {
         super(context, map, clusterManager);
         iconGenerator = new IconGenerator(context);  // 3
         markerImageView = new ImageView(context);
