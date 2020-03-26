@@ -386,8 +386,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
                 //Places marker on the user's position
                 map.setMyLocationEnabled(true);
-            }
-            else{
+            } else{
                 //If location services are not provided (!permissionGrantedFlag), other functionality should
                 //still be allowed so the user is able to geolocate restaurants
                 if (inLAT != 0.0 && inLONG != 0.0) {
@@ -471,8 +470,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             if (ContextCompat.checkSelfPermission(this.getContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 permissionsGrantedFlag = true;
-            }
-            else{
+            } else{
                 Toast.makeText(this.getContext(), "Some services may be unavailable", Toast.LENGTH_SHORT).show();
             }
         }

@@ -130,11 +130,9 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         double MDPI_SCREEN_SIZE = 1.0;
         if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
             setContentView(R.layout.activity_restaurant_list_custom);
-        }
-        else if(width == 1440 && height == 2560) {
+        } else if(width == 1440 && height == 2560) {
             setContentView(R.layout.activity_restaurant_list_custom_one);
-        }
-        else{
+        } else{
             setContentView(R.layout.activity_restaurant_list);
         }
     }
@@ -164,8 +162,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 setUpMapOpen(getWindow().getDecorView().getRootView());
-            }
-            else{
+            } else{
                 Log.i("lengthened_launch", "Map is launching as default screen for the first time");
                 getRequiredPermissions();
                 new Timer().schedule(new TimerTask() {
@@ -175,8 +172,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                     }
                 }, 3000);
             }
-        }
-        else{
+        } else{
             Log.i("lengthened_launch", "Map is launching as default screen for the first time");
             getRequiredPermissions();
             new Timer().schedule(new TimerTask() {
