@@ -71,7 +71,7 @@ public class RestaurantMarkerCluster implements ClusterItem {
     }
     @Override
     public String getSnippet() {
-        if(!(this.getManager().getInspectionMap().get(this.getRestaurant().getTrackingNumber()) == null)) {
+        if((this.getManager().getInspectionMap().get(this.getRestaurant().getTrackingNumber()) != null)) {
             if(manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0).getHazardLevel().equalsIgnoreCase("Low")) {
                 return restaurant.getPhysicalAddress() + ", " + manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0).getHazardLevel();
             }

@@ -34,7 +34,7 @@ public class MarkerCluster extends DefaultClusterRenderer<RestaurantMarkerCluste
 
     @Override
     protected void onBeforeClusterItemRendered(RestaurantMarkerCluster item, MarkerOptions markerOptions) {
-        if(!(item.getManager().getInspectionMap().get(item.getRestaurant().getTrackingNumber()) == null)) {
+        if((item.getManager().getInspectionMap().get(item.getRestaurant().getTrackingNumber()) != null)) {
             Inspection mostRecentInspection = item.getManager().getInspectionMap().get(item.getRestaurant().getTrackingNumber()).get(0);
             if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Low")) {
                 markerImageView.setImageResource(R.drawable.low_hazard);
