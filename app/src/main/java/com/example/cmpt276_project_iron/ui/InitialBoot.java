@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,16 +57,17 @@ public class InitialBoot extends AppCompatActivity implements CallBackInquiryFra
 
         //Uncomment these lines to wipe internal data
 
-        getFileStreamPath(RESTAURANTS_FILE_TIME_STAMP).delete();
-        getFileStreamPath(INSPECTIONS_FILE_TIME_STAMP).delete();
-        getFileStreamPath(RESTAURANTS_FILE).delete();
-        getFileStreamPath(INSPECTIONS_FILE).delete();
-        getFileStreamPath(JSON_RESTAURANTS_LAST_MODIFIED).delete();
-        getFileStreamPath(JSON_RESTAURANTS_LAST_MODIFIED).delete();
-        getFileStreamPath(RESTAURANTS_FILE_BACKUP).delete();
-        getFileStreamPath(INSPECTIONS_FILE_BACKUP).delete();
+        if(isOnline()) {
+            downloadCsvFiles();
+        } else {
+            startRestaurantList();
+        }
+    }
 
-        downloadCsvFiles();
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        return ni != null && ni.isAvailable() && ni.isConnected();
     }
 
     private void downloadCsvFiles() {
