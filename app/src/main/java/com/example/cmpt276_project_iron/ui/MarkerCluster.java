@@ -45,8 +45,7 @@ public class MarkerCluster extends DefaultClusterRenderer<RestaurantMarkerCluste
             } else {
                 markerImageView.setImageResource(R.drawable.not_found);
             }
-        }
-        else {
+        } else {
             markerImageView.setImageResource(R.drawable.not_found);
         }
 
