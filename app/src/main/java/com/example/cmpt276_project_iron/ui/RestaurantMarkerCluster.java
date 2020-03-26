@@ -74,7 +74,7 @@ public class RestaurantMarkerCluster implements ClusterItem {
         if(!(this.getManager().getInspectionMap().get(this.getRestaurant().getTrackingNumber()) == null)) {
             return restaurant.getPhysicalAddress() + ", " + manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0).getHazardLevel();
         }
-        else {
+        else{
             return restaurant.getPhysicalAddress() + ", " + "No Inspection available";
         }
 
