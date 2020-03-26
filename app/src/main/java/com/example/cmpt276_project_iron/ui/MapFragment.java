@@ -383,14 +383,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                         }
                     }
                 });
+
+                //Places marker on the user's position
+                map.setMyLocationEnabled(true);
+            }
+            else{
+                //If location services are not provided (!permissionGrantedFlag), other functionality should
+                //still be allowed so the user is able to geolocate restaurants
+                if (inLAT != 0.0 && inLONG != 0.0) {
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                    (inLAT, inLONG),
+                            ZOOM_AMNT));
+                }
             }
 
         } catch (SecurityException e) {
             Log.i("servicesClientException", "Security exception: " + e.getMessage());
         }
-
-        //Places marker on the user's position
-        map.setMyLocationEnabled(true);
     }
 
     private void updateGPSPosition() {
@@ -453,8 +462,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
 
     private void getRequiredPermissions() {
-        String[] req_permissons = {Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION};
 
         //Once the permissions have been displayed, check what the user's selection was
         //More specifically, make sure that it is correct
@@ -464,12 +471,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             if (ContextCompat.checkSelfPermission(this.getContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 permissionsGrantedFlag = true;
-            } else {
-                //If the permissions were not granted already (via the settings), ask for them
-                ActivityCompat.requestPermissions(this.getActivity(), req_permissons, 0);
             }
-        } else {
-            ActivityCompat.requestPermissions(this.getActivity(), req_permissons, 0);
+            else{
+                Toast.makeText(this.getContext(), "Some services may be unavailable", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

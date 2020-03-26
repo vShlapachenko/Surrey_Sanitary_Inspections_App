@@ -1,6 +1,8 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmpt276_project_iron.R;
@@ -21,6 +25,8 @@ import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -40,9 +46,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Used for launching the map fragment
         inflateRestaurantList();
 
-        //Only after the necessary processing of the first activity has been completed should the
-        //map be displayed (as default first screen)
-        setUpMapOpen(getWindow().getDecorView().getRootView());
+        //Will get required permissions for services, wait and then launch activity, but also
+        //check if the necessary services are already provided, then launch instantly
+        //Fixes bug with invalid service permissions resulting in map related exceptions
+        safeLaunchMap();
+
     }
 
     //Made public so it can be launched from xml (non-dynamic)
@@ -147,6 +155,58 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             //If no fragments -> on restaurant screen -> exit application -> normal behaviour
             super.onBackPressed();
         }*/
+    }
+
+    private void safeLaunchMap(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                setUpMapOpen(getWindow().getDecorView().getRootView());
+            }
+            else{
+                Log.i("lengthened_launch", "Map is launching as default screen for the first time");
+                getRequiredPermissions();
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        setUpMapOpen(getWindow().getDecorView().getRootView());
+                    }
+                }, 3000);
+            }
+        }
+        else{
+            Log.i("lengthened_launch", "Map is launching as default screen for the first time");
+            getRequiredPermissions();
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    setUpMapOpen(getWindow().getDecorView().getRootView());
+                }
+            }, 3000);
+        }
+    }
+
+    private void getRequiredPermissions() {
+        String[] req_permissons = {Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION};
+
+        //Once the permissions have been displayed, check what the user's selection was
+        //More specifically, make sure that it is correct
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    //Do nothing
+            } else {
+                //If the permissions were not granted already (via the settings), ask for them
+                ActivityCompat.requestPermissions(this, req_permissons, 0);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, req_permissons, 0);
+        }
     }
 
     @Override
