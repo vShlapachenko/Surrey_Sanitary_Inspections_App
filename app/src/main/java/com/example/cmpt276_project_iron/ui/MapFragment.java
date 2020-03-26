@@ -430,13 +430,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public void onLocationChanged(Location location) {
         if (gpsChangeListener != null) {
             gpsChangeListener.onLocationChanged(location);
-
-            //Move the camera to the user's location once it's available!
-            //map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
-                            (location.getLatitude(), location.getLongitude()),
-                    ZOOM_AMNT));
         }
+
+        //Just notifying that a location has changed such that other methods can update themselves,
+        //now excluding location auto-centering as per requirement
     }
 
     @Override
