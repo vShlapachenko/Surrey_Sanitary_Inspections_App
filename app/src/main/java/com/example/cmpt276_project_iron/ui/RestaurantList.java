@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +22,7 @@ import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -37,6 +40,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
         setUpBackButton();
+        setUpNavigationBar();
         manager = Manager.getInstance(this);
 
         //Used for launching the map fragment
@@ -115,6 +119,23 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
     private void setUpBackButton(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    private void setUpNavigationBar() {
+        BottomNavigationView navMenu = findViewById(R.id.navigationView);
+        navMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.navigation_resList) {
+                    // on favorites clicked
+                    return true;
+                } else if (item.getItemId() == R.id.navigation_map) {
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void displayCorrectLayout(){

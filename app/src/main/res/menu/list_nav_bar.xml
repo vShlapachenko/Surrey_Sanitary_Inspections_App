@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_resList"
+        android:icon="@drawable/restaurant_icon"
+        android:title="List"/>
+
+    <item
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/common_google_signin_btn_text_dark"
+        android:title="Map"/>
+</menu>

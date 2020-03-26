@@ -53,7 +53,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         holder.restaurantName.setText(String.valueOf(restaurant.getName()));
 
         if (manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) {
-            initializeLayoutNoInspection(holder);
+            initializeLayoutNoInspection(restaurant, holder);
         }
         else {
             initializeLayoutWithInspection(restaurant, holder);
@@ -81,14 +81,14 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         });
     }
 
-    private void initializeLayoutNoInspection(ViewHolder viewHolder) {
+    private void initializeLayoutNoInspection(Restaurant restaurant, ViewHolder viewHolder) {
         viewHolder.critIssues.setText(context.getString(R.string.not_applicable_text));
 
         viewHolder.nonCritIssues.setText(context.getString(R.string.not_applicable_text));
 
         viewHolder.inspectionDate.setText(context.getString(R.string.not_applicable_text));
 
-        viewHolder.restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        initializeRestaurantIconImage(restaurant, viewHolder.restaurantIcon);
         viewHolder.restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         viewHolder.hazardIcon.setVisibility(View.INVISIBLE);
@@ -104,10 +104,26 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         viewHolder.inspectionDate.setText(DateConversionCalculator.
                 getFormattedDate(context, recentInspection.getInspectionDate()));
 
-        viewHolder.restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        initializeRestaurantIconImage(restaurant, viewHolder.restaurantIcon);
         viewHolder.restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         initializeHazardIcon(recentInspection.getHazardLevel(), viewHolder.hazardIcon);
+    }
+
+    //Hardcoded 10 different restaurant names to have custom images
+    private void initializeRestaurantIconImage(Restaurant restaurant, ImageView restaurantIcon) {
+        String[] resNameArray = context.getResources().getStringArray(R.array.custom_icon_restaurants);
+
+        for (String resName : resNameArray) {
+            if (restaurant.getName().contains(resName)) {
+                System.out.println(restaurant.getName());
+                int id = context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
+                System.out.println(id);
+                restaurantIcon.setImageResource(id);
+                return;
+            }
+        }
+        restaurantIcon.setImageResource(R.drawable.restaurant_icon);
     }
 
     private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon) {
