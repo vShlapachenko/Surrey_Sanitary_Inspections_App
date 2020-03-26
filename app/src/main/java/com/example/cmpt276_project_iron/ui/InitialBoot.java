@@ -21,7 +21,6 @@ import com.google.gson.JsonPrimitive;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -100,7 +99,7 @@ public class InitialBoot extends AppCompatActivity implements CallBackInquiryFra
                         || inspectionDifferenceInHours >= UPDATE_THRESHOLD) {
                     new JsonTask().execute(jsonRestaurantUrl, jsonInspectionUrl);
                 } else {
-                    startRestaurantListVOID();
+                    startRestaurantList();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -137,7 +136,7 @@ public class InitialBoot extends AppCompatActivity implements CallBackInquiryFra
         return cal;
     }
 
-    public void startRestaurantListVOID(){
+    public void startRestaurantList(){
         Intent intent = new Intent(this, RestaurantList.class);
         startActivity(intent);
     }
@@ -204,7 +203,7 @@ public class InitialBoot extends AppCompatActivity implements CallBackInquiryFra
                         writeToInternal(time, INSPECTIONS_FILE_TIME_STAMP);
                         showFragmentInquiry(s.urlRestaurant, s.urlInspection);
                     } else {
-                        startRestaurantListVOID();
+                        startRestaurantList();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -328,7 +327,7 @@ public class InitialBoot extends AppCompatActivity implements CallBackInquiryFra
                 copyFromRawToInternal(getResources().openRawResource(R.raw.restaurants_itr1), RESTAURANTS_FILE);
                 copyFromRawToInternal(getResources().openRawResource(R.raw.inspectionreports_itr1), INSPECTIONS_FILE);
             }
-            startRestaurantListVOID();
+            startRestaurantList();
             super.onCancelled();
         }
 
@@ -340,7 +339,7 @@ public class InitialBoot extends AppCompatActivity implements CallBackInquiryFra
             if (progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            startRestaurantListVOID();
+            startRestaurantList();
         }
     }
 }

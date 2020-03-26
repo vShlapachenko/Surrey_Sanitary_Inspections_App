@@ -34,11 +34,9 @@ public class InquiryFragment extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         setCancelable(false);
 
-        //Create View to show
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.inquire_data_update_restaurant, null);
 
         DialogInterface.OnClickListener listener;
-        //Create a button listener
 
         listener = getOnClickListener();
         return new AlertDialog.Builder(getActivity())
