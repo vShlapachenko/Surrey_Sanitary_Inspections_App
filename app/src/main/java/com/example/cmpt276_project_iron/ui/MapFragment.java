@@ -108,6 +108,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private Manager manager;
     Dialog popUp;
 
+
     public MapFragment() {
         // Required empty public constructor
     }
@@ -134,6 +135,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         //Explicitly asks the user for permission for the required services
         getRequiredPermissions();
 
@@ -146,19 +148,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(new OnMapReadyCallback() {  // 2
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setUpClusterManager(googleMap);
-            }
-        });
+//        mapFragment.getMapAsync(new OnMapReadyCallback() {  // put the set up cluster manager in the already made onMapReady
+//            @Override
+//            public void onMapReady(GoogleMap googleMap) {
+//                setUpClusterManager(googleMap);
+//            }
+//        });
     }
     private void setUpClusterManager(GoogleMap googleMap){
         ClusterManager<RestaurantMarkerCluster> clusterManager = new ClusterManager<RestaurantMarkerCluster>(getContext(), googleMap);
         clusterManager.setRenderer(new MarkerClusterRenderer(getContext(), googleMap, clusterManager));
         googleMap.setOnCameraIdleListener(clusterManager);
-        markers = getItems();
-        clusterManager.addItems(items);
+        clusterManager.addItems(markers);
         clusterManager.cluster();
 
     }
@@ -167,8 +168,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public boolean onClusterClick(Cluster<RestaurantMarkerCluster> cluster) {
         if (cluster == null) return false;
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (RestaurantMarkerCluster user : cluster.getItems())
-            builder.include(user.getPosition());
+        for (RestaurantMarkerCluster restaurant : cluster.getItems())
+            builder.include(restaurant.getPosition());
         LatLngBounds bounds = builder.build();
         try {
             map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
@@ -262,7 +263,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         for(int i=0; i<restaurantList.size(); i++) {
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
         }
-        makeMarkerTextClickable();
+        setUpClusterManager(map);
+        makeMarkerTextClickable(markers);
+
     }
 
 
@@ -270,28 +273,41 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         Marker curMarker;
         LatLng latLng = new LatLng(restaurant.getLatitude(), restaurant.getLongitude());
 
+
         final int height = 100;
         final int width = 100;
-        if(!(manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null)) {
-            Inspection mostRecentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
 
+        if(!(manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null)) {
+
+            Inspection mostRecentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
             Log.e(TAG, "restaurant haz level " + mostRecentInspection.getHazardLevel());
 
 
             if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Low")) {
 
-                // got from stack overflow https://stackoverflow.com/questions/35718103/how-to-specify-the-size-of-the-icon-on-the-marker-in-google-maps-v2-android
+
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.low_hazard);
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-                curMarker = map.addMarker(new MarkerOptions()
+
+//                curMarker = map.addMarker(new MarkerOptions()
+//                        .position(latLng)
+//                        .title(restaurant.getName())
+//                        .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+//                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+//                );
+                MarkerOptions markerOptions = new MarkerOptions()
                         .position(latLng)
                         .title(restaurant.getName())
                         .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                );
-                curMarker.setTag(index);
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                RestaurantMarkerCluster newMarker = new RestaurantMarkerCluster(restaurant, manager, index);
+                markers.add(newMarker);
+//                cluster.onBeforeClusterItemRendered(newMarker, markerOptions);
+//                curMarker.setTag(index);
+
+
 
                 Log.e(TAG, manager.getRestaurantList().get(index).getName());
                 Log.e(TAG, restaurant.getName());
@@ -304,13 +320,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
 
-                curMarker = map.addMarker(new MarkerOptions()
+//                curMarker = map.addMarker(new MarkerOptions()
+//                        .position(latLng)
+//                        .title(restaurant.getName())
+//                        .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+//                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+//                );
+//                curMarker.setTag(index);
+                MarkerOptions markerOptions = new MarkerOptions()
                         .position(latLng)
                         .title(restaurant.getName())
                         .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                );
-                curMarker.setTag(index);
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                RestaurantMarkerCluster newMarker = new RestaurantMarkerCluster(restaurant, manager, index);
+                markers.add(newMarker);
+//                cluster.onBeforeClusterItemRendered(newMarker, markerOptions);
+
                 Log.e(TAG, manager.getRestaurantList().get(index).getName());
                 Log.e(TAG, restaurant.getName());
                 Log.e(TAG, String.valueOf(index));
@@ -319,25 +344,41 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.high_hazard);
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-
-                curMarker = map.addMarker(new MarkerOptions()
+//
+//                curMarker = map.addMarker(new MarkerOptions()
+//                        .position(latLng)
+//                        .title(restaurant.getName())
+//                        .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+//                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+//                );
+                MarkerOptions markerOptions = new MarkerOptions()
                         .position(latLng)
                         .title(restaurant.getName())
                         .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                );
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                RestaurantMarkerCluster newMarker = new RestaurantMarkerCluster(restaurant, manager, index);
+                markers.add(newMarker);
+//                cluster.onBeforeClusterItemRendered(newMarker, markerOptions);
             }
             else {
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.not_found);
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-
-                curMarker = map.addMarker(new MarkerOptions()
+//
+//                curMarker = map.addMarker(new MarkerOptions()
+//                        .position(latLng)
+//                        .title(restaurant.getName())
+//                        .snippet(restaurant.getPhysicalAddress() + ", " + "No Hazard level")
+//                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+//                );
+                MarkerOptions markerOptions = new MarkerOptions()
                         .position(latLng)
                         .title(restaurant.getName())
                         .snippet(restaurant.getPhysicalAddress() + ", " + "No Hazard level")
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                );
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                RestaurantMarkerCluster newMarker = new RestaurantMarkerCluster(restaurant, manager, index);
+                markers.add(newMarker);
+//                cluster.onBeforeClusterItemRendered(newMarker, markerOptions);
 
             }
         }
@@ -347,23 +388,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             Bitmap b = bitmapdraw.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-            curMarker = map.addMarker(new MarkerOptions()
+//            curMarker = map.addMarker(new MarkerOptions()
+//                    .position(latLng)
+//                    .title(restaurant.getName())
+//                    .snippet(restaurant.getPhysicalAddress() + ", " + "No inspections found")
+//                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+//            );
+//            curMarker.setTag(index);
+//            Log.e(TAG, manager.getRestaurantList().get(index).getName());
+//            Log.e(TAG, restaurant.getName());
+//            Log.e(TAG, String.valueOf(index));
+//            markers.add(curMarker);
+            MarkerOptions markerOptions = new MarkerOptions()
                     .position(latLng)
                     .title(restaurant.getName())
                     .snippet(restaurant.getPhysicalAddress() + ", " + "No inspections found")
-                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-            );
-            curMarker.setTag(index);
-            Log.e(TAG, manager.getRestaurantList().get(index).getName());
-            Log.e(TAG, restaurant.getName());
-            Log.e(TAG, String.valueOf(index));
-            markers.add(curMarker);
+                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+            RestaurantMarkerCluster newMarker = new RestaurantMarkerCluster(restaurant, manager, index);
+            markers.add(newMarker);
+//            cluster.onBeforeClusterItemRendered(newMarker, markerOptions);
 
         }
 
     }
 
-    private void makeMarkerTextClickable() {
+    private void makeMarkerTextClickable(List<RestaurantMarkerCluster> markers) {
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 
             @Override

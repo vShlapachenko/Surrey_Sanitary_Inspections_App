@@ -23,6 +23,7 @@ public class MarkerClusterRenderer extends DefaultClusterRenderer<RestaurantMark
     private final IconGenerator iconGenerator;
     private final ImageView markerImageView;
 
+
     public MarkerClusterRenderer(Context context, GoogleMap map, ClusterManager<RestaurantMarkerCluster> clusterManager) {
         super(context, map, clusterManager);
         iconGenerator = new IconGenerator(context);  // 3
@@ -30,37 +31,61 @@ public class MarkerClusterRenderer extends DefaultClusterRenderer<RestaurantMark
         markerImageView.setLayoutParams(new ViewGroup.LayoutParams(MARKER_DIMENSION, MARKER_DIMENSION));
         iconGenerator.setContentView(markerImageView);  // 4
     }
-
-    protected void onBeforeClusterItemRendered(RestaurantMarkerCluster item, Marker marker, LatLng latLng, Restaurant restaurant, Inspection mostRecentInspection, Bitmap smallMarker, Manager manager) { // 5
-       Boolean hasHazardLevel = true;
-        if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Low")) {
-            markerImageView.setImageResource(R.drawable.low_hazard);
-        } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Moderate")) {
-            markerImageView.setImageResource(R.drawable.moderate_hazard);
-        } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("High")) {
-            markerImageView.setImageResource(R.drawable.high_hazard);
-        } else {
+//    protected void onBeforeClusterItemRendered(RestaurantMarkerCluster item, Marker marker, LatLng latLng, Restaurant restaurant, Inspection mostRecentInspection, Bitmap smallMarker, Manager manager) { // 5
+//       Boolean hasHazardLevel = true;
+//        if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Low")) {
+//            markerImageView.setImageResource(R.drawable.low_hazard);
+//        } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Moderate")) {
+//            markerImageView.setImageResource(R.drawable.moderate_hazard);
+//        } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("High")) {
+//            markerImageView.setImageResource(R.drawable.high_hazard);
+//        } else {
+//            markerImageView.setImageResource(R.drawable.not_found);
+//            hasHazardLevel = false;
+//        }
+//
+//        Bitmap icon = iconGenerator.makeIcon();  // 7
+//        if(!(manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) && hasHazardLevel) {
+//            MarkerOptions markerOptions = new MarkerOptions().position(latLng)
+//                    .title(restaurant.getName())
+//                    .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
+//                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+//            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));  // 8
+//            markerOptions.title(item.getTitle());
+//        }
+//        else if(!(manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) && !hasHazardLevel){
+//            MarkerOptions markerOptions = new MarkerOptions().position(latLng)
+//                    .title(restaurant.getName())
+//                    .snippet(restaurant.getPhysicalAddress() + ", " + "No inspection found")
+//                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+//            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));  // 8
+//            markerOptions.title(item.getTitle());
+//        }
+//    }
+    @Override
+    protected void onBeforeClusterItemRendered(RestaurantMarkerCluster item, MarkerOptions markerOptions) {
+        if(!(item.getManager().getInspectionMap().get(item.getRestaurant().getTrackingNumber()) == null)) {
+            Inspection mostRecentInspection = item.getManager().getInspectionMap().get(item.getRestaurant().getTrackingNumber()).get(0);
+            Boolean hasHazardLevel = true;
+            if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Low")) {
+                markerImageView.setImageResource(R.drawable.low_hazard);
+            } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Moderate")) {
+                markerImageView.setImageResource(R.drawable.moderate_hazard);
+            } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("High")) {
+                markerImageView.setImageResource(R.drawable.high_hazard);
+            } else {
+                markerImageView.setImageResource(R.drawable.not_found);
+                hasHazardLevel = false;
+            }
+        }
+        else {
             markerImageView.setImageResource(R.drawable.not_found);
-            hasHazardLevel = false;
         }
 
-        Bitmap icon = iconGenerator.makeIcon();  // 7
-        if(!(manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) && hasHazardLevel) {
-            MarkerOptions markerOptions = new MarkerOptions().position(latLng)
-                    .title(restaurant.getName())
-                    .snippet(restaurant.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel())
-                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));  // 8
-            markerOptions.title(item.getTitle());
-        }
-        else if(!(manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) && !hasHazardLevel){
-            MarkerOptions markerOptions = new MarkerOptions().position(latLng)
-                    .title(restaurant.getName())
-                    .snippet(restaurant.getPhysicalAddress() + ", " + "No inspection found")
-                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));  // 8
-            markerOptions.title(item.getTitle());
-        }
+
+        Bitmap icon = iconGenerator.makeIcon();
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
+        markerOptions.title(item.getTitle());
     }
 }
 
