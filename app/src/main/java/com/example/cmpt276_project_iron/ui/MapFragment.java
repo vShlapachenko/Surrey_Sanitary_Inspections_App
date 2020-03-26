@@ -110,7 +110,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         //Tracks the user's location
         updateGPSPosition();
 
-
         if (getArguments() != null) {
             inLAT = getArguments().getDouble(LAT);
             inLONG = getArguments().getDouble(LONG);

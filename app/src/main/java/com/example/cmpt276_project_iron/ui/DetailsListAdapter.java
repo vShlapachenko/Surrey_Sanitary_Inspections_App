@@ -17,6 +17,8 @@ import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -81,6 +83,13 @@ public class DetailsListAdapter extends ArrayAdapter<Inspection> {
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
+        } else{
+            hazardIcon.setImageResource(R.drawable.not_found);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            //Providing context if a hazard level is not found
+            TextView error_text = view.findViewById(R.id.error_text);
+            error_text.setText(R.string.hazard_not_found_message);
         }
 
          //Set an onclick listener for the individual items such that the third activity can be launched with the necessary info.

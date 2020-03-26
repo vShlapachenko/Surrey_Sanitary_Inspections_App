@@ -97,5 +97,6 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="hazard_not_found_message">Hazard level not found</string>
 
 </resources>
