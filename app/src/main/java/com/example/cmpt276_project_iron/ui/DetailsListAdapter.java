@@ -82,7 +82,7 @@ public class DetailsListAdapter extends ArrayAdapter<Inspection> {
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         } else{
-            hazardIcon.setImageResource(R.drawable.not_found);
+            hazardIcon.setImageResource(R.drawable.missing_info);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
             //Providing context if a hazard level is not found

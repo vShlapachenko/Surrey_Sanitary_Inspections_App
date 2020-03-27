@@ -75,6 +75,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private static final String LAT = "lat";
     private static final String LONG = "long";
     private static final String COORDLAUNCH = "coordinate_launch";
+    private static final String RINDEX = "restaurant_index";
 
     private EditText mSearchText;
 
@@ -93,6 +94,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private double inLAT = 0.0;
     private double inLONG = 0.0;
     private boolean coordLaunch = false;
+    private int restaurantIndex = 0;
 
     private boolean permissionsGrantedFlag = false;
 
@@ -120,12 +122,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     }
 
     //Used if incoming from coords click
-    public static MapFragment newInstance(double latitude, double longitude, boolean coordinateFlag) {
+    public static MapFragment newInstance(double latitude, double longitude, boolean coordinateFlag, int restaurantIndex) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         args.putDouble(LAT, latitude);
         args.putDouble(LONG, longitude);
         args.putBoolean(COORDLAUNCH, coordinateFlag);
+        args.putInt(RINDEX, restaurantIndex);
         fragment.setArguments(args);
         return fragment;
     }
@@ -155,6 +158,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             inLAT = getArguments().getDouble(LAT);
             inLONG = getArguments().getDouble(LONG);
             coordLaunch = getArguments().getBoolean(COORDLAUNCH);
+            restaurantIndex = getArguments().getInt(RINDEX);
         }
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -293,8 +297,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         markers.add(newMarker);
 
     }
-
-
 
     private void placeGPSPosition() {
 

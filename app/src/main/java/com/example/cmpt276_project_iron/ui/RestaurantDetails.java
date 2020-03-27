@@ -37,6 +37,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
     private Restaurant curRestaurant;
     private Manager manager;
     private boolean gServicesFlag;
+    private int restaurantIndex;
 
     // private FrameLayout mapContainer;
 
@@ -103,7 +104,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
                     //passed in
 
                     MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
-                            curRestaurant.getLongitude(), true);
+                            curRestaurant.getLongitude(), true, restaurantIndex);
                     FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
                     transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
                             R.anim.swipe_left, R.anim.swipe_right);
@@ -147,13 +148,13 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
         //which would set the cur restaurant to the def value. By using SharedPreferences, this data is only changed coming
         //from the first activity
         SharedPreferences data = this.getSharedPreferences("data", MODE_PRIVATE);
-        int index = getIntent().getIntExtra("restaurantIndex", data.getInt("cur_restaurant", 2));
+        restaurantIndex = getIntent().getIntExtra("restaurantIndex", data.getInt("cur_restaurant", 2));
         manager = Manager.getInstance(this);
         gServicesFlag = data.getBoolean("goog_services", false);
 
 
         manager = Manager.getInstance(this);
-        curRestaurant = manager.getRestaurantList().get(index);
+        curRestaurant = manager.getRestaurantList().get(restaurantIndex);
     }
 
     public static Intent getIntent(Context context, int restaurantIndex){
