@@ -20,6 +20,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
@@ -131,14 +133,16 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
     private void inflateInspectionList(){
         List<Inspection> inspections = manager.getInspectionMap().get(curRestaurant.getTrackingNumber());
+
         if(inspections == null){
             TextView emptyListText = findViewById(R.id.noInspectionsText);
             emptyListText.setText(getResources().getString(R.string.no_inspection_text));
         } else {
-            ListView inspectionList = findViewById(R.id.inspectionList);
-            DetailsListAdapter adapter = new DetailsListAdapter(this, R.layout.inspection_list_item, inspections);
+            RecyclerView inspectionList = findViewById(R.id.inspectionList);
+            DetailsListAdapter adapter = new DetailsListAdapter(this, inspections);
             adapter.notifyDataSetChanged();
             inspectionList.setAdapter(adapter);
+            inspectionList.setLayoutManager(new LinearLayoutManager(this));
         }
     }
 

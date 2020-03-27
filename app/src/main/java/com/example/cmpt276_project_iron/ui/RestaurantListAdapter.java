@@ -7,18 +7,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
+import com.example.cmpt276_project_iron.ui.RestaurantList;
 
 import java.util.List;
 
@@ -28,13 +28,12 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  *  List adapter used for the restaurant list activity
  */
-public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
+public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.ViewHolder> {
     private Context context;
     private List<Restaurant> restaurants;
     private Manager manager;
 
-    public RestaurantListAdapter(Context context, int resource, List<Restaurant> restaurants){
-        super(context, resource, restaurants);
+    public RestaurantListAdapter(Context context, List<Restaurant> restaurants){
         this.context = context;
         this.restaurants = restaurants;
         this.manager = Manager.getInstance(context);
@@ -42,89 +41,73 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
 
     @NonNull
     @Override
-    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(
+                LayoutInflater.from(context)
+                        .inflate(R.layout.restaurant_list_item, parent, false));
+    }
 
-        final View view = inflater.inflate(R.layout.restaurant_list_item, null);
-        view.setClickable(true);
-
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Restaurant restaurant = restaurants.get(position);
 
-        TextView restaurantName = view.findViewById(R.id.restaurantName);
-        restaurantName.setText(String.valueOf(restaurant.getName()));
+        holder.restaurantName.setText(String.valueOf(restaurant.getName()));
 
-        if (manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) {
-            initializeLayoutNoInspection(view);
+        if ((manager.getInspectionMap().get(restaurant.getTrackingNumber())) == null) {
+            initializeLayoutNoInspection(holder);
         }
         else {
-            initializeLayoutWithInspection(restaurant, view);
+            initializeLayoutWithInspection(restaurant, holder);
         }
 
-        view.setOnClickListener(new View.OnClickListener() {
+        holder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (view.isVerticalScrollBarEnabled() == false) {
-                    Intent intent = new Intent(context, RestaurantDetails.class);
-                    intent.putExtra("restaurantIndex", position);
+            public void onClick(View view) {
+                Intent intent = RestaurantList.getIntent(context, position);
 
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
 
-                    //Using shared preferences to retain the index of the restaurant which is used to address activity two's
-                    //bug with a changing toolbar tittle - Jas
+                //Using shared preferences to retain the index of the restaurant which is used to address activity two's
+                //bug with a changing toolbar tittle - Jas
 
-                    SharedPreferences data = context.getSharedPreferences("data", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = data.edit();
-                    editor.putInt("cur_restaurant", position);
-                    editor.apply();
+                SharedPreferences data = context.getSharedPreferences("data", MODE_PRIVATE);
+                SharedPreferences.Editor editor = data.edit();
+                editor.putInt("cur_restaurant", position);
+                editor.apply();
 
-
-
-                    Log.i("Position_clicked", position + " ");
-                }
+                Log.i("Position_clicked", position + " ");
             }
         });
-
-        return view;
     }
 
-    private void initializeLayoutNoInspection(View view) {
-        TextView critIssues = view.findViewById(R.id.numCritIssues);
-        critIssues.setText(getContext().getString(R.string.not_applicable_text));
+    private void initializeLayoutNoInspection(ViewHolder viewHolder) {
+        viewHolder.critIssues.setText(context.getString(R.string.not_applicable_text));
 
-        TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
-        nonCritIssues.setText(getContext().getString(R.string.not_applicable_text));
+        viewHolder.nonCritIssues.setText(context.getString(R.string.not_applicable_text));
 
-        TextView inspectionDate = view.findViewById(R.id.inspectionDate);
-        inspectionDate.setText(getContext().getString(R.string.not_applicable_text));
+        viewHolder.inspectionDate.setText(context.getString(R.string.not_applicable_text));
 
-        ImageView restaurantIcon = view.findViewById(R.id.restaurantIcon);
-        restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
-        restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        viewHolder.restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
+        viewHolder.restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
-        ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
-        hazardIcon.setVisibility(View.INVISIBLE);
+        viewHolder.hazardIcon.setVisibility(View.INVISIBLE);
     }
 
-    private void initializeLayoutWithInspection(Restaurant restaurant, View view) {
+    private void initializeLayoutWithInspection(Restaurant restaurant, ViewHolder viewHolder) {
         Inspection recentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
 
-        TextView critIssues = view.findViewById(R.id.numCritIssues);
-        critIssues.setText(String.valueOf(recentInspection.getNumCritical()));
+        viewHolder.critIssues.setText(String.valueOf(recentInspection.getNumCritical()));
 
-        TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
-        nonCritIssues.setText(String.valueOf(recentInspection.getNumNonCritical()));
+        viewHolder.nonCritIssues.setText(String.valueOf(recentInspection.getNumNonCritical()));
 
-        TextView inspectionDate = view.findViewById(R.id.inspectionDate);
-        inspectionDate.setText(DateConversionCalculator.getFormattedDate(view.getContext(), recentInspection.getInspectionDate()));
+        viewHolder.inspectionDate.setText(DateConversionCalculator.
+                getFormattedDate(context, recentInspection.getInspectionDate()));
 
-        ImageView restaurantIcon = view.findViewById(R.id.restaurantIcon);
-        restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
-        restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        viewHolder.restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
+        viewHolder.restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
-        String hazardLevel = recentInspection.getHazardLevel();
-        ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
-        initializeHazardIcon(hazardLevel, hazardIcon);
+        initializeHazardIcon(recentInspection.getHazardLevel(), viewHolder.hazardIcon);
     }
 
     private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon) {
@@ -137,6 +120,32 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         } else if (hazardLevel.equalsIgnoreCase("High")) {
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return restaurants.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView restaurantName;
+        private TextView critIssues;
+        private TextView nonCritIssues;
+        private TextView inspectionDate;
+        private ImageView restaurantIcon;
+        private ImageView hazardIcon;
+        private View parentView;
+
+        public ViewHolder(@NonNull View parentView) {
+            super(parentView);
+            this.parentView = parentView;
+            restaurantName = parentView.findViewById(R.id.restaurantName);
+            critIssues = parentView.findViewById(R.id.numCritIssues);
+            nonCritIssues = parentView.findViewById(R.id.numNonCritIssues);
+            inspectionDate = parentView.findViewById(R.id.inspectionDate);
+            restaurantIcon = parentView.findViewById(R.id.restaurantIcon);
+            hazardIcon = parentView.findViewById(R.id.hazardIcon);
         }
     }
 }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
@@ -22,76 +23,44 @@ import java.util.List;
 /**
  * Custom adapter for the list of inspections for the second screen, required for formatting with multiple data in a single item
  */
-public class DetailsListAdapter extends ArrayAdapter<Inspection> {
-
+public class DetailsListAdapter extends RecyclerView.Adapter<DetailsListAdapter.ViewHolder> {
     private Context context;
-    private int resource;
     private List<Inspection> inspections;
 
 
-    public DetailsListAdapter(Context context, int resource, List<Inspection> inspections) {
-        super(context, resource, inspections);
-
+    public DetailsListAdapter(Context context, List<Inspection> inspections) {
         this.context = context;
-        this.resource = resource;
         this.inspections = inspections;
     }
 
     @NonNull
     @Override
-    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(
+                LayoutInflater.from(context)
+                        .inflate(R.layout.inspection_list_item, parent, false));
+    }
 
-        View view = inflater.inflate(R.layout.inspection_list_item, null);
-        view.setClickable(true);
-
-
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Inspection inspection = inspections.get(position);
 
-        TextView inspectionNum = view.findViewById(R.id.inspectionNum);
-        inspectionNum.setText(Integer.toString(position + 1));
+        holder.inspectionNum.setText(Integer.toString(position + 1));
 
-        TextView critIssues = view.findViewById(R.id.numCritIssues);
-        critIssues.setText(String.valueOf(inspection.getNumCritical()));
+        holder.critIssues.setText(String.valueOf(inspection.getNumCritical()));
 
-        TextView nonCritIssues = view.findViewById(R.id.numNonCritIssues);
-        nonCritIssues.setText(String.valueOf(inspection.getNumNonCritical()));
+        holder.nonCritIssues.setText(String.valueOf(inspection.getNumNonCritical()));
 
-
-        TextView inspectionDate = view.findViewById(R.id.inspection_date);
-        inspectionDate.setText(DateConversionCalculator.getFormattedDate(view.getContext(), inspection.getInspectionDate()));
-
-
+        holder.inspectionDate.setText(DateConversionCalculator.
+                getFormattedDate(context, inspection.getInspectionDate()));
 
         //Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
         String hazardLevel = inspection.getHazardLevel();
-        ImageView hazardIcon = view.findViewById(R.id.hazardIcon);
+        initializeHazardIcon(hazardLevel, holder.hazardIcon, holder.error_text);
 
-        view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
+        holder.parentView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
 
-        if(hazardLevel.equalsIgnoreCase("Low")){
-            hazardIcon.setImageResource(R.drawable.low_hazard);
-            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        } else if (hazardLevel.equalsIgnoreCase("Moderate")) {
-            hazardIcon.setImageResource(R.drawable.moderate_hazard);
-            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        } else if (hazardLevel.equalsIgnoreCase("High")) {
-            hazardIcon.setImageResource(R.drawable.high_hazard);
-            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        } else{
-            hazardIcon.setImageResource(R.drawable.missing_info);
-            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
-
-            //Providing context if a hazard level is not found
-            TextView error_text = view.findViewById(R.id.error_text);
-            error_text.setText(R.string.hazard_not_found_message);
-        }
-
-         //Set an onclick listener for the individual items such that the third activity can be launched with the necessary info.
-        view.setOnClickListener(new View.OnClickListener() {
+        holder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -101,7 +70,51 @@ public class DetailsListAdapter extends ArrayAdapter<Inspection> {
                 context.startActivity(intent);
             }
         });
+    }
 
-        return view;
+    private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon, TextView errorText) {
+        if(hazardLevel.equalsIgnoreCase("Low")){
+            hazardIcon.setImageResource(R.drawable.low_hazard);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        } else if (hazardLevel.equalsIgnoreCase("Moderate")) {
+            hazardIcon.setImageResource(R.drawable.moderate_hazard);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        } else if (hazardLevel.equalsIgnoreCase("High")) {
+            hazardIcon.setImageResource(R.drawable.high_hazard);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        } else{
+            hazardIcon.setImageResource(R.drawable.missing_info);
+            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            //Providing context if a hazard level is not found
+            errorText.setText(R.string.hazard_not_found_message);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return inspections.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView inspectionNum;
+        private TextView critIssues;
+        private TextView nonCritIssues;
+        private TextView inspectionDate;
+        private ImageView hazardIcon;
+        private TextView error_text;
+        private View parentView;
+
+
+        public ViewHolder(@NonNull View parentView) {
+            super(parentView);
+            this.parentView = parentView;
+            inspectionNum = parentView.findViewById(R.id.inspectionNum);
+            critIssues = parentView.findViewById(R.id.numCritIssues);
+            nonCritIssues = parentView.findViewById(R.id.numNonCritIssues);
+            inspectionDate = parentView.findViewById(R.id.inspection_date);
+            hazardIcon = parentView.findViewById(R.id.hazardIcon);
+            error_text = parentView.findViewById(R.id.error_text);
+        }
     }
 }
