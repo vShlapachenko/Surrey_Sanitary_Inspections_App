@@ -18,7 +18,7 @@
         android:contentDescription="@string/restaurantIconDescription"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.985"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -71,12 +71,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorText"
         android:textSize="12sp"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintStart_toEndOf="@+id/coordsText"
         app:layout_constraintTop_toBottomOf="@+id/restaurantAddress" />
 
@@ -105,7 +105,7 @@
         app:layout_constraintBottom_toTopOf="@+id/inspectionList"
         app:layout_constraintStart_toEndOf="@+id/inspectionText" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inspectionList"
         android:layout_width="322dp"
         android:layout_height="268dp"

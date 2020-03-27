@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#C9000000"
     android:weightSum="2.0"
     tools:context=".ui.RestaurantDetails"
@@ -106,7 +106,7 @@
         app:layout_constraintBottom_toTopOf="@+id/inspectionList"
         app:layout_constraintStart_toEndOf="@+id/inspectionText" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inspectionList"
         android:layout_width="413dp"
         android:layout_height="404dp"
