@@ -19,7 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
-import androidx.fragment.app.FragmentTransaction;
+
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Inspection;
@@ -102,15 +102,31 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
                 if (gServicesFlag) {
                     //Once the coordinates are clicked, open the fragment with the necessary data being
                     //passed in
+                    //Storing an indicator in sharedPreferences such that the intent values are not accessed
+                    //in cases they shouldn't be
+                    SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = data.edit();
+                    editor.putBoolean("coord_launch", true);
+                    editor.apply();
 
-                    MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
+                    //Putting the necessary data in intent since this activity must be finished
+                    //for correct flow
+                    Intent intent = RestaurantList.getIntent(v.getContext(), curRestaurant.getLatitude(),
                             curRestaurant.getLongitude(), true, restaurantIndex);
-                    FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
+                    //Clearing the above stack
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    v.getContext().startActivity(intent);
+
+                    //finish();
+
+                    /*MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
+                            curRestaurant.getLongitude(), true, restaurantIndex);*/
+                    /*FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
                     transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
                             R.anim.swipe_left, R.anim.swipe_right);
                     //Adding to stack will be used to exit the fragment
                     transactor.addToBackStack("fragInstance");
-                    transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+                    transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();*/
                 } else {
                     Toast.makeText(getApplicationContext(), "Must have Google Play Services to " +
                             "launch map", Toast.LENGTH_SHORT).show();
