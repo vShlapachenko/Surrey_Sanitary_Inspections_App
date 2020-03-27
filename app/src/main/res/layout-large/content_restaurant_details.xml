@@ -108,8 +108,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inspectionList"
-        android:layout_width="478dp"
-        android:layout_height="467dp"
+        android:layout_width="470dp"
+        android:layout_height="481dp"
         android:layout_marginTop="328dp"
         android:layout_weight="1.0"
         android:clickable="false"
@@ -118,7 +118,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="135dp"
-        app:layout_constraintBottom_toBottomOf="@+id/inspectionText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +128,9 @@
     <FrameLayout
         android:id="@+id/mapContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@+id/inspectionList"
+        tools:layout_editor_absoluteX="0dp">
 
     </FrameLayout>
 
