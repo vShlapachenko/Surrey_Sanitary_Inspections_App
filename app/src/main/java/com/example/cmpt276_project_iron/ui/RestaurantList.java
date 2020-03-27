@@ -1,6 +1,10 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +34,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -37,8 +45,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private Manager manager;
     private FrameLayout mapContainer;
 
-    final Fragment mapFragment = new MapFragment();
-    final FragmentManager fm = getSupportFragmentManager();
+    final MapFragment mapFragment = MapFragment.newInstance();;
+    final FragmentManager fragManager = getSupportFragmentManager();
     Fragment active = mapFragment;
 
     @Override
@@ -52,11 +60,10 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Used for launching the map fragment
         inflateRestaurantList();
 
-
-
-//        fm.beginTransaction().add(R.id.main_container, fragment3, "3").hide(fragment3).commit();
-//        fm.beginTransaction().add(R.id.main_container, fragment2, "2").hide(fragment2).commit();
-        fm.beginTransaction().add(R.id.mapContainer,mapFragment, "1").commit();
+        //Will get required permissions for services, wait and then launch activity, but also
+        //check if the necessary services are already provided, then launch instantly
+        //Fixes bug with invalid service permissions resulting in map related exceptions
+        safeLaunchMap();
 
         //Only after the necessary processing of the first activity has been completed should the
         //map be displayed (as default first screen)
@@ -91,8 +98,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             editor.putBoolean("goog_services", false);
 
         } else {
-            MapFragment fragment = MapFragment.newInstance();
-            FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transactor = fragManager.beginTransaction();
             /**
              * Note: When a toolbar is set up for the map, it must be tasked with making the
              *       button reappear
@@ -102,8 +108,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                     R.anim.swipe_left, R.anim.swipe_right);
             //Only want the fragment to close (not the activity), therefore
             //explicitly add it to the stack
-            //transactor.addToBackStack("fragInstance");
-            //transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+            transactor.addToBackStack("fragInstance");
+            transactor.add(R.id.mapContainer, mapFragment, "mapFrag").commit();
             editor.putBoolean("goog_services", true);
         }
         editor.apply();
@@ -130,45 +136,28 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
     private void setUpNavigationBar() {
         BottomNavigationView navMenu = findViewById(R.id.navigationView);
+        navMenu.setSelectedItemId(R.id.navigation_map);
         navMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
-//                SharedPreferences.Editor editor = data.edit();
-//                boolean isMapOpen = false;
-//                if (item.getItemId() == R.id.navigation_resList) {
-//                    if (isMapOpen) {
-//                        getSupportFragmentManager().popBackStackImmediate();
-//                        isMapOpen = false;
-//                        return true;
-//                    }
-//                } else if (item.getItemId() == R.id.navigation_map) {
-//                    if (!isMapOpen) {
-//                        MapFragment fragment = MapFragment.newInstance();
-//                        FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
-//                        transactor.addToBackStack("fragInstance");
-//                        transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
-//                        editor.putBoolean("goog_services", true);
-//                        isMapOpen = true;
-//                        return true;
-//                    }
-//                }
-//                return false;
-//            }
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case (R.id.navigation_resList):
-                        fm.beginTransaction().hide(active).hide(mapFragment).commit();
+                        fragManager.beginTransaction().hide(active).hide(mapFragment).commit();
                         return true;
 
                     case (R.id.navigation_map):
-                        fm.beginTransaction().hide(active).show(mapFragment).commit();
+                        fragManager.beginTransaction().hide(active).show(mapFragment).commit();
                         return true;
                 }
                 return false;
             }
         });
+    }
+
+    public static Intent getIntent(Context context, int restaurantIndex){
+        Intent intent = new Intent(context, RestaurantDetails.class);
+        intent.putExtra("restaurantIndex", restaurantIndex);
+        return intent;
     }
 
     private void displayCorrectLayout(){
@@ -183,11 +172,9 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         double MDPI_SCREEN_SIZE = 1.0;
         if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
             setContentView(R.layout.activity_restaurant_list_custom);
-        }
-        else if(width == 1440 && height == 2560) {
+        } else if(width == 1440 && height == 2560) {
             setContentView(R.layout.activity_restaurant_list_custom_one);
-        }
-        else{
+        } else{
             setContentView(R.layout.activity_restaurant_list);
         }
     }
@@ -195,19 +182,66 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        /**
-         * REMOVE ONCE BOTTOM NAVIGATION BAR IS ADDED (just bottom 2 lines of code)
-         */
 
         //In accordance with the user stories, any one of the selections of the map or restaurant
         //will result in an exit of the application
-        /*FragmentManager manager = getFragmentManager();
+        android.app.FragmentManager manager = getFragmentManager();
         if (manager.getBackStackEntryCount() > 0) {
             finish();
         } else {
             //If no fragments -> on restaurant screen -> exit application -> normal behaviour
             super.onBackPressed();
-        }*/
+        }
+    }
+
+    private void safeLaunchMap(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                setUpMapOpen(getWindow().getDecorView().getRootView());
+            } else{
+                Log.i("lengthened_launch", "Map is launching as default screen for the first time");
+                getRequiredPermissions();
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        setUpMapOpen(getWindow().getDecorView().getRootView());
+                    }
+                }, 3000);
+            }
+        } else{
+            Log.i("lengthened_launch", "Map is launching as default screen for the first time");
+            getRequiredPermissions();
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    setUpMapOpen(getWindow().getDecorView().getRootView());
+                }
+            }, 3000);
+        }
+    }
+
+    private void getRequiredPermissions() {
+        String[] req_permissons = {Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION};
+
+        //Once the permissions have been displayed, check what the user's selection was
+        //More specifically, make sure that it is correct
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    //Do nothing
+            } else {
+                //If the permissions were not granted already (via the settings), ask for them
+                ActivityCompat.requestPermissions(this, req_permissons, 0);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, req_permissons, 0);
+        }
     }
 
     @Override

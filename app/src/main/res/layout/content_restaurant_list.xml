@@ -44,6 +44,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:itemIconSize="25dp"
+        app:itemIconTint="@android:color/white"
+        app:itemBackground="@android:color/black"
+        app:itemTextColor="@color/colorText"
         app:menu="@menu/list_nav_bar" />
 
 

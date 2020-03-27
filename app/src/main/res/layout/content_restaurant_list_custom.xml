@@ -7,16 +7,14 @@
     android:background="#00000000"
     tools:context=".ui.RestaurantList">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/mapButton"
+    <TextView
+        android:id="@+id/noRestaurantsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="@color/colorTint"
-        android:onClick="setUpMapOpen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/restaurantList"
-        app:srcCompat="@drawable/googleg_standard_color_18" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/restaurantList"
@@ -37,6 +35,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:itemIconSize="25dp"
+        app:itemIconTint="@android:color/white"
+        app:itemBackground="@android:color/black"
+        app:itemTextColor="@color/colorText"
         app:menu="@menu/list_nav_bar" />
 
     <FrameLayout

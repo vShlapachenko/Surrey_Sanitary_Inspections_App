@@ -18,6 +18,7 @@ import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
+import com.example.cmpt276_project_iron.ui.RestaurantList;
 
 import java.util.List;
 
@@ -52,18 +53,16 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
         holder.restaurantName.setText(String.valueOf(restaurant.getName()));
 
-        if (manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) {
+        if ((manager.getInspectionMap().get(restaurant.getTrackingNumber())) == null) {
             initializeLayoutNoInspection(restaurant, holder);
-        }
-        else {
+        } else {
             initializeLayoutWithInspection(restaurant, holder);
         }
 
         holder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, RestaurantDetails.class);
-                intent.putExtra("restaurantIndex", position);
+                Intent intent = RestaurantList.getIntent(context, position);
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
@@ -113,30 +112,53 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     //Hardcoded 10 different restaurant names to have custom images
     private void initializeRestaurantIconImage(Restaurant restaurant, ImageView restaurantIcon) {
         String[] resNameArray = context.getResources().getStringArray(R.array.custom_icon_restaurants);
-
+        boolean customImageApplied = false;
         for (String resName : resNameArray) {
             if (restaurant.getName().contains(resName)) {
-                System.out.println(restaurant.getName());
-                int id = context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
-                System.out.println(id);
-                restaurantIcon.setImageResource(id);
-                return;
+                assignCustomRestaurantIcon(resName, restaurantIcon);
+                customImageApplied = true;
             }
         }
-        restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
+        if (!customImageApplied) {
+            restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
+        }
+    }
+
+    private void assignCustomRestaurantIcon(String resName, ImageView restaurantIcon) {
+        if (resName.contains("Blenz")) {
+            restaurantIcon.setImageResource(R.drawable.blenz);
+        } else if (resName.contains("Freshii")) {
+            restaurantIcon.setImageResource(R.drawable.freshii);
+        } else if (resName.contains("Freshslice")) {
+            restaurantIcon.setImageResource(R.drawable.freshslice);
+        } else if (resName.contains("Mcdonald")) {
+            restaurantIcon.setImageResource(R.drawable.mcdonalds);
+        } else if (resName.contains("Panago")) {
+            restaurantIcon.setImageResource(R.drawable.panago);
+        } else if (resName.contains("Starbucks")) {
+            restaurantIcon.setImageResource(R.drawable.starbucks);
+        } else if (resName.contains("Subway")) {
+            restaurantIcon.setImageResource(R.drawable.subway);
+        } else if (resName.contains("Tim Hortons")) {
+            restaurantIcon.setImageResource(R.drawable.timbos);
+        } else if (resName.contains("KFC")) {
+            restaurantIcon.setImageResource(R.drawable.kfc);
+        } else if (resName.contains("Booster")) {
+            restaurantIcon.setImageResource(R.drawable.boosterjuice);
+        }
     }
 
     private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon) {
         if (hazardLevel.equalsIgnoreCase("Low")) {
             hazardIcon.setImageResource(R.drawable.low_hazard);
-            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
         } else if (hazardLevel.equalsIgnoreCase("Moderate")) {
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
-            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
         } else if (hazardLevel.equalsIgnoreCase("High")) {
             hazardIcon.setImageResource(R.drawable.high_hazard);
-            hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        } else {
+            hazardIcon.setImageResource(R.drawable.low_hazard);
         }
+        hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
     }
 
     @Override
@@ -153,15 +175,15 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         private ImageView hazardIcon;
         private View parentView;
 
-        public ViewHolder(@NonNull View view) {
-            super(view);
-            parentView = view;
-            restaurantName = view.findViewById(R.id.restaurantName);
-            critIssues = view.findViewById(R.id.numCritIssues);
-            nonCritIssues = view.findViewById(R.id.numNonCritIssues);
-            inspectionDate = view.findViewById(R.id.inspectionDate);
-            restaurantIcon = view.findViewById(R.id.restaurantIcon);
-            hazardIcon = view.findViewById(R.id.hazardIcon);
+        public ViewHolder(@NonNull View parentView) {
+            super(parentView);
+            this.parentView = parentView;
+            restaurantName = parentView.findViewById(R.id.restaurantName);
+            critIssues = parentView.findViewById(R.id.numCritIssues);
+            nonCritIssues = parentView.findViewById(R.id.numNonCritIssues);
+            inspectionDate = parentView.findViewById(R.id.inspectionDate);
+            restaurantIcon = parentView.findViewById(R.id.restaurantIcon);
+            hazardIcon = parentView.findViewById(R.id.hazardIcon);
         }
     }
 }

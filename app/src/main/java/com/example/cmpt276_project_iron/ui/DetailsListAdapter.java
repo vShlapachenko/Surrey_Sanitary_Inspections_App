@@ -56,7 +56,7 @@ public class DetailsListAdapter extends RecyclerView.Adapter<DetailsListAdapter.
 
         //Processing the hazard level so the appropriate hazard icon is assigned and a complementing background color
         String hazardLevel = inspection.getHazardLevel();
-        initializeHazardIcon(hazardLevel, holder.hazardIcon);
+        initializeHazardIcon(hazardLevel, holder.hazardIcon, holder.error_text);
 
         holder.parentView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHazard));
 
@@ -72,7 +72,7 @@ public class DetailsListAdapter extends RecyclerView.Adapter<DetailsListAdapter.
         });
     }
 
-    private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon) {
+    private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon, TextView errorText) {
         if(hazardLevel.equalsIgnoreCase("Low")){
             hazardIcon.setImageResource(R.drawable.low_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -86,12 +86,11 @@ public class DetailsListAdapter extends RecyclerView.Adapter<DetailsListAdapter.
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         } else{
-            hazardIcon.setImageResource(R.drawable.not_found);
+            hazardIcon.setImageResource(R.drawable.missing_info);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
             //Providing context if a hazard level is not found
-            //TextView error_text = view.findViewById(R.id.error_text);
-            //error_text.setText(R.string.hazard_not_found_message);
+            errorText.setText(R.string.hazard_not_found_message);
         }
     }
 
@@ -106,16 +105,19 @@ public class DetailsListAdapter extends RecyclerView.Adapter<DetailsListAdapter.
         private TextView nonCritIssues;
         private TextView inspectionDate;
         private ImageView hazardIcon;
+        private TextView error_text;
         private View parentView;
 
-        public ViewHolder(@NonNull View view) {
-            super(view);
-            parentView = view;
-            inspectionNum = view.findViewById(R.id.inspectionNum);
-            critIssues = view.findViewById(R.id.numCritIssues);
-            nonCritIssues = view.findViewById(R.id.numNonCritIssues);
-            inspectionDate = view.findViewById(R.id.inspection_date);
-            hazardIcon = view.findViewById(R.id.hazardIcon);
+
+        public ViewHolder(@NonNull View parentView) {
+            super(parentView);
+            this.parentView = parentView;
+            inspectionNum = parentView.findViewById(R.id.inspectionNum);
+            critIssues = parentView.findViewById(R.id.numCritIssues);
+            nonCritIssues = parentView.findViewById(R.id.numNonCritIssues);
+            inspectionDate = parentView.findViewById(R.id.inspection_date);
+            hazardIcon = parentView.findViewById(R.id.hazardIcon);
+            error_text = parentView.findViewById(R.id.error_text);
         }
     }
 }

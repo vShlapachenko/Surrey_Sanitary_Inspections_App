@@ -260,12 +260,8 @@ public class InitialBoot extends AppCompatActivity implements CallBackInquiryFra
             super.onPreExecute();
             progressDialog = new ProgressDialog(InitialBoot.this);
             progressDialog.setMessage("Downloading and executing CSV files");
-            progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, InitialBoot.this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    CsvTask.this.cancel(true);
-                }
-            });
+            progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, InitialBoot.this.getString(R.string.cancel), (dialog, which) ->
+                    CsvTask.this.cancel(true));
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -336,6 +332,10 @@ public class InitialBoot extends AppCompatActivity implements CallBackInquiryFra
                 copyFromRawToInternal(getResources().openRawResource(R.raw.restaurants_itr1), RESTAURANTS_FILE);
                 copyFromRawToInternal(getResources().openRawResource(R.raw.inspectionreports_itr1), INSPECTIONS_FILE);
             }
+            getFileStreamPath(RESTAURANTS_FILE_TIME_STAMP).delete();
+            getFileStreamPath(INSPECTIONS_FILE_TIME_STAMP).delete();
+            getFileStreamPath(JSON_RESTAURANTS_LAST_MODIFIED).delete();
+            getFileStreamPath(JSON_INSPECTIONS_LAST_MODIFIED).delete();
             startRestaurantList();
             super.onCancelled();
         }
