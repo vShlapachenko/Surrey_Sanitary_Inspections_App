@@ -103,7 +103,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
                     //passed in
 
                     MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
-                            curRestaurant.getLongitude(), true);
+                            curRestaurant.getLongitude());
                     FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
                     transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
                             R.anim.swipe_left, R.anim.swipe_right);
