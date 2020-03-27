@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -144,12 +145,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Prevents orientation in fragments
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         //Explicitly asks the user for permission for the required services
         getRequiredPermissions();
 
         //Tracks the user's location
         updateGPSPosition();
-
 
         if (getArguments() != null) {
             inLAT = getArguments().getDouble(LAT);
@@ -369,9 +372,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                                         ZOOM_AMNT));
 
                             } else {
-                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
-                                                (curLocation.getLatitude(), curLocation.getLongitude()),
-                                        ZOOM_AMNT));
+                                if (curLocation != null) {
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                                    (curLocation.getLatitude(), curLocation.getLongitude()),
+                                            ZOOM_AMNT));
+                                }
+
                             }
 
                         } else {
@@ -430,13 +436,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public void onLocationChanged(Location location) {
         if (gpsChangeListener != null) {
             gpsChangeListener.onLocationChanged(location);
-
-            //Move the camera to the user's location once it's available!
-            //map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
-                            (location.getLatitude(), location.getLongitude()),
-                    ZOOM_AMNT));
         }
+
+        //Just notifying that a location has changed such that other methods can update themselves,
+        //now excluding location auto-centering as per requirement
     }
 
     @Override

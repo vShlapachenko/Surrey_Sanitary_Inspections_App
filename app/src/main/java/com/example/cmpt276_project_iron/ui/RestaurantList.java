@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +37,10 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private Manager manager;
     private FrameLayout mapContainer;
 
+    final Fragment mapFragment = new MapFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment active = mapFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +52,15 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Used for launching the map fragment
         inflateRestaurantList();
 
+
+
+//        fm.beginTransaction().add(R.id.main_container, fragment3, "3").hide(fragment3).commit();
+//        fm.beginTransaction().add(R.id.main_container, fragment2, "2").hide(fragment2).commit();
+        fm.beginTransaction().add(R.id.mapContainer,mapFragment, "1").commit();
+
         //Only after the necessary processing of the first activity has been completed should the
         //map be displayed (as default first screen)
-        setUpMapOpen(getWindow().getDecorView().getRootView());
+        //setUpMapOpen(getWindow().getDecorView().getRootView());
     }
 
     //Made public so it can be launched from xml (non-dynamic)
@@ -90,8 +102,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                     R.anim.swipe_left, R.anim.swipe_right);
             //Only want the fragment to close (not the activity), therefore
             //explicitly add it to the stack
-            transactor.addToBackStack("fragInstance");
-            transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+            //transactor.addToBackStack("fragInstance");
+            //transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
             editor.putBoolean("goog_services", true);
         }
         editor.apply();
@@ -119,27 +131,40 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private void setUpNavigationBar() {
         BottomNavigationView navMenu = findViewById(R.id.navigationView);
         navMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+//                SharedPreferences.Editor editor = data.edit();
+//                boolean isMapOpen = false;
+//                if (item.getItemId() == R.id.navigation_resList) {
+//                    if (isMapOpen) {
+//                        getSupportFragmentManager().popBackStackImmediate();
+//                        isMapOpen = false;
+//                        return true;
+//                    }
+//                } else if (item.getItemId() == R.id.navigation_map) {
+//                    if (!isMapOpen) {
+//                        MapFragment fragment = MapFragment.newInstance();
+//                        FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
+//                        transactor.addToBackStack("fragInstance");
+//                        transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+//                        editor.putBoolean("goog_services", true);
+//                        isMapOpen = true;
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
-                SharedPreferences.Editor editor = data.edit();
-                boolean isMapOpen = false;
-                if (item.getItemId() == R.id.navigation_resList) {
-                    if (isMapOpen) {
-                        getSupportFragmentManager().popBackStackImmediate();
-                        isMapOpen = false;
+                switch (item.getItemId()) {
+                    case (R.id.navigation_resList):
+                        fm.beginTransaction().hide(active).hide(mapFragment).commit();
                         return true;
-                    }
-                } else if (item.getItemId() == R.id.navigation_map) {
-                    if (!isMapOpen) {
-                        MapFragment fragment = MapFragment.newInstance();
-                        FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
-                        transactor.addToBackStack("fragInstance");
-                        transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
-                        editor.putBoolean("goog_services", true);
-                        isMapOpen = true;
+
+                    case (R.id.navigation_map):
+                        fm.beginTransaction().hide(active).show(mapFragment).commit();
                         return true;
-                    }
                 }
                 return false;
             }
