@@ -52,6 +52,8 @@ import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +79,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private static final String COORDLAUNCH = "coordinate_launch";
     private static final String RINDEX = "restaurant_index";
 
+    //By default the recentering is enabled, however, once an action such as a forceful movement of the screen
+    //is imposed, then will be set to false until the map recenter button is clicked
+    private boolean recenterEnabled = true;
     private EditText mSearchText;
 
     // TODO: Rename and change types of parameters
@@ -122,7 +127,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     }
 
     //Used if incoming from coords click
-    public static MapFragment newInstance(double latitude, double longitude, boolean coordinateFlag, int restaurantIndex) {
+    public static MapFragment newInstance(double latitude, double longitude, boolean coordinateFlag,
+                                          int restaurantIndex) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         args.putDouble(LAT, latitude);
@@ -287,8 +293,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
         }
         setUpClusterManager(map);
-    }
 
+        //Once the map detects movement, the re-centering will be disabled
+        map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                recenterEnabled = false;
+                Log.i("recenter_disabled", "recentering disabled through movement");
+            }
+        });
+
+    }
 
     private void placePeg(Restaurant restaurant, float zoom, int index) {
 
@@ -322,12 +337,34 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
                                                 (inLAT, inLONG),
                                         ZOOM_AMNT));
+                                Log.i("recenter_enabled", "recentering disabled through coordinate launch");
+                                recenterEnabled = false;
 
                             } else {
                                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
                                                 (curLocation.getLatitude(), curLocation.getLongitude()),
                                         ZOOM_AMNT));
                             }
+
+                            //When the user clicks the my location button, it will bring back the view and also
+                            //turn on recentering again
+                            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener(){
+                                @Override
+                                public boolean onMyLocationButtonClick() {
+                                    //Not animated as onCameraMoveListener also detects non-user movement
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                                    (curLocation.getLatitude(), curLocation.getLongitude()),
+                                                    ZOOM_AMNT));
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            recenterEnabled = true;
+                                            Log.i("recenter_enabled", "recentering enabled through my location button");
+                                        }
+                                    }, 1500);
+                                    return false;
+                                }
+                            });
 
                         } else {
                             Toast.makeText(getContext(), "Unable to track user",
@@ -366,10 +403,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         locationManger.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000L, 10f, this);
         //map.setLocationSource(this);
 
-        /**
-         * Two ways need to be tested: Current deployment of locationListener+ and the
-         * below sequence
-         */
         locationProvider = LocationServices.getFusedLocationProviderClient(this.getContext());
         //Higher priority == greater accuracy of coords on map
         locationRequest = new LocationRequest();
@@ -395,8 +428,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             gpsChangeListener.onLocationChanged(location);
         }
 
-        //Just notifying that a location has changed such that other methods can update themselves,
-        //now excluding location auto-centering as per requirement
+        //Only if the user clicks the recenter toggle will it start re-centering
+        if(recenterEnabled && map != null) {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                            (location.getLatitude(), location.getLongitude()),
+                    ZOOM_AMNT));
+        }
     }
 
     @Override
@@ -461,6 +498,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 }
         }
     }
+
 
 
     private void changeToolbarText() {
