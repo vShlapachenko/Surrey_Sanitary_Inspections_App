@@ -43,10 +43,10 @@ public class MarkerCluster extends DefaultClusterRenderer<RestaurantMarkerCluste
             } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("High")) {
                 markerImageView.setImageResource(R.drawable.high_hazard);
             } else {
-                markerImageView.setImageResource(R.drawable.not_found);
+                markerImageView.setImageResource(R.drawable.missing_info);
             }
         } else {
-            markerImageView.setImageResource(R.drawable.not_found);
+            markerImageView.setImageResource(R.drawable.missing_info);
         }
 
 
