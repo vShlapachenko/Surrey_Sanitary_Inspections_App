@@ -74,6 +74,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String LAT = "lat";
     private static final String LONG = "long";
+    private static final String COORDLAUNCH = "coordinate_launch";
 
     private EditText mSearchText;
 
@@ -91,6 +92,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     private double inLAT = 0.0;
     private double inLONG = 0.0;
+    private boolean coordLaunch = false;
 
     private boolean permissionsGrantedFlag = false;
 
@@ -118,11 +120,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     }
 
     //Used if incoming from coords click
-    public static MapFragment newInstance(double latitude, double longitude) {
+    public static MapFragment newInstance(double latitude, double longitude, boolean coordinateFlag) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         args.putDouble(LAT, latitude);
         args.putDouble(LONG, longitude);
+        args.putBoolean(COORDLAUNCH, coordinateFlag);
         fragment.setArguments(args);
         return fragment;
     }
@@ -151,6 +154,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         if (getArguments() != null) {
             inLAT = getArguments().getDouble(LAT);
             inLONG = getArguments().getDouble(LONG);
+            coordLaunch = getArguments().getBoolean(COORDLAUNCH);
         }
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
