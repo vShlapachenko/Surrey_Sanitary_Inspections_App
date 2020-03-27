@@ -18,6 +18,7 @@ import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
+import com.example.cmpt276_project_iron.ui.RestaurantList;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
         holder.restaurantName.setText(String.valueOf(restaurant.getName()));
 
-        if (manager.getInspectionMap().get(restaurant.getTrackingNumber()) == null) {
+        if ((manager.getInspectionMap().get(restaurant.getTrackingNumber())) == null) {
             initializeLayoutNoInspection(holder);
         }
         else {
@@ -62,8 +63,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         holder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, RestaurantDetails.class);
-                intent.putExtra("restaurantIndex", position);
+                Intent intent = RestaurantList.getIntent(context, position);
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
@@ -88,7 +88,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
         viewHolder.inspectionDate.setText(context.getString(R.string.not_applicable_text));
 
-        viewHolder.restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        viewHolder.restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
         viewHolder.restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         viewHolder.hazardIcon.setVisibility(View.INVISIBLE);
@@ -104,7 +104,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         viewHolder.inspectionDate.setText(DateConversionCalculator.
                 getFormattedDate(context, recentInspection.getInspectionDate()));
 
-        viewHolder.restaurantIcon.setImageResource(R.drawable.restaurant_icon);
+        viewHolder.restaurantIcon.setImageResource(R.drawable.animated_restaurant_icon);
         viewHolder.restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         initializeHazardIcon(recentInspection.getHazardLevel(), viewHolder.hazardIcon);
@@ -137,15 +137,15 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         private ImageView hazardIcon;
         private View parentView;
 
-        public ViewHolder(@NonNull View view) {
-            super(view);
-            parentView = view;
-            restaurantName = view.findViewById(R.id.restaurantName);
-            critIssues = view.findViewById(R.id.numCritIssues);
-            nonCritIssues = view.findViewById(R.id.numNonCritIssues);
-            inspectionDate = view.findViewById(R.id.inspectionDate);
-            restaurantIcon = view.findViewById(R.id.restaurantIcon);
-            hazardIcon = view.findViewById(R.id.hazardIcon);
+        public ViewHolder(@NonNull View parentView) {
+            super(parentView);
+            this.parentView = parentView;
+            restaurantName = parentView.findViewById(R.id.restaurantName);
+            critIssues = parentView.findViewById(R.id.numCritIssues);
+            nonCritIssues = parentView.findViewById(R.id.numNonCritIssues);
+            inspectionDate = parentView.findViewById(R.id.inspectionDate);
+            restaurantIcon = parentView.findViewById(R.id.restaurantIcon);
+            hazardIcon = parentView.findViewById(R.id.hazardIcon);
         }
     }
 }

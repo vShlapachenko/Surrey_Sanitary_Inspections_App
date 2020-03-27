@@ -1,5 +1,7 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
@@ -20,7 +22,6 @@ import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -49,7 +50,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
     //Made public so it can be launched from xml (non-dynamic)
     public void setUpMapOpen(View view) {
-        FloatingActionButton mapButton = findViewById(R.id.mapButton);
         mapContainer = findViewById(R.id.mapContainer);
 
         //Checks if the user has Google Play Services that is required for maps, if not, a message
@@ -78,10 +78,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         } else {
             MapFragment fragment = MapFragment.newInstance();
             FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
-            //Before 'opening' the fragment, hide the fpb (floating-btn) as it may leak through,
-            //Since we're putting the instances of the fragment on the stack, when coming back
-            //we override the onBackPressed method such that it makes the fqb reappear
-            mapButton.hide();
             /**
              * Note: When a toolbar is set up for the map, it must be tasked with making the
              *       button reappear
@@ -117,6 +113,12 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
+    public static Intent getIntent(Context context, int restaurantIndex){
+        Intent intent = new Intent(context, RestaurantDetails.class);
+        intent.putExtra("restaurantIndex", restaurantIndex);
+        return intent;
+    }
+
     private void displayCorrectLayout(){
         Display dimensions = getWindowManager().getDefaultDisplay();
         Point dimension = new Point();
@@ -144,8 +146,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         /**
          * REMOVE ONCE BOTTOM NAVIGATION BAR IS ADDED (just bottom 2 lines of code)
          */
-        FloatingActionButton mapButton = findViewById(R.id.mapButton);
-        mapButton.show();
 
         //In accordance with the user stories, any one of the selections of the map or restaurant
         //will result in an exit of the application
