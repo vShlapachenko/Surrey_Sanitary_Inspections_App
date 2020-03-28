@@ -151,18 +151,14 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon) {
         if (hazardLevel.equalsIgnoreCase("Low")) {
             hazardIcon.setImageResource(R.drawable.low_hazard);
-            System.out.println("low");
         } else if (hazardLevel.equalsIgnoreCase("Moderate")) {
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
-            System.out.println("mid");
         } else if (hazardLevel.equalsIgnoreCase("High")) {
             hazardIcon.setImageResource(R.drawable.high_hazard);
-            System.out.println("high");
         } else {
             hazardIcon.setImageResource(R.drawable.missing_info);
-            System.out.println("none");
         }
-        hazardIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
     }
 
     @Override
