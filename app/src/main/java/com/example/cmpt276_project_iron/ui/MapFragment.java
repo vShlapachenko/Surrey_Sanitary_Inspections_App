@@ -360,6 +360,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 Log.i("recenter_disabled", "recentering disabled through movement");
             }
         });
+        map.setPadding(0,150,0,150);
 
         map.setPadding(0,150,0,150);
 
