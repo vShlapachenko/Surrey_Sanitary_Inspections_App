@@ -18,21 +18,20 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/restaurantList"
-        android:layout_width="411dp"
-        android:layout_height="550dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="412dp"
+        android:layout_height="686dp"
         app:layout_constraintBottom_toTopOf="@+id/navigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/mapContainer"></androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toTopOf="@+id/mapContainer"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        </androidx.recyclerview.widget.RecyclerView>
 
     <FrameLayout
         android:id="@+id/mapContainer"
-        android:layout_width="411dp"
-        android:layout_height="551dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="122dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     </FrameLayout>
 
