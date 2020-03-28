@@ -2,10 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layout_violation"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_corners"
     android:orientation="vertical"
-    android:id="@+id/parent_layout_violation">
+    android:padding="15dp">
 
 
     <ImageView
@@ -13,8 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:maxWidth="200dp"
-        android:maxHeight="200dp"
+        android:maxWidth="80dp"
+        android:maxHeight="80dp"
         android:visibility="visible"
         app:srcCompat="@drawable/mouse"
         tools:layout_editor_absoluteX="16dp"
@@ -32,19 +34,18 @@
         android:layout_toStartOf="@id/item_hazard"
         android:layout_toEndOf="@+id/item_violation_image"
         android:text="@string/summary"
-        android:textAlignment="center"
-        android:textSize="36sp" />
+        android:textAlignment="center" />
 
     <ImageView
         android:id="@+id/item_hazard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="8dp"
         android:adjustViewBounds="true"
-        android:maxWidth="180dp"
-        android:maxHeight="180dp"
+        android:maxWidth="50dp"
+        android:maxHeight="50dp"
         app:srcCompat="@drawable/moderate_hazard" />
 
 </RelativeLayout>
