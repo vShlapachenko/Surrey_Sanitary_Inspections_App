@@ -341,9 +341,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                                 recenterEnabled = false;
 
                             } else {
-                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
-                                                (curLocation.getLatitude(), curLocation.getLongitude()),
-                                        ZOOM_AMNT));
+                                if (curLocation != null) {
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
+                                                    (curLocation.getLatitude(), curLocation.getLongitude()),
+                                            ZOOM_AMNT));
+                                }
+
                             }
 
                             //When the user clicks the my location button, it will bring back the view and also
