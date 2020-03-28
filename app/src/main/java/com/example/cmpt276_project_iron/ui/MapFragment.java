@@ -31,6 +31,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.widget.EditText;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -43,8 +44,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.Cluster;
@@ -120,10 +124,59 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private final String TAG = "Maps";
     private Manager manager;
     Dialog popUp;
-
+    Marker coordinateClickedMarker;
 
     public MapFragment() {
         // Required empty public constructor
+    }
+
+    private void coordinateTappedByUser(boolean coordLaunch) {
+        if(coordLaunch) {
+            Restaurant restaurantSelected = manager.getRestaurantList().get(restaurantIndex);
+            LatLng latLng = new LatLng(restaurantSelected.getLatitude(), restaurantSelected.getLongitude());
+            coordinateClickedMarker = map.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(restaurantSelected.getName())
+                    .snippet(restaurantSelected.getPhysicalAddress() + ", " + "No Hazard level")
+            );
+            if((manager.getInspectionMap().get(restaurantSelected.getTrackingNumber()) != null)) {
+                Inspection mostRecentInspection = manager.getInspectionMap().get(restaurantSelected.getTrackingNumber()).get(0);
+
+                if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Low")) {
+                    coordinateClickedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    coordinateClickedMarker.setSnippet(restaurantSelected.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel());
+                } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("Moderate")) {
+                    coordinateClickedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    coordinateClickedMarker.setSnippet(restaurantSelected.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel());
+                } else if (mostRecentInspection.getHazardLevel().equalsIgnoreCase("High")) {
+                    coordinateClickedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    coordinateClickedMarker.setSnippet(restaurantSelected.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel());
+                } else {
+                    coordinateClickedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    coordinateClickedMarker.setSnippet(restaurantSelected.getPhysicalAddress() + ", " + mostRecentInspection.getHazardLevel());
+                }
+            } else {
+                coordinateClickedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            }
+
+            coordinateClickedMarker.setTag(restaurantIndex);
+
+            coordinateClickedMarker.showInfoWindow();
+
+        }
+    }
+
+    // add this as well
+    private void makeMarkerTextClickable() {
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker arg0) {
+                arg0.remove();
+                Intent gotoRestaurant = RestaurantDetails.getIntent(getContext(), restaurantIndex);
+                startActivity(gotoRestaurant);
+                coordinateClickedMarker.remove();
+            }
+        });
     }
 
     //Used if incoming from coords click
@@ -170,6 +223,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
     }
+
     private void setUpClusterManager(GoogleMap googleMap){
         clusterManager = new ClusterManager<RestaurantMarkerCluster>(getContext(), googleMap);
         clusterManager.setRenderer(new MarkerCluster(getContext(), googleMap, clusterManager));
@@ -288,11 +342,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         manager = Manager.getInstance(getContext());
         List<Restaurant> restaurantList = manager.getRestaurantList();
+        setUpClusterManager(map);
 
         for(int i=0; i<restaurantList.size(); i++) {
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
+
+            clusterManager.getMarkerCollection();
+            coordinateTappedByUser(coordLaunch);
+            makeMarkerTextClickable();
+
         }
-        setUpClusterManager(map);
 
         //Once the map detects movement, the re-centering will be disabled
         map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
