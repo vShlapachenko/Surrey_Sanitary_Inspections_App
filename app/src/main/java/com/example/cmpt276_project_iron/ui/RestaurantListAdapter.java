@@ -42,9 +42,9 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(
-                LayoutInflater.from(context)
-                        .inflate(R.layout.restaurant_list_item, parent, false));
+        ViewHolder holder = new ViewHolder(LayoutInflater.from(context).inflate(R.layout.restaurant_list_item, parent, false));
+        holder.setIsRecyclable(false);
+        return holder;
     }
 
     @Override
@@ -162,7 +162,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             hazardIcon.setImageResource(R.drawable.missing_info);
             System.out.println("none");
         }
-        hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        hazardIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
     }
 
     @Override
