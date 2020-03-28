@@ -18,7 +18,6 @@ import com.example.cmpt276_project_iron.model.DateConversionCalculator;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
-import com.example.cmpt276_project_iron.ui.RestaurantList;
 
 import java.util.List;
 
@@ -42,9 +41,8 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ViewHolder holder = new ViewHolder(LayoutInflater.from(context).inflate(R.layout.restaurant_list_item, parent, false));
-        holder.setIsRecyclable(false);
-        return holder;
+        return new ViewHolder(LayoutInflater.from(context)
+                .inflate(R.layout.restaurant_list_item, parent, false));
     }
 
     @Override
@@ -107,6 +105,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         viewHolder.restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
 
         initializeHazardIcon(recentInspection.getHazardLevel(), viewHolder.hazardIcon);
+
     }
 
     //Hardcoded 10 different restaurant names to have custom images
@@ -149,6 +148,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     }
 
     private void initializeHazardIcon(String hazardLevel, ImageView hazardIcon) {
+        hazardIcon.setVisibility(View.VISIBLE);
         if (hazardLevel.equalsIgnoreCase("Low")) {
             hazardIcon.setImageResource(R.drawable.low_hazard);
         } else if (hazardLevel.equalsIgnoreCase("Moderate")) {
