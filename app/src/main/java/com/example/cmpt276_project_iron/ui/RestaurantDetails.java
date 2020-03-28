@@ -121,14 +121,14 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
                     //finish();
 
-                    MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
-                            curRestaurant.getLongitude(), true, restaurantIndex);
+                    /*MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
+                    //        curRestaurant.getLongitude(), true, restaurantIndex);
                     FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
                     transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
                             R.anim.swipe_left, R.anim.swipe_right);
                     //Adding to stack will be used to exit the fragment
                     transactor.addToBackStack("fragInstance");
-                    transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+                    //transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();*/
                 } else {
                     Toast.makeText(getApplicationContext(), "Must have Google Play Services to " +
                             "launch map", Toast.LENGTH_SHORT).show();
