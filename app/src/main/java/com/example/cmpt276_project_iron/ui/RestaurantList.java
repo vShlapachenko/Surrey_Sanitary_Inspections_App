@@ -3,6 +3,8 @@ package com.example.cmpt276_project_iron.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -30,7 +32,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 /**
  *  Attains and sets the necessary information for the restaurant's details
@@ -84,12 +85,23 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             editor.putBoolean("goog_services", false);
 
         } else {
-            MapFragment fragment = MapFragment.newInstance();
+            MapFragment fragment;
+            //Check if this was a coordinates launch request or a standard request
+            boolean coord_launch = data.getBoolean("coord_launch", false);
+
+            if(coord_launch){
+                fragment = MapFragment.newInstance(getIntent().getDoubleExtra("latitude", 0.0),
+                        getIntent().getDoubleExtra("longitude", 0.0),
+                        getIntent().getBooleanExtra("coordinateFlag", true),
+                        getIntent().getIntExtra("restaurantIndex", 0));
+
+                //Consume the indicator once launched for coordinates
+                editor.putBoolean("coord_launch", false);
+            }else {
+                fragment = MapFragment.newInstance();
+            }
+
             FragmentTransaction transactor = getSupportFragmentManager().beginTransaction();
-            /**
-             * Note: When a toolbar is set up for the map, it must be tasked with making the
-             *       button reappear
-             */
             //First two parameters are for entry, the last two are for exit (animations)
             transactor.setCustomAnimations(R.anim.swipe_left, R.anim.swipe_right,
                     R.anim.swipe_left, R.anim.swipe_right);
@@ -212,6 +224,16 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         } else {
             ActivityCompat.requestPermissions(this, req_permissons, 0);
         }
+    }
+
+    //Used to redirect map launch from coordinates to restaurantList
+    public static Intent getIntent(Context context, double latitude, double longitude, boolean coordinateFlag, int restaurantIndex){
+        Intent intent = new Intent(context, RestaurantList.class);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+        intent.putExtra("coordinateFlag", coordinateFlag);
+        intent.putExtra("restaurantIndex", restaurantIndex);
+        return intent;
     }
 
     @Override
