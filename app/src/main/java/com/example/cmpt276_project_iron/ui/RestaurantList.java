@@ -46,9 +46,9 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private Manager manager;
     private FrameLayout mapContainer;
 
-    final MapFragment mapFragment = MapFragment.newInstance();;
+    //final MapFragment mapFragment = MapFragment.newInstance();;
     final FragmentManager fragManager = getSupportFragmentManager();
-    Fragment active = mapFragment;
+    MapFragment curMapFrag = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +122,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             //Only want the fragment to close (not the activity), therefore
             //explicitly add it to the stack
             transactor.addToBackStack("fragInstance");
-            transactor.add(R.id.mapContainer, mapFragment, "mapFrag").commit();
+            transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+            curMapFrag = fragment;
             editor.putBoolean("goog_services", true);
         }
         editor.apply();
@@ -155,11 +156,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case (R.id.navigation_resList):
-                        fragManager.beginTransaction().hide(active).hide(mapFragment).commit();
+                        fragManager.beginTransaction().hide(curMapFrag).commit();
                         return true;
 
                     case (R.id.navigation_map):
-                        fragManager.beginTransaction().hide(active).show(mapFragment).commit();
+                        fragManager.beginTransaction().show(curMapFrag).commit();
                         return true;
                 }
                 return false;
