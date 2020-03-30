@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -82,6 +83,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private static final String LONG = "long";
     private static final String COORDLAUNCH = "coordinate_launch";
     private static final String RINDEX = "restaurant_index";
+    private EditText searchText;
 
     //By default the recentering is enabled, however, once an action such as a forceful movement of the screen
     //is imposed, then will be set to false until the map recenter button is clicked
@@ -280,6 +282,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         mapFragment.getMapAsync(this);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //Since using a fragment, view's can only be attained once the actual view is created (note:
+        //cannot place in onCreate)
+        searchText = view.findViewById(R.id.search_input);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -116,5 +116,7 @@
     <string name="yes_positive">YES</string>
     <string name="negative_update">UPDATE NEXT TIME</string>
     <string name="cancel">Cancel</string>
+    <string name="magnifier_description">magnifier for search bar</string>
+    <string name="searchBar_hint">Enter Restaurant Name</string>
 
 </resources>
