@@ -361,9 +361,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             }
         });
         map.setPadding(0,150,0,150);
-
-        map.setPadding(0,150,0,150);
-
     }
 
     private void placePeg(Restaurant restaurant, float zoom, int index) {
