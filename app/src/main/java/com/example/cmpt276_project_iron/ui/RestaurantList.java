@@ -261,7 +261,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                     public void run() {
                         setUpMapOpen(getWindow().getDecorView().getRootView());
                     }
-                }, 3000);
+                }, 4000);
             }
         } else{
             Log.i("lengthened_launch", "Map is launching as default screen for the first time");
@@ -271,7 +271,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                 public void run() {
                     setUpMapOpen(getWindow().getDecorView().getRootView());
                 }
-            }, 3000);
+            }, 4000);
         }
     }
 
