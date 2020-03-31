@@ -421,7 +421,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
                             //First check if launched from second activity
                             if (inLAT != 0.0 && inLONG != 0.0) {
-                                Log.e("CORRECT LAUNCH", "CORRECT LAUNCH");
                                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng
                                                 (inLAT, inLONG),
                                         ZOOM_AMNT));
@@ -480,6 +479,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             Log.i("servicesClientException", "Security exception: " + e.getMessage());
         }
     }
+
 
     private void updateGPSPosition() {
 

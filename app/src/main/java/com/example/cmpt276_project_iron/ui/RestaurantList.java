@@ -3,8 +3,6 @@ package com.example.cmpt276_project_iron.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -33,7 +31,6 @@ import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.Timer;
@@ -46,9 +43,9 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private Manager manager;
     private FrameLayout mapContainer;
 
-    final MapFragment mapFragment = MapFragment.newInstance();;
-    final FragmentManager fragManager = getSupportFragmentManager();
-    Fragment active = mapFragment;
+    MapFragment fragment;
+    Fragment active;
+    FragmentManager fragManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +63,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Fixes bug with invalid service permissions resulting in map related exceptions
         safeLaunchMap();
 
-        //Only after the necessary processing of the first activity has been completed should the
-        //map be displayed (as default first screen)
-        //setUpMapOpen(getWindow().getDecorView().getRootView());
     }
 
     //Made public so it can be launched from xml (non-dynamic)
@@ -99,15 +93,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             editor.putBoolean("goog_services", false);
 
         } else {
-            MapFragment fragment;
             //Check if this was a coordinates launch request or a standard request
             boolean coord_launch = data.getBoolean("coord_launch", false);
-            if(!coord_launch){
-                Log.e("launch_false", "coord launch is false");
-            }
-            else{
-                Log.e("launch_true", "coord launch is true");
-            }
 
             if(coord_launch){
                 fragment = MapFragment.newInstance(getIntent().getDoubleExtra("latitude", 0.0),
@@ -132,6 +119,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             editor.putBoolean("goog_services", true);
         }
         editor.apply();
+        fragManager = getSupportFragmentManager();
+        active = fragment;
     }
 
     private void inflateRestaurantList(){
@@ -154,6 +143,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     }
 
     private void setUpNavigationBar() {
+        fragManager = getSupportFragmentManager();
         BottomNavigationView navMenu = findViewById(R.id.navigationView);
         navMenu.setSelectedItemId(R.id.navigation_map);
         navMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -161,12 +151,20 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case (R.id.navigation_resList):
-                        fragManager.beginTransaction().hide(active).hide(mapFragment).commit();
-                        return true;
+                        if(fragManager.getBackStackEntryCount() > 0){
+                            fragManager.popBackStack();
+                            fragManager.beginTransaction().hide(active).hide(fragment).commit();
+                            return true;
+                        }
+                        return false;
 
                     case (R.id.navigation_map):
-                        fragManager.beginTransaction().hide(active).show(mapFragment).commit();
-                        return true;
+                        if(fragManager.getBackStackEntryCount() == 0){
+                            setUpMapOpen(getWindow().getDecorView().getRootView());
+                            fragManager.beginTransaction().hide(active).show(fragment).commit();
+                            return true;
+                        }
+                        return false;
                 }
                 return false;
             }
