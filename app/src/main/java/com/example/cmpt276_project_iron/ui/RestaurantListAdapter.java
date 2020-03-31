@@ -70,8 +70,6 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
 
-                //Using shared preferences to retain the index of the restaurant which is used to address activity two's
-                //bug with a changing toolbar tittle - Jas
 
                 SharedPreferences data = context.getSharedPreferences("data", MODE_PRIVATE);
                 SharedPreferences.Editor editor = data.edit();
@@ -197,6 +195,11 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                 //Iterate through our complete restaurant list to check which ones meet this specification
                 //Current filter: based on restaurant name in regards to .contains()
                 for(Restaurant restaurant : completeRestaurants){
+                    /**
+                     * ADD ANY OTHER NECESSARY FILTERS HERE, HOWEVER, NEED TO KNOW WHAT OPTIONS WERE TOGGLED
+                     * USE ->> SHARED PREFERENCES
+                     *
+                     */
                     if(restaurant.getName().toLowerCase().contains(filterSpecification)){
                         //If the restaurant name contains the specified filter text then add it
                         //to the list of filtered restaurants

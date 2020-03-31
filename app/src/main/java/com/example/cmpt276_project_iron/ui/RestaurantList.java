@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
@@ -189,6 +190,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                         if(fragManager.getBackStackEntryCount() > 0){
                             fragManager.popBackStack();
                             fragManager.beginTransaction().hide(active).hide(fragment).commit();
+
+                            //Reset the toolbar sub tittle (would apply to the case in which
+                            //the coordinates are clicked and it is changed to "location")
+                            ActionBar detailsBar = getSupportActionBar();
+                            detailsBar.setSubtitle("");
                             return true;
                         }
                         return false;
