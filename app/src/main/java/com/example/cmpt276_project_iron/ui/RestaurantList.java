@@ -261,6 +261,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                     public void run() {
                         setUpMapOpen(getWindow().getDecorView().getRootView());
                     }
+                    //Lengthened for accommodation of slower processes
                 }, 4000);
             }
         } else{
