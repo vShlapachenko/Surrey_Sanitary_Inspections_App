@@ -354,7 +354,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
