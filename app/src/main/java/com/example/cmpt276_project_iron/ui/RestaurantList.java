@@ -102,6 +102,12 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             MapFragment fragment;
             //Check if this was a coordinates launch request or a standard request
             boolean coord_launch = data.getBoolean("coord_launch", false);
+            if(!coord_launch){
+                Log.e("launch_false", "coord launch is false");
+            }
+            else{
+                Log.e("launch_true", "coord launch is true");
+            }
 
             if(coord_launch){
                 fragment = MapFragment.newInstance(getIntent().getDoubleExtra("latitude", 0.0),
@@ -122,7 +128,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             //Only want the fragment to close (not the activity), therefore
             //explicitly add it to the stack
             transactor.addToBackStack("fragInstance");
-            transactor.add(R.id.mapContainer, mapFragment, "mapFrag").commit();
+            transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
             editor.putBoolean("goog_services", true);
         }
         editor.apply();

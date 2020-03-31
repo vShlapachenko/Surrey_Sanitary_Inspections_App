@@ -43,7 +43,8 @@
             android:id="@+id/search_input"
             android:background="@null"
             android:hint="@string/searchBar_hint"
-            android:inputType="textAutoCorrect" />
+            android:inputType="textAutoCorrect"
+            android:imeOptions="actionSearch"/>
 
     </RelativeLayout>
 
