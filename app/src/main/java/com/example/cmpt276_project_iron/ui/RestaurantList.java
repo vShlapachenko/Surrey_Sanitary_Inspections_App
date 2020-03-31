@@ -1,8 +1,8 @@
 package com.example.cmpt276_project_iron.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -10,18 +10,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,9 +47,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private Manager manager;
     private FrameLayout mapContainer;
 
-    MapFragment fragment;
-    Fragment active;
-    FragmentManager fragManager;
+    private MapFragment fragment;
+    private Fragment active;
+    private FragmentManager fragManager;
+    private List<Restaurant> restaurants;
+    private RestaurantListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +59,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         displayCorrectLayout();
         setUpBackButton();
         setUpNavigationBar();
-        manager = Manager.getInstance(this);
-
         //Used for launching the map fragment
         inflateRestaurantList();
 
@@ -63,6 +67,34 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Fixes bug with invalid service permissions resulting in map related exceptions
         safeLaunchMap();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        //Setting search bar in place of provided menu
+        inflater.inflate(R.menu.filter_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.filter_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        //Change the go button in the keyboard to something more appropriate for live search
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        //Listener for the text change in the search bar
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+                //Do nothing as programmed to complete in real time
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Get filtered results using the logic defined in the RestaurantListAdapter.java
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
     }
 
     //Made public so it can be launched from xml (non-dynamic)
@@ -124,14 +156,17 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     }
 
     private void inflateRestaurantList(){
-        List<Restaurant> restaurants = manager.getRestaurantList();
+        manager = Manager.getInstance(this);
+        restaurants = manager.getRestaurantList();
+        adapter = new RestaurantListAdapter(this, restaurants);
 
         if(restaurants == null){
             TextView emptyListText = findViewById(R.id.noRestaurantsText);
             emptyListText.setText(getResources().getString(R.string.no_restaurants_text));
         } else {
+            restaurants = manager.getRestaurantList();
+            adapter = new RestaurantListAdapter(this, restaurants);
             RecyclerView restaurantList = findViewById(R.id.restaurantList);
-            RestaurantListAdapter adapter = new RestaurantListAdapter(this, restaurants);
             adapter.notifyDataSetChanged();
             restaurantList.setAdapter(adapter);
             restaurantList.setLayoutManager(new LinearLayoutManager(this));

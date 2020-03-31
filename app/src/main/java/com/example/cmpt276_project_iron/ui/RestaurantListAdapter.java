@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -27,14 +30,16 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  *  List adapter used for the restaurant list activity
  */
-public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.ViewHolder> {
+public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.ViewHolder> implements Filterable {
     private Context context;
-    private List<Restaurant> restaurants;
+    private List<Restaurant> restaurants; //Data set list
+    private List<Restaurant> completeRestaurants; //Duplicate data set list for filtering
     private Manager manager;
 
     public RestaurantListAdapter(Context context, List<Restaurant> restaurants){
         this.context = context;
         this.restaurants = restaurants;
+        this.completeRestaurants = new ArrayList<>(restaurants);  //Copy of list for maintaing data while filtering
         this.manager = Manager.getInstance(context);
     }
 
@@ -108,7 +113,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
     }
 
-    //Hardcoded 10 different restaurant names to have custom images
+
     private void initializeRestaurantIconImage(Restaurant restaurant, ImageView restaurantIcon) {
         String[] resNameArray = context.getResources().getStringArray(R.array.custom_icon_restaurants);
         boolean customImageApplied = false;
@@ -165,6 +170,57 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     public int getItemCount() {
         return restaurants.size();
     }
+
+
+    @Override //Filter for filtering the list of restaurants in real time
+    public Filter getFilter() {
+        return restaurantFilter;
+    }
+
+    private Filter restaurantFilter = new Filter() {
+        @Override
+        //performFiltering will perform filtering in the background therefore no delay
+        protected FilterResults performFiltering(CharSequence constraint) {
+            //constraint argument is used to define the filter logic
+            List<Restaurant> filteredRestaurantList = new ArrayList<>();
+
+            //If the specified filter (constraint, based on search bar) is empty then we want to show the full
+            //set of results
+            if (constraint == null || constraint.length() == 0){
+               filteredRestaurantList.addAll(completeRestaurants);
+            }
+            //In the other case, if there was a specification made by the user
+            else{
+                //filter specification == user's filter specification
+                String filterSpecification = constraint.toString().toLowerCase().trim();
+
+                //Iterate through our complete restaurant list to check which ones meet this specification
+                //Current filter: based on restaurant name in regards to .contains()
+                for(Restaurant restaurant : completeRestaurants){
+                    if(restaurant.getName().toLowerCase().contains(filterSpecification)){
+                        //If the restaurant name contains the specified filter text then add it
+                        //to the list of filtered restaurants
+                        filteredRestaurantList.add(restaurant);
+                    }
+                }
+            }
+
+            FilterResults filteredResults = new FilterResults();
+            filteredResults.values = filteredRestaurantList;
+            return filteredResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            //Remove the contents of the list of restaurants in order to replace with the filtered ones
+            restaurants.clear();
+
+            //Add the filtered results to the list that will be adapted
+            restaurants.addAll((List) results.values);
+            //Once the data has changed, it must be relayed, so the adapter is notified of this change
+            notifyDataSetChanged();
+        }
+    };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView restaurantName;

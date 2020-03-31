@@ -118,5 +118,6 @@
     <string name="cancel">Cancel</string>
     <string name="magnifier_description">magnifier for search bar</string>
     <string name="searchBar_hint">Enter Restaurant Name</string>
+    <string name="search_tittle">Search</string>
 
 </resources>
