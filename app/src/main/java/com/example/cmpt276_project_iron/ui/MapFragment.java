@@ -355,16 +355,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             //Note: For stability, maps are based on a submission basis
             public boolean onQueryTextSubmit(String query) {
                 Log.i("Map_searched", "map search completed, filter: " + query);
-                //Get filtered results using the logic defined in the RestaurantListAdapter.java
 
-                //On submission, process the input and based on it, set the visibility of the markers
-                //-->> Alter the visibility of the markers
-                //NOTE: Would have to make non-applicable visible as well
+                //For each marker cluster check if the filter applies to it, if it does, make it visible
+                //if not, make it invisible
+                for(RestaurantMarkerCluster marker : markers){
+                    if(marker.getRestaurant().getName().toLowerCase().trim().contains(query)){
+                        //Make these visible
+                    }
+                    else{
+                        //Make these invisible
+                    }
+                }
 
-                //adapter.getFilter().filter(newText);
-                /*
-                 * Check if viable to use onQueryTextChange
-                 */
                 return false;
             }
 

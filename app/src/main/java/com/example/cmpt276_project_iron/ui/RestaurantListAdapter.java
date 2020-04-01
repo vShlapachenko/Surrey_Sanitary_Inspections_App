@@ -197,7 +197,9 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                 for(Restaurant restaurant : completeRestaurants){
                     /**
                      * ADD ANY OTHER NECESSARY FILTERS HERE, HOWEVER, NEED TO KNOW WHAT OPTIONS WERE TOGGLED
-                     * USE ->> SHARED PREFERENCES
+                     * USE ->> SHARED PREFERENCES (NOTE: THIS IS FOR THE RESTAURANT FILTER)
+                     *
+                     * FIND THE EQUIVALENT FUNCTION IN MAPFRAGMENT TO FILTER MAP RELATED MATERIAL
                      *
                      */
                     if(restaurant.getName().toLowerCase().contains(filterSpecification)){
