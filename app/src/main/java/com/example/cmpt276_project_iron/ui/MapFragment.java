@@ -15,6 +15,9 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -25,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -91,7 +95,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     //By default the recentering is enabled, however, once an action such as a forceful movement of the screen
     //is imposed, then will be set to false until the map recenter button is clicked
     private boolean recenterEnabled = true;
-    private EditText mSearchText;
+    //private EditText mSearchText;
 
     // TODO: Rename and change types of parameters
 
@@ -207,7 +211,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //Indicates to the fragment that a toolbar is in effect (used so that searches can be made
+        //for the map)
+        setHasOptionsMenu(true);
         //Prevents orientation in fragments
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -270,7 +276,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-
         //Getting a map into the fragment
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
@@ -286,17 +291,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         return view;
     }
 
-    @Override
+    //Note*: The following two methods are for a distinct search bar in the map itself, however,
+    //now the toolbar search bar is used for both
+
+    /*@Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //Since using a fragment, view's can only be attained once the actual view is created (note:
         //cannot place in onCreate)
         searchText = view.findViewById(R.id.search_input);
-    }
+    }*/
 
     private void processSearch(){
         //Before processing the actual input, override the keyboard 'search' button
-        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        /*searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
@@ -308,7 +316,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 }
                 return false;
             }
-        });
+        });*/
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -349,6 +357,49 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+
+        //Not inflated in fragment as it retains the life cycle of its parent which already
+        //inflates;
+        super.onPrepareOptionsMenu(menu);
+
+        //Just getting access to the options menu to process the input for the maps
+        MenuItem searchItem = menu.findItem(R.id.filter_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        //Prevents automatic lock-on on search bar
+        searchView.setFocusable(false);
+        searchView.setIconifiedByDefault(false);
+        searchView.clearFocus();
+
+        //Listener for the text change in the search bar
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            //Note: For stability, maps are based on a submission basis
+            public boolean onQueryTextSubmit(String query) {
+                Log.i("Map_searched", "map search completed, filter: " + query);
+                //Get filtered results using the logic defined in the RestaurantListAdapter.java
+
+                //On submission, process the input and based on it, set the visibility of the markers
+                //-->> Alter the visibility of the markers
+                //NOTE: Would have to make non-applicable visible as well
+
+                //adapter.getFilter().filter(newText);
+                /*
+                 * Check if viable to use onQueryTextChange
+                 */
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do nothing as programmed to procession on completion
+                return false;
+            }
+        });
     }
 
     @Override

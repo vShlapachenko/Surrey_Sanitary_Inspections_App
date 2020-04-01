@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.MapsFramework" />
 
-
+    <!--
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -46,6 +46,6 @@
             android:inputType="textAutoCorrect"
             android:imeOptions="actionSearch"/>
 
-    </RelativeLayout>
+    </RelativeLayout> -->
 
 </FrameLayout>

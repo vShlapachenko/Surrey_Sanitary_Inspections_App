@@ -78,6 +78,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         MenuItem searchItem = menu.findItem(R.id.filter_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
+        searchView.setFocusable(false);
+        searchView.setIconifiedByDefault(false);
+        searchView.clearFocus();
+
+        searchView.setQueryHint("Enter a Restaurant Name");
         //Change the go button in the keyboard to something more appropriate for live search
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         //Listener for the text change in the search bar
@@ -90,6 +95,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                Log.i("restaurant_filtered", "restaurant list filtered via search, filter: " + newText);
                 //Get filtered results using the logic defined in the RestaurantListAdapter.java
                 adapter.getFilter().filter(newText);
                 return false;
@@ -194,7 +200,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                             //Reset the toolbar sub tittle (would apply to the case in which
                             //the coordinates are clicked and it is changed to "location")
                             ActionBar detailsBar = getSupportActionBar();
-                            detailsBar.setSubtitle("");
+                            detailsBar.setSubtitle("Filter: ");
                             return true;
                         }
                         return false;
