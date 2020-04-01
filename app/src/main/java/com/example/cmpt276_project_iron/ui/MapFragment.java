@@ -125,7 +125,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private SupportMapFragment mapFragment;
     private OnFragmentInteractionListener mListener;
 
-    private  List<RestaurantMarkerCluster> markers = new ArrayList<>();
+    //Retains all markers such that no data is lost
+    private List<RestaurantMarkerCluster> markersFull;
+    private List<RestaurantMarkerCluster> markers = new ArrayList<>();
     private ClusterManager<RestaurantMarkerCluster> clusterManager;
 
     private static final float ZOOM_AMNT = 17f;
@@ -351,28 +353,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         //Listener for the text change in the search bar
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             //Note: For stability, maps are based on a submission basis
             public boolean onQueryTextSubmit(String query) {
-                Log.i("Map_searched", "map search completed, filter: " + query);
-
-                //For each marker cluster check if the filter applies to it, if it does, make it visible
-                //if not, make it invisible
-                for(RestaurantMarkerCluster marker : markers){
-                    if(marker.getRestaurant().getName().toLowerCase().trim().contains(query)){
-                        //Make these visible
-                    }
-                    else{
-                        //Make these invisible
-                    }
-                }
-
+                //Do nothing as programmed to procession on completion
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Do nothing as programmed to procession on completion
+                Log.i("Map_searched", "map search completed, filter: " + newText);
+
+                //Clear up all items, and just add those that pertain to the filer
+                clusterManager.clearItems();
+                for(RestaurantMarkerCluster marker : markers){
+                    if(marker.getRestaurant().getName().toLowerCase().trim().contains(newText)){
+                        //Using full data set of markersFull to reference what should be added or removed
+                        clusterManager.addItem(marker);
+                    }
+                }
+                clusterManager.cluster();
+                map.setOnMarkerClickListener(clusterManager);
+                map.setInfoWindowAdapter(clusterManager.getMarkerManager());
+                map.setOnInfoWindowClickListener(clusterManager);
                 return false;
             }
         });
@@ -399,6 +403,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         for(int i=0; i<restaurantList.size(); i++) {
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
         }
+        markersFull = new ArrayList<>(markers);
+
         setUpClusterManager(map);
         clusterManager.getMarkerCollection();
         coordinateTappedByUser(coordLaunch);
