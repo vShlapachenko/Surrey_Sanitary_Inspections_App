@@ -419,16 +419,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         manager = Manager.getInstance(getContext());
         List<Restaurant> restaurantList = manager.getRestaurantList();
-        setUpClusterManager(map);
+
 
         for(int i=0; i<restaurantList.size(); i++) {
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
-
-            clusterManager.getMarkerCollection();
-            coordinateTappedByUser(coordLaunch);
-            makeMarkerTextClickable();
-
         }
+        setUpClusterManager(map);
+        clusterManager.getMarkerCollection();
+        coordinateTappedByUser(coordLaunch);
+        makeMarkerTextClickable();
 
         //Once the map detects movement, the re-centering will be disabled
         map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
