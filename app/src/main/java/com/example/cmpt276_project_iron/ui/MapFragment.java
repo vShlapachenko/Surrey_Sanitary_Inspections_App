@@ -292,33 +292,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         return view;
     }
 
-    //Note*: The following two methods are for a distinct search bar in the map itself, however,
-    //now the toolbar search bar is used for both
-
-    /*@Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //Since using a fragment, view's can only be attained once the actual view is created (note:
-        //cannot place in onCreate)
-        searchText = view.findViewById(R.id.search_input);
-    }*/
-
-    private void processSearch(){
-        //Before processing the actual input, override the keyboard 'search' button
-        /*searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
-                        || event.getAction() == KeyEvent.ACTION_DOWN ||
-                        event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    //Process the actual input search
-                    String search = searchText.getText().toString();
-
-                }
-                return false;
-            }
-        });*/
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -439,7 +412,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         });
         map.setPadding(0,150,0,150);
 
-        processSearch();
     }
 
     private void placePeg(Restaurant restaurant, float zoom, int index) {
