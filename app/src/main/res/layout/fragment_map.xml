@@ -13,4 +13,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.MapsFramework" />
+
+    <!--
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="10dp"
+        android:background="@drawable/search_border"
+        android:id="@+id/searchLayout">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/magnifier"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:contentDescription="@string/magnifier_description"
+            android:src="@drawable/ic_magnifier"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@id/magnifier"
+            android:layout_centerVertical="true"
+            android:textSize="15sp"
+            android:textColor="#000"
+            android:id="@+id/search_input"
+            android:background="@null"
+            android:hint="@string/searchBar_hint"
+            android:inputType="textAutoCorrect"
+            android:imeOptions="actionSearch"/>
+
+    </RelativeLayout> -->
+
 </FrameLayout>

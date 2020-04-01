@@ -56,7 +56,7 @@
         </activity>
         <activity
             android:name=".ui.RestaurantList"
-            android:label="@string/restaurant_list_title"
+            android:label="" 
             android:parentActivityName=".ui.InitialBoot">
         </activity>
         <activity
