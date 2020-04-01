@@ -256,6 +256,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         return true;
     }
 
+
     @Override
     public boolean onClusterItemClick(RestaurantMarkerCluster restaurantMarkerCluster) {
         Log.e("Cluster", "Clicked!");
