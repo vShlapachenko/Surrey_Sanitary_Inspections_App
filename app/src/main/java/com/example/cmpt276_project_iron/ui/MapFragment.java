@@ -357,8 +357,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             @Override
             //Note: For stability, maps are based on a submission basis
             public boolean onQueryTextSubmit(String query) {
-                //Do nothing as programmed to procession on completion
-                return false;
+                //Do nothing as programmed to procession on completion, however, hide the keyboard
+                searchView.clearFocus();
+                return true;
             }
 
             @Override

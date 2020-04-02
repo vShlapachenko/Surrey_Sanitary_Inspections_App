@@ -15,7 +15,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,8 +94,9 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
-                //Do nothing as programmed to complete in real time
+                //Do nothing as programmed to complete in real time, however, hide keyboard
+                searchView.clearFocus();
+                return true;
             }
 
             @Override
