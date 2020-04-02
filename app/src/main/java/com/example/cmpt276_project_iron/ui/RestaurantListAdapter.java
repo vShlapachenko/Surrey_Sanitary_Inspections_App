@@ -3,10 +3,13 @@ package com.example.cmpt276_project_iron.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -46,6 +49,22 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //Depending on case, may return a custom one (Ex Nexus S)
+
+        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        Display dimensions = wm.getDefaultDisplay();
+        Point dimension = new Point();
+        dimensions.getSize(dimension);
+        int width = dimension.x;
+        int height = dimension.y;
+        float density = context.getResources().getDisplayMetrics().density;
+        //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
+        double MDPI_SCREEN_SIZE = 1.0;
+
+        if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
+            return new ViewHolder(LayoutInflater.from(context)
+                    .inflate(R.layout.restaurant_list_item_custom, parent, false));
+        }
         return new ViewHolder(LayoutInflater.from(context)
                 .inflate(R.layout.restaurant_list_item, parent, false));
     }

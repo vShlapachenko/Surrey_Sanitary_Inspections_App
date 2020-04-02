@@ -237,7 +237,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
         double MDPI_SCREEN_SIZE = 1.0;
         if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
-            setContentView(R.layout.activity_restaurant_list_custom);
+            setContentView(R.layout.activity_restaurant_list_custom); //NEXUS S Specific
         } else if(width == 1440 && height == 2560) {
             setContentView(R.layout.activity_restaurant_list_custom_one);
         } else{
