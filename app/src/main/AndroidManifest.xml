@@ -50,16 +50,16 @@
             android:name=".ui.InitialBoot"
             android:label="@string/initial_boot_title"
             android:parentActivityName=".ui.InitialBoot">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.RestaurantList"
             android:windowSoftInputMode="adjustNothing"
             android:label="" 
             android:parentActivityName=".ui.InitialBoot">
-            <intent-filter> <!-- Move back to InitialBoot if not done  -->
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.RestaurantDetails"
