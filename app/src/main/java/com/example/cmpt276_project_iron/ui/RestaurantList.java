@@ -95,6 +95,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Do nothing as programmed to complete in real time, however, hide keyboard
+                
                 searchView.clearFocus();
                 return true;
             }
@@ -104,6 +105,10 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                 Log.i("restaurant_filtered", "restaurant list filtered via search, filter: " + newText);
                 //Get filtered results using the logic defined in the RestaurantListAdapter.java
                 adapter.getFilter().filter(newText);
+
+                if(newText.isEmpty()){
+                    searchView.clearFocus();
+                }
                 return false;
             }
         });
