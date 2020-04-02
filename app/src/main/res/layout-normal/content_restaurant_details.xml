@@ -108,8 +108,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inspectionList"
-        android:layout_width="413dp"
-        android:layout_height="404dp"
+        android:layout_width="404dp"
+        android:layout_height="410dp"
         android:layout_marginTop="328dp"
         android:layout_weight="1.0"
         android:clickable="false"

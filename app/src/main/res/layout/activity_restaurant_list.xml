@@ -8,6 +8,4 @@
     tools:context=".ui.RestaurantList">
 
     <include layout="@layout/content_restaurant_list" />
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

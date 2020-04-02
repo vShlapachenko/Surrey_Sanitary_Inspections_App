@@ -12,12 +12,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,6 +32,8 @@ import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.Timer;
@@ -40,11 +46,16 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private Manager manager;
     private FrameLayout mapContainer;
 
+    final MapFragment mapFragment = MapFragment.newInstance();;
+    final FragmentManager fragManager = getSupportFragmentManager();
+    Fragment active = mapFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         displayCorrectLayout();
         setUpBackButton();
+        setUpNavigationBar();
         manager = Manager.getInstance(this);
 
         //Used for launching the map fragment
@@ -55,6 +66,9 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Fixes bug with invalid service permissions resulting in map related exceptions
         safeLaunchMap();
 
+        //Only after the necessary processing of the first activity has been completed should the
+        //map be displayed (as default first screen)
+        //setUpMapOpen(getWindow().getDecorView().getRootView());
     }
 
     //Made public so it can be launched from xml (non-dynamic)
@@ -108,7 +122,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             //Only want the fragment to close (not the activity), therefore
             //explicitly add it to the stack
             transactor.addToBackStack("fragInstance");
-            transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
+            transactor.add(R.id.mapContainer, mapFragment, "mapFrag").commit();
             editor.putBoolean("goog_services", true);
         }
         editor.apply();
@@ -131,6 +145,26 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
     private void setUpBackButton(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    private void setUpNavigationBar() {
+        BottomNavigationView navMenu = findViewById(R.id.navigationView);
+        navMenu.setSelectedItemId(R.id.navigation_map);
+        navMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case (R.id.navigation_resList):
+                        fragManager.beginTransaction().hide(active).hide(mapFragment).commit();
+                        return true;
+
+                    case (R.id.navigation_map):
+                        fragManager.beginTransaction().hide(active).show(mapFragment).commit();
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     public static Intent getIntent(Context context, int restaurantIndex){
@@ -161,19 +195,16 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        /**
-         * REMOVE ONCE BOTTOM NAVIGATION BAR IS ADDED (just bottom 2 lines of code)
-         */
 
         //In accordance with the user stories, any one of the selections of the map or restaurant
         //will result in an exit of the application
-        /*FragmentManager manager = getFragmentManager();
+        android.app.FragmentManager manager = getFragmentManager();
         if (manager.getBackStackEntryCount() > 0) {
             finish();
         } else {
             //If no fragments -> on restaurant screen -> exit application -> normal behaviour
             super.onBackPressed();
-        }*/
+        }
     }
 
     private void safeLaunchMap(){

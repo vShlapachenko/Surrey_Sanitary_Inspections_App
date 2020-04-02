@@ -76,12 +76,15 @@ public class DetailsListAdapter extends RecyclerView.Adapter<DetailsListAdapter.
         if(hazardLevel.equalsIgnoreCase("Low")){
             hazardIcon.setImageResource(R.drawable.low_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+
         } else if (hazardLevel.equalsIgnoreCase("Moderate")) {
             hazardIcon.setImageResource(R.drawable.moderate_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+
         } else if (hazardLevel.equalsIgnoreCase("High")) {
             hazardIcon.setImageResource(R.drawable.high_hazard);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+
         } else{
             hazardIcon.setImageResource(R.drawable.missing_info);
             hazardIcon.setScaleType(ImageView.ScaleType.FIT_XY);

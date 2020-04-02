@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_resList"
+        android:title="List"
+        android:icon="@drawable/animated_restaurant_icon"/>
+
+    <item
+        android:id="@+id/navigation_map"
+        android:title="Map"
+        android:icon="@drawable/googleg_standard_color_18"/>
+</menu>

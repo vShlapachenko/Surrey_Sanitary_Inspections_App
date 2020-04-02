@@ -33,7 +33,8 @@
         android:paddingBottom="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/alert_dark_frame" />
+        app:srcCompat="@android:drawable/alert_dark_frame"
+        tools:srcCompat="@drawable/missing_info" />
 
     <TextView
         android:id="@+id/inspectionDate"
