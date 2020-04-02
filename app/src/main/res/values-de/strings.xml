@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CMPT276_Project_Iron</string>
+    <string name="inspection_report">Inspektionsbericht</string>
+    <string name="date_of_inspection">Tag der Inspektion:</string>
+    <string name="critical_issues_inspection">Kritische Fragen:</string>
+    <string name="hazard_level">Gefahrenstufe:</string>
+    <string name="inspections">#Inspektionen</string>
+    <string name="crticalissues">#KritischeProbleme</string>
+    <string name="hazard">Gefahr</string>
+    <string name="non_critical_issues">Unkritische Fragen:</string>
+    <string name="noncrit">#Nichtkritisch</string>
+    <string name="restaurantIconDescription">repräsentiert das Restaurant-Symbol</string>
+    <string name="address_text">Adresse:</string>
+    <string name="coordinates_text">Koordinaten:</string>
+    <string name="inspectionHistoryText">Inspektionsverlauf:</string>
+    <string name="borderDescription">Trennzeichen der Liste vom Text</string>
+    <string name="inspection_text">Inspektion</string>
+    <string name="crit_text"># Kritische Probleme gefunden:</string>
+    <string name="nonCrit_text"># Nicht kritische Probleme gefunden:</string>
+    <string name="date_text">Datum:</string>
+    <string name="hazardIconDescription">Zeigt die aktuelle Gefahrenstufe an</string>
+    <string name="no_inspection_text">Keine Inspektionen verfügbar</string>
+    <string name="no_violation_text">Keine Verstöße verfügbar</string>
+    <string name="restaurantExtension">Restaurant Details</string>
+    <string name="days_text"> Tage</string>
+    <string-array name="months">
+        <item>Januar</item>
+        <item>Februar</item>
+        <item>März</item>
+        <item>April</item>
+        <item>Kann</item>
+        <item>Juni</item>
+        <item>Juli</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>Dezember</item>
+    </string-array>
+    <string name="inspection_date">%1s %2s</string>
+    <string name="inspection_date_full">%1s %2d, %3d</string>
+    <string name="more_info_text">(Klicken Sie für weitere Informationen)</string>
+    <string name="violation101">Bau nicht genehmigt</string>
+    <string name="violation102">Nicht genehmigte Räumlichkeiten sind in Betrieb</string>
+    <string name="violation103">Fehlen wenn gültige Erlaubnis</string>
+    <string name="violation104">Erlaubnis ist schwer zu finden</string>
+    <string name="violation201">Verdorbenes Essen</string>
+    <string name="violation202">Lebensmittel nicht richtig verarbeitet</string>
+    <string name="violation203">Lebensmittelkühlung verletzt</string>
+    <string name="violation204">Der Koch- / Aufheizvorgang ist unsicher</string>
+    <string name="violation205">Kalte Speisen über 4 ° C gelagert</string>
+    <string name="violation206">Warme Speisen unter 60 ° C</string>
+    <string name="violation208">Nahrungsquelle nicht genehmigt</string>
+    <string name="violation209">Lebensmittel nicht geschützt</string>
+    <string name="violation210">Aufgetauter Prozess verletzt</string>
+    <string name="violation211">Tiefkühlkost über -18 ° C gelagert</string>
+    <string name="violation212">Schriftliche Form fehlt</string>
+    <string name="violation301">Hygienischer Zustand nicht aufrechterhalten</string>
+    <string name="violation302">Nicht richtig gewaschen / desinfiziert</string>
+    <string name="violation303">Keine Ressource für die sanitäre Wartung</string>
+    <string name="violation304">Schädlinge</string>
+    <string name="violation305">Der beobachtete Zustand ist nicht tolerierbar</string>
+    <string name="violation306">Essensräume nicht gepflegt</string>
+    <string name="violation307">Design / Material nicht geeignet</string>
+    <string name="violation308">Nicht gut funktioniert</string>
+    <string name="violation309">Chemikalien unsachgemäß gelagert</string>
+    <string name="violation310">Einwegartikel, die mehrmals verwendet werden</string>
+    <string name="violation311">Die Wartung entspricht nicht den Plänen</string>
+    <string name="violation312">Falscher Gegenstand vor Ort gelagert</string>
+    <string name="violation313">Lebendes Tier auf dem Gelände</string>
+    <string name="violation314">No written sanitation procedures</string>
+    <string name="violation315">Keine schriftlichen Hygieneverfahren</string>
+    <string name="violation401">Keine ausreichenden Handwaschstationen</string>
+    <string name="violation402">Mitarbeiter wäscht Hände nicht richtig</string>
+    <string name="violation403">Dem Mitarbeiter fehlt die persönliche Hygiene</string>
+    <string name="violation404">Mitarbeiter rauchen in der Nähe von Lebensmitteln</string>
+    <string name="violation501">Dem Bediener fehlt FOODSAFE Level 1</string>
+    <string name="violation502">Dem Mitarbeiter fehlt FOODSAFE Level 1</string>
+    <string name="summary">Zusammenfassung</string>
+    <string name="no_violations">Keine Verstöße</string>
+    <string name="no_restaurants_text">Keine Restaurants gefunden. Bitte versuche es erneut...</string>
+    <string name="restaurant_list_title">Restaurants</string>
+    <string name="recent_inspection_text">Letzte Inspektion:</string>
+    <string name="not_applicable_text">N/A</string>
+    <string name="restaurant_address">%1s, %2s, BC, Canada</string>
+    <string name="restaurant_coordinates">&lt;u>%1f, %2f&lt;/u></string>
+    <string name="inspection_detail_title">Inspektionsdetails</string>
+    <string name="no_violations_available">Keine Verstöße verfügbar</string>
+    <string name="violation_header">Art der Verletzung</string>
+    <string name="summary_header">Zusammenfassung</string>
+    <string name="hazard_header">Gefahrenstufe</string>
+    <string-array name="custom_icon_restaurants">
+        <item>McDonald</item>
+        <item>Freshslice</item>
+        <item>Subway</item>
+        <item>Panago</item>
+        <item>Starbucks</item>
+        <item>Blenz</item>
+        <item>Tim Hortons</item>
+        <item>Booster Juice</item>
+        <item>Freshii</item>
+        <item>KFC</item>
+    </string-array>
+    <string name="initial_boot_title">Initial Boot</string>
+    <string name="title_activity_maps_framework">Karte</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Benachrichtigungen</string>
+    <string name="hazard_not_found_message">Gefahrenstufe nicht gefunden</string>
+
+
+    <string name="data_download_inquire">Möchten Sie Daten herunterladen?</string>
+    <string name="yes_positive">JA</string>
+    <string name="negative_update">NÄCHSTES MAL AKTUALISIEREN</string>
+    <string name="cancel">Stornieren</string>
+    <string name="magnifier_description">Lupe für Suchleiste</string>
+    <string name="searchBar_hint">Geben Sie den Namen des Restaurants ein</string>
+    <string name="search_tittle">Suche</string>
+    <string name="filter_tittle">Filter:</string>
+    <string name="list_tittle">Aufführen</string>
+    <string name="map_tittle">Karte</string>
+    <string name="restaurant_hint">Geben Sie einen Restaurantnamen ein</string>
+</resources>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CMPT276_Project_Iron</string>
     <string name="inspection_report">Inspection Report</string>
@@ -119,5 +120,8 @@
     <string name="magnifier_description">magnifier for search bar</string>
     <string name="searchBar_hint">Enter Restaurant Name</string>
     <string name="search_tittle">Search</string>
-
+    <string name="filter_tittle">Filter:</string>
+    <string name="list_tittle">List</string>
+    <string name="map_tittle">Map</string>
+    <string name="restaurant_hint">Enter a Restaurant Name</string>
 </resources>
