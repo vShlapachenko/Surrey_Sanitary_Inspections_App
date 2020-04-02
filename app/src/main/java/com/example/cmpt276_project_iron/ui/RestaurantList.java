@@ -1,29 +1,35 @@
 package com.example.cmpt276_project_iron.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +39,6 @@ import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.Timer;
@@ -46,9 +51,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private Manager manager;
     private FrameLayout mapContainer;
 
-    final MapFragment mapFragment = MapFragment.newInstance();;
-    final FragmentManager fragManager = getSupportFragmentManager();
-    Fragment active = mapFragment;
+    private MapFragment fragment;
+    private Fragment active;
+    private FragmentManager fragManager;
+    private List<Restaurant> restaurants;
+    private RestaurantListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +63,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         displayCorrectLayout();
         setUpBackButton();
         setUpNavigationBar();
-        manager = Manager.getInstance(this);
-
         //Used for launching the map fragment
         inflateRestaurantList();
 
@@ -66,9 +71,43 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Fixes bug with invalid service permissions resulting in map related exceptions
         safeLaunchMap();
 
-        //Only after the necessary processing of the first activity has been completed should the
-        //map be displayed (as default first screen)
-        //setUpMapOpen(getWindow().getDecorView().getRootView());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        ActionBar detailsBar = getSupportActionBar();
+        detailsBar.setSubtitle("Filter: ");
+        MenuInflater inflater = getMenuInflater();
+        //Setting search bar in place of provided menu
+        inflater.inflate(R.menu.filter_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.filter_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setFocusable(false);
+        searchView.setIconifiedByDefault(false);
+        searchView.clearFocus();
+
+        searchView.setQueryHint(getString(R.string.restaurant_hint));
+        //Change the go button in the keyboard to something more appropriate for live search
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        //Listener for the text change in the search bar
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //Do nothing as programmed to complete in real time, however, hide keyboard
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i("restaurant_filtered", "restaurant list filtered via search, filter: " + newText);
+                //Get filtered results using the logic defined in the RestaurantListAdapter.java
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
     }
 
     //Made public so it can be launched from xml (non-dynamic)
@@ -99,7 +138,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             editor.putBoolean("goog_services", false);
 
         } else {
-            MapFragment fragment;
             //Check if this was a coordinates launch request or a standard request
             boolean coord_launch = data.getBoolean("coord_launch", false);
 
@@ -122,21 +160,26 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             //Only want the fragment to close (not the activity), therefore
             //explicitly add it to the stack
             transactor.addToBackStack("fragInstance");
-            transactor.add(R.id.mapContainer, mapFragment, "mapFrag").commit();
+            transactor.add(R.id.mapContainer, fragment, "mapFrag").commit();
             editor.putBoolean("goog_services", true);
         }
         editor.apply();
+        fragManager = getSupportFragmentManager();
+        active = fragment;
     }
 
     private void inflateRestaurantList(){
-        List<Restaurant> restaurants = manager.getRestaurantList();
+        manager = Manager.getInstance(this);
+        restaurants = manager.getRestaurantList();
+        adapter = new RestaurantListAdapter(this, restaurants);
 
         if(restaurants == null){
             TextView emptyListText = findViewById(R.id.noRestaurantsText);
             emptyListText.setText(getResources().getString(R.string.no_restaurants_text));
         } else {
+            restaurants = manager.getRestaurantList();
+            adapter = new RestaurantListAdapter(this, restaurants);
             RecyclerView restaurantList = findViewById(R.id.restaurantList);
-            RestaurantListAdapter adapter = new RestaurantListAdapter(this, restaurants);
             adapter.notifyDataSetChanged();
             restaurantList.setAdapter(adapter);
             restaurantList.setLayoutManager(new LinearLayoutManager(this));
@@ -148,6 +191,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     }
 
     private void setUpNavigationBar() {
+        fragManager = getSupportFragmentManager();
         BottomNavigationView navMenu = findViewById(R.id.navigationView);
         navMenu.setSelectedItemId(R.id.navigation_map);
         navMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -155,12 +199,25 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case (R.id.navigation_resList):
-                        fragManager.beginTransaction().hide(active).hide(mapFragment).commit();
-                        return true;
+                        if(fragManager.getBackStackEntryCount() > 0){
+                            fragManager.popBackStack();
+                            fragManager.beginTransaction().hide(active).hide(fragment).commit();
+
+                            //Reset the toolbar sub tittle (would apply to the case in which
+                            //the coordinates are clicked and it is changed to "location")
+                            ActionBar detailsBar = getSupportActionBar();
+                            detailsBar.setSubtitle(R.string.filter_tittle);
+                            return true;
+                        }
+                        return false;
 
                     case (R.id.navigation_map):
-                        fragManager.beginTransaction().hide(active).show(mapFragment).commit();
-                        return true;
+                        if(fragManager.getBackStackEntryCount() == 0){
+                            setUpMapOpen(getWindow().getDecorView().getRootView());
+                            fragManager.beginTransaction().hide(active).show(fragment).commit();
+                            return true;
+                        }
+                        return false;
                 }
                 return false;
             }
@@ -184,12 +241,14 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
         double MDPI_SCREEN_SIZE = 1.0;
         if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
-            setContentView(R.layout.activity_restaurant_list_custom);
+            setContentView(R.layout.activity_restaurant_list_custom); //NEXUS S Specific
         } else if(width == 1440 && height == 2560) {
             setContentView(R.layout.activity_restaurant_list_custom_one);
         } else{
             setContentView(R.layout.activity_restaurant_list);
         }
+
+        getWindow().getDecorView().setBackgroundColor(Color.parseColor("#252525"));
     }
 
     @Override
@@ -222,7 +281,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                     public void run() {
                         setUpMapOpen(getWindow().getDecorView().getRootView());
                     }
-                }, 3000);
+                    //Lengthened for accommodation of slower processes
+                }, 4500);
             }
         } else{
             Log.i("lengthened_launch", "Map is launching as default screen for the first time");
@@ -232,7 +292,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                 public void run() {
                     setUpMapOpen(getWindow().getDecorView().getRootView());
                 }
-            }, 3000);
+            }, 4500);
         }
     }
 

@@ -13,14 +13,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -82,11 +90,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private static final String LONG = "long";
     private static final String COORDLAUNCH = "coordinate_launch";
     private static final String RINDEX = "restaurant_index";
+    private EditText searchText;
 
     //By default the recentering is enabled, however, once an action such as a forceful movement of the screen
     //is imposed, then will be set to false until the map recenter button is clicked
     private boolean recenterEnabled = true;
-    private EditText mSearchText;
+    //private EditText mSearchText;
 
     // TODO: Rename and change types of parameters
 
@@ -116,7 +125,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private SupportMapFragment mapFragment;
     private OnFragmentInteractionListener mListener;
 
-    private  List<RestaurantMarkerCluster> markers = new ArrayList<>();
+    //Retains all markers such that no data is lost
+    private List<RestaurantMarkerCluster> markersFull;
+    private List<RestaurantMarkerCluster> markers = new ArrayList<>();
     private ClusterManager<RestaurantMarkerCluster> clusterManager;
 
     private static final float ZOOM_AMNT = 17f;
@@ -166,7 +177,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
     }
 
-    // add this as well
     private void makeMarkerTextClickable() {
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -203,7 +213,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //Indicates to the fragment that a toolbar is in effect (used so that searches can be made
+        //for the map)
+        setHasOptionsMenu(true);
         //Prevents orientation in fragments
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -243,7 +255,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public boolean onClusterClick(Cluster<RestaurantMarkerCluster> cluster) {
 
-        if (cluster == null) {return false;};
+        if (cluster == null) {return false;}
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (RestaurantMarkerCluster restaurant : cluster.getItems())
             builder.include(restaurant.getPosition());
@@ -256,6 +268,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         return true;
     }
 
+
     @Override
     public boolean onClusterItemClick(RestaurantMarkerCluster restaurantMarkerCluster) {
         Log.e("Cluster", "Clicked!");
@@ -266,7 +279,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-
         //Getting a map into the fragment
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
@@ -282,14 +294,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         return view;
     }
 
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -325,9 +336,56 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     }
 
     @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+
+        //Not inflated in fragment as it retains the life cycle of its parent which already
+        //inflates;
+        super.onPrepareOptionsMenu(menu);
+
+        //Just getting access to the options menu to process the input for the maps
+        MenuItem searchItem = menu.findItem(R.id.filter_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        //Prevents automatic lock-on on search bar
+        searchView.setFocusable(false);
+        searchView.setIconifiedByDefault(false);
+        searchView.clearFocus();
+
+        //Listener for the text change in the search bar
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            //Note: For stability, maps are based on a submission basis
+            public boolean onQueryTextSubmit(String query) {
+                //Do nothing as programmed to procession on completion, however, hide the keyboard
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i("Map_searched", "map search completed, filter: " + newText);
+
+                //Clear up all items, and just add those that pertain to the filer
+                clusterManager.clearItems();
+                for(RestaurantMarkerCluster marker : markers){
+                    if(marker.getRestaurant().getName().toLowerCase().trim().contains(newText)){
+                        //Using full data set of markersFull to reference what should be added or removed
+                        clusterManager.addItem(marker);
+                    }
+                }
+                clusterManager.cluster();
+                map.setOnMarkerClickListener(clusterManager);
+                map.setInfoWindowAdapter(clusterManager.getMarkerManager());
+                map.setOnInfoWindowClickListener(clusterManager);
+                return false;
+            }
+        });
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
@@ -341,16 +399,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         manager = Manager.getInstance(getContext());
         List<Restaurant> restaurantList = manager.getRestaurantList();
-        setUpClusterManager(map);
+
 
         for(int i=0; i<restaurantList.size(); i++) {
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
-
-            clusterManager.getMarkerCollection();
-            coordinateTappedByUser(coordLaunch);
-            makeMarkerTextClickable();
-
         }
+        markersFull = new ArrayList<>(markers);
+
+        setUpClusterManager(map);
+        clusterManager.getMarkerCollection();
+        coordinateTappedByUser(coordLaunch);
+        makeMarkerTextClickable();
 
         //Once the map detects movement, the re-centering will be disabled
         map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
@@ -361,6 +420,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             }
         });
         map.setPadding(0,150,0,150);
+
     }
 
     private void placePeg(Restaurant restaurant, float zoom, int index) {
@@ -450,6 +510,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             Log.i("servicesClientException", "Security exception: " + e.getMessage());
         }
     }
+
 
     private void updateGPSPosition() {
 

@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_resList"
-        android:title="List"
+        android:title="@string/list_tittle"
         android:icon="@drawable/animated_restaurant_icon"/>
 
     <item
         android:id="@+id/navigation_map"
-        android:title="Map"
+        android:title="@string/map_tittle"
         android:icon="@drawable/googleg_standard_color_18"/>
 </menu>

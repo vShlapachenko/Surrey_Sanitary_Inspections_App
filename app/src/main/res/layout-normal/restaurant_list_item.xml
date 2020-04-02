@@ -9,16 +9,16 @@
 
     <TextView
         android:id="@+id/restaurantName"
-        android:layout_width="253dp"
-        android:layout_height="66dp"
+        android:layout_width="263dp"
+        android:layout_height="80dp"
         android:layout_marginStart="120dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-black"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,14 +40,13 @@
         android:id="@+id/inspectionDate"
         android:layout_width="95dp"
         android:layout_height="26dp"
-        android:layout_marginStart="172dp"
         android:layout_marginTop="128dp"
         android:fontFamily="serif"
         android:paddingBottom="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dateText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -64,8 +63,8 @@
 
     <TextView
         android:id="@+id/dateText"
-        android:layout_width="42dp"
-        android:layout_height="26dp"
+        android:layout_width="37dp"
+        android:layout_height="24dp"
         android:layout_marginStart="136dp"
         android:layout_marginTop="128dp"
         android:fontFamily="serif"
@@ -81,32 +80,31 @@
         android:id="@+id/numCritIssues"
         android:layout_width="84dp"
         android:layout_height="20dp"
-        android:layout_marginStart="272dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="146dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/critText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/numNonCritIssues"
         android:layout_width="75dp"
         android:layout_height="24dp"
-        android:layout_marginStart="300dp"
         android:layout_marginTop="164dp"
         android:fontFamily="serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/nonCritText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/nonCritText"
-        android:layout_width="167dp"
-        android:layout_height="19dp"
+        android:layout_width="169dp"
+        android:layout_height="25dp"
         android:layout_marginStart="136dp"
         android:layout_marginTop="164dp"
         android:fontFamily="serif"
