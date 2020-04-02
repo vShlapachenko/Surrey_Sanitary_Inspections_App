@@ -6,6 +6,11 @@
         android:icon="@drawable/animated_restaurant_icon"/>
 
     <item
+        android:id="@+id/options"
+        android:title="@string/options_tittle"
+        android:icon="@drawable/options_icon"/>
+
+    <item
         android:id="@+id/navigation_map"
         android:title="@string/map_tittle"
         android:icon="@drawable/googleg_standard_color_18"/>

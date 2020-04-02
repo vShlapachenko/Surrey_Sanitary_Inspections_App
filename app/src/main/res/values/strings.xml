@@ -124,4 +124,5 @@
     <string name="list_tittle">List</string>
     <string name="map_tittle">Map</string>
     <string name="restaurant_hint">Enter a Restaurant Name</string>
+    <string name="options_tittle">Options</string>
 </resources>

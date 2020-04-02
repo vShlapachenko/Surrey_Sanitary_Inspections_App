@@ -124,4 +124,5 @@
     <string name="list_tittle">список</string>
     <string name="map_tittle">карта</string>
     <string name="restaurant_hint">Введите название ресторана</string>
+    <string name="options_tittle">вариант</string>
 </resources>
