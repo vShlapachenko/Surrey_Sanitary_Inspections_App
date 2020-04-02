@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -243,6 +244,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         } else{
             setContentView(R.layout.activity_restaurant_list);
         }
+
+        getWindow().getDecorView().setBackgroundColor(Color.parseColor("#252525"));
     }
 
     @Override
