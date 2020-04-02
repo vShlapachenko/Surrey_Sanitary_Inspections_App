@@ -16,8 +16,8 @@
     <string name="inspectionHistoryText">Historique d\'inspection:</string>
     <string name="borderDescription">séparateur de liste du texte</string>
     <string name="inspection_text">Inspection</string>
-    <string name="crit_text"># Problèmes critiques trouvés:</string>
-    <string name="nonCrit_text"># Problèmes non critiques trouvés:</string>
+    <string name="crit_text"># critiques trouvés:</string>
+    <string name="nonCrit_text"># problèmes non critiques:</string>
     <string name="date_text">Date:</string>
     <string name="hazardIconDescription">Affiche le niveau de danger actuel</string>
     <string name="no_inspection_text">Aucune inspection disponible</string>

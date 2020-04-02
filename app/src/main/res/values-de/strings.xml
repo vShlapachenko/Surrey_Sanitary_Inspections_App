@@ -16,8 +16,8 @@
     <string name="inspectionHistoryText">Inspektionsverlauf:</string>
     <string name="borderDescription">Trennzeichen der Liste vom Text</string>
     <string name="inspection_text">Inspektion</string>
-    <string name="crit_text"># Kritische Probleme gefunden:</string>
-    <string name="nonCrit_text"># Nicht kritische Probleme gefunden:</string>
+    <string name="crit_text"># Kritische Probleme:</string>
+    <string name="nonCrit_text"># Nicht kritische Probleme:</string>
     <string name="date_text">Datum:</string>
     <string name="hazardIconDescription">Zeigt die aktuelle Gefahrenstufe an</string>
     <string name="no_inspection_text">Keine Inspektionen verfügbar</string>
@@ -123,5 +123,5 @@
     <string name="filter_tittle">Filter:</string>
     <string name="list_tittle">Aufführen</string>
     <string name="map_tittle">Karte</string>
-    <string name="restaurant_hint">Geben Sie einen Restaurantnamen ein</string>
+    <string name="restaurant_hint">Restaurant betreten</string>
 </resources>
