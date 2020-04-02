@@ -183,7 +183,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     }
 
     private void setUpBackButton(){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setUpNavigationBar() {
