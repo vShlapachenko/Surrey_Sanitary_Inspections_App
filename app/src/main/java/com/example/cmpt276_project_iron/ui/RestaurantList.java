@@ -183,7 +183,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     }
 
     private void setUpBackButton(){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     private void setUpNavigationBar() {
@@ -276,7 +276,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                         setUpMapOpen(getWindow().getDecorView().getRootView());
                     }
                     //Lengthened for accommodation of slower processes
-                }, 4000);
+                }, 4500);
             }
         } else{
             Log.i("lengthened_launch", "Map is launching as default screen for the first time");
@@ -286,7 +286,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                 public void run() {
                     setUpMapOpen(getWindow().getDecorView().getRootView());
                 }
-            }, 4000);
+            }, 4500);
         }
     }
 
