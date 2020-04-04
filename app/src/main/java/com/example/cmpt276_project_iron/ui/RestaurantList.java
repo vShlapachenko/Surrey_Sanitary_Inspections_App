@@ -109,10 +109,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                 Log.i("restaurant_filtered", "restaurant list filtered via search, filter: " + newText);
                 //Get filtered results using the logic defined in the RestaurantListAdapter.java
                 adapter.getFilter().filter(newText);
-
-                if (newText.isEmpty()) {
-                    searchView.clearFocus();
-                }
                 return false;
             }
         });
