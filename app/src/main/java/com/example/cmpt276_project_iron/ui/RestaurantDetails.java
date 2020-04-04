@@ -135,7 +135,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     v.getContext().startActivity(intent);
 
-                    //finish();
+                    finish();
 
                     /*MapFragment fragment = MapFragment.newInstance(curRestaurant.getLatitude(),
                             curRestaurant.getLongitude(), true, restaurantIndex);*/

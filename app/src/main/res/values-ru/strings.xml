@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CMPT276_Project_Iron</string>
+    <string name="inspection_report">Отчет о проверке</string>
+    <string name="date_of_inspection">Дата осмотра:</string>
+    <string name="critical_issues_inspection">Критические проблемы:</string>
+    <string name="hazard_level">Уровень опасности:</string>
+    <string name="inspections">#осмотры</string>
+    <string name="crticalissues"># Критические проблемы</string>
+    <string name="hazard">опасность</string>
+    <string name="non_critical_issues">Некритические проблемы:</string>
+    <string name="noncrit"># Без крита</string>
+    <string name="restaurantIconDescription">представляет значок ресторана</string>
+    <string name="address_text">Адрес:</string>
+    <string name="coordinates_text">Координаты:</string>
+    <string name="inspectionHistoryText">История проверок:</string>
+    <string name="borderDescription">разделитель списка от текста</string>
+    <string name="inspection_text">осмотр</string>
+    <string name="crit_text"># критический:</string>
+    <string name="nonCrit_text"># некритическое число:</string>
+    <string name="date_text">Дата:</string>
+    <string name="hazardIconDescription">отображает текущий уровень опасности</string>
+    <string name="no_inspection_text">Нет доступных проверок</string>
+    <string name="no_violation_text">Нарушения отсутствуют</string>
+    <string name="restaurantExtension">Детали ресторана</string>
+    <string name="days_text"> дней</string>
+    <string-array name="months">
+        <item>Январь</item>
+        <item>февраль</item>
+        <item>март</item>
+        <item>апрель</item>
+        <item>Май</item>
+        <item>июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>сентябрь</item>
+        <item>Октябрь</item>
+        <item>ноября</item>
+        <item>Декабрь</item>
+    </string-array>
+    <string name="inspection_date">%1s %2s</string>
+    <string name="inspection_date_full">%1s %2d, %3d</string>
+    <string name="more_info_text">(больше информации)</string>
+    <string name="violation101">Строительство не разрешено</string>
+    <string name="violation102">Неутвержденные помещения работают</string>
+    <string name="violation103">Отсутствие действительного разрешения</string>
+    <string name="violation104">Разрешение трудно найти</string>
+    <string name="violation201">Испорченная еда</string>
+    <string name="violation202">Пища не обработана правильно</string>
+    <string name="violation203">Пищевое охлаждение нарушено</string>
+    <string name="violation204">Процесс приготовления / разогрева небезопасен</string>
+    <string name="violation205">Холодная пища хранится при температуре выше 4 ° C</string>
+    <string name="violation206">Горячая пища хранится при температуре ниже 60 ° C</string>
+    <string name="violation208">Источник пищи не утвержден</string>
+    <string name="violation209">Пища не защищена</string>
+    <string name="violation210">Талая процесс нарушен</string>
+    <string name="violation211">Замороженные продукты хранятся при температуре выше -18 ° C</string>
+    <string name="violation212">Письменная форма отсутствует</string>
+    <string name="violation301">Санитарное состояние не поддерживается</string>
+    <string name="violation302">Не правильно вымыто / продезинфицировано</string>
+    <string name="violation303">Нет ресурсов для санитарного обслуживания</string>
+    <string name="violation304">вредители</string>
+    <string name="violation305">Состояние соблюдается недопустимо</string>
+    <string name="violation306">Пищевые помещения не поддерживаются</string>
+    <string name="violation307">Дизайн / материал не подходит</string>
+    <string name="violation308">Не хороший рабочий порядок</string>
+    <string name="violation309">Химические вещества хранятся неправильно</string>
+    <string name="violation310">Предметы одноразового использования, использованные более одного раза</string>
+    <string name="violation311">Техническое обслуживание не соответствует планам</string>
+    <string name="violation312">Неправильный товар хранится в помещении</string>
+    <string name="violation313">Живое животное в помещениях</string>
+    <string name="violation314">Нет письменных санитарных процедур</string>
+    <string name="violation315">Отсутствие точных термометров</string>
+    <string name="violation401">Нет адекватных станций для мытья рук</string>
+    <string name="violation402">Сотрудник не моет руки должным образом</string>
+    <string name="violation403">Сотруднику не хватает личной гигиены</string>
+    <string name="violation404">Сотрудник курит рядом с едой</string>
+    <string name="violation501">Оператору не хватает FOODSAFE уровня 1</string>
+    <string name="violation502">Сотруднику не хватает FOODSAFE уровня 1</string>
+    <string name="summary">Резюме</string>
+    <string name="no_violations">Нарушений нет</string>
+    <string name="no_restaurants_text">Рестораны не найдены. Пожалуйста, попробуйте снова...</string>
+    <string name="restaurant_list_title">ресторан</string>
+    <string name="recent_inspection_text">Самая последняя проверка:</string>
+    <string name="not_applicable_text">N/A</string>
+    <string name="restaurant_address">%1s, %2s, BC, Canada</string>
+    <string name="restaurant_coordinates">&lt;u>%1f, %2f&lt;/u></string>
+    <string name="inspection_detail_title">Детали осмотра</string>
+    <string name="no_violations_available">Нарушения отсутствуют</string>
+    <string name="violation_header">Тип нарушения</string>
+    <string name="summary_header">Резюме</string>
+    <string name="hazard_header">Уровень опасности</string>
+    <string-array name="custom_icon_restaurants">
+        <item>McDonald</item>
+        <item>Freshslice</item>
+        <item>Subway</item>
+        <item>Panago</item>
+        <item>Starbucks</item>
+        <item>Blenz</item>
+        <item>Tim Hortons</item>
+        <item>Booster Juice</item>
+        <item>Freshii</item>
+        <item>KFC</item>
+    </string-array>
+    <string name="initial_boot_title">Начальная загрузка</string>
+    <string name="title_activity_maps_framework">карта</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Уведомления</string>
+    <string name="hazard_not_found_message">Уровень опасности не найден</string>
+
+
+    <string name="data_download_inquire">Вы хотите загрузить данные?</string>
+    <string name="yes_positive">ДА</string>
+    <string name="negative_update">ОБНОВЛЕНИЕ СЛЕДУЮЩЕЕ ВРЕМЯ</string>
+    <string name="cancel">отменить</string>
+    <string name="magnifier_description">лупа для панели поиска</string>
+    <string name="searchBar_hint">Введите название ресторана</string>
+    <string name="search_tittle">Поиск</string>
+    <string name="filter_tittle">Фильтр:</string>
+    <string name="list_tittle">список</string>
+    <string name="map_tittle">карта</string>
+    <string name="restaurant_hint">Введите название ресторана</string>
+    <string name="options_tittle">вариант</string>
+</resources>
