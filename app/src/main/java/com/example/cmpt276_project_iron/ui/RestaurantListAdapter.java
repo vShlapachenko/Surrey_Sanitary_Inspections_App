@@ -61,6 +61,10 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
         double MDPI_SCREEN_SIZE = 1.0;
 
+
+        //this was done by previous member of our team ajbrown
+        //width == x && height == y should have been constants, so they would be clear to everyone
+        //but it is unclear to us what 400 && 800 means so our team desided to leave it as it is
         if (width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
             return new ViewHolder(LayoutInflater.from(context)
                     .inflate(R.layout.restaurant_list_item_custom, parent, false));
