@@ -1,7 +1,5 @@
 package com.example.cmpt276_project_iron.model;
 
-import java.io.Serializable;
-
 /**
  * Restaurant (immutable) object with all getters
  */
@@ -14,6 +12,7 @@ public class Restaurant implements Comparable<Restaurant> {
     private final String facType;
     private final double latitude;
     private final double longitude;
+    private boolean favourite = false;
 
     public Restaurant(String trackingNumber, String name, String physicalAddress, String physicalCity,
                       String facType, double latitude, double longitude) {
@@ -24,6 +23,14 @@ public class Restaurant implements Comparable<Restaurant> {
         this.facType = facType;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
     }
 
     public String getTrackingNumber() {
