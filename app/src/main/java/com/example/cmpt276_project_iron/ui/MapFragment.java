@@ -379,9 +379,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 map.setInfoWindowAdapter(clusterManager.getMarkerManager());
                 map.setOnInfoWindowClickListener(clusterManager);
 
-                if(newText.isEmpty()){
-                    searchView.clearFocus();
-                }
                 return false;
             }
         });
