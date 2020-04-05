@@ -15,9 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +72,12 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         ActionBar detailsBar = getSupportActionBar();
         detailsBar.setSubtitle("Filter: ");
@@ -95,6 +99,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Do nothing as programmed to complete in real time, however, hide keyboard
+
                 searchView.clearFocus();
                 return true;
             }
@@ -199,7 +204,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case (R.id.navigation_resList):
-                        if(fragManager.getBackStackEntryCount() > 0){
+                        if (fragManager.getBackStackEntryCount() > 0) {
                             fragManager.popBackStack();
                             fragManager.beginTransaction().hide(active).hide(fragment).commit();
 
@@ -212,7 +217,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                         return false;
 
                     case (R.id.navigation_map):
-                        if(fragManager.getBackStackEntryCount() == 0){
+                        if (fragManager.getBackStackEntryCount() == 0) {
                             setUpMapOpen(getWindow().getDecorView().getRootView());
                             fragManager.beginTransaction().hide(active).show(fragment).commit();
                             return true;
