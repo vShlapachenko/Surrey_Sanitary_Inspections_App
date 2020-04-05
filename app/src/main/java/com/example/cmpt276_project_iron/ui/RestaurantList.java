@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -74,6 +73,12 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Fixes bug with invalid service permissions resulting in map related exceptions
         safeLaunchMap();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -208,7 +213,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case (R.id.navigation_resList):
-                        if(fragManager.getBackStackEntryCount() > 0){
+                        if (fragManager.getBackStackEntryCount() > 0) {
                             fragManager.popBackStack();
                             fragManager.beginTransaction().hide(active).hide(fragment).commit();
 
@@ -222,7 +227,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                         return false;
 
                     case (R.id.navigation_map):
-                        if(fragManager.getBackStackEntryCount() == 0){
+                        if (fragManager.getBackStackEntryCount() == 0) {
                             setUpMapOpen(getWindow().getDecorView().getRootView());
                             fragManager.beginTransaction().hide(active).show(fragment).commit();
                             return true;
