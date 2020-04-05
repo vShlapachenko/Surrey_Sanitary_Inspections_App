@@ -119,5 +119,19 @@
     <string name="magnifier_description">magnifier for search bar</string>
     <string name="searchBar_hint">Enter Restaurant Name</string>
     <string name="search_tittle">Search</string>
+    <string name="search_options">Search Options</string>
+    <string name="favourites">Favourites</string>
+    <string name="low">Low</string>
+    <string name="moderate">Moderate</string>
+    <string name="high">High</string>
+    <string name="all">All</string>
+    <string name="number_of_critical_issues">Number of critical issues</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="no_favourites">No favourites</string>
+    <string name="greater_then_or_equal_to">Greater then or equal to</string>
+    <string name="less_then_or_equal_to">Less then or equal to</string>
+    <string name="greater_then_or_equal_to_crtical_issues">Greater then or equal to crtical issues</string>
+    <string name="less_then_or_equal_to_critical_issues">Less then or equal to critical issues</string>
+    <string name="greater_then_or_equal_to_critical_issues">Greater then or equal to critical issues</string>
 
 </resources>

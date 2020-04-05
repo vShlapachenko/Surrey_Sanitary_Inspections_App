@@ -18,6 +18,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -67,6 +68,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //check if the necessary services are already provided, then launch instantly
         //Fixes bug with invalid service permissions resulting in map related exceptions
         safeLaunchMap();
+//        setActionBar();
 
     }
 
@@ -74,6 +76,12 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     public boolean onCreateOptionsMenu(Menu menu) {
         ActionBar detailsBar = getSupportActionBar();
         detailsBar.setSubtitle("Filter: ");
+
+
+//        getSupportActionBar().setHomeAsUpIndicator(int restID / drawable d);
+
+
+
         MenuInflater inflater = getMenuInflater();
         //Setting search bar in place of provided menu
         inflater.inflate(R.menu.filter_menu, menu);
@@ -330,5 +338,15 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     public void onPointerCaptureChanged(boolean hasCapture) {
         //Do nothing
     }
+
+//    public void setActionBar() {
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.options_icon);
+//        @Override
+//        public boolean onOptionsItemSelected(MenuItem item) {
+//            //Back button of toolbar clicked
+//            if (item.getItemId() == android.R.id.home) {
+//
+//            }
+//    }
 
 }

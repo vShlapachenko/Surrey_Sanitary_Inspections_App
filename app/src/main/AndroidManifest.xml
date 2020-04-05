@@ -27,6 +27,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".FilterOptions">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -49,16 +57,18 @@
             android:name=".ui.InitialBoot"
             android:label="@string/initial_boot_title"
             android:parentActivityName=".ui.InitialBoot">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".ui.RestaurantList"
-            android:label="" 
-            android:parentActivityName=".ui.InitialBoot">
-        </activity>
+            android:label=""
+            android:parentActivityName=".ui.InitialBoot" />
         <activity
             android:name=".ui.RestaurantDetails"
             android:parentActivityName=".ui.RestaurantList" />
