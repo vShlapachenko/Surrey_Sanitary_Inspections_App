@@ -6,15 +6,14 @@ public class FilterSettings {
     private Boolean isFavourite;
     private Boolean isGreaterThenInput;
     private Boolean isLowerThenInput;
-    private int criticlIssues;
+    private int criticalIssues;
 
     public FilterSettings() {
         this.hazLevel = "all";
         this.isFavourite = false;
         this.isGreaterThenInput = false;
         this.isLowerThenInput = false;
-        this.criticlIssues = -1;
-
+        this.criticalIssues = -1;
     }
 
     public static FilterSettings getInstance() {
@@ -60,12 +59,12 @@ public class FilterSettings {
         isLowerThenInput = lowerThenInput;
     }
 
-    public int getInput() {
-        return criticlIssues;
+    public int getCriticalIssues() {
+        return criticalIssues;
     }
 
-    public void setInput(int input) {
-        this.criticlIssues = input;
+    public void setCriticalIssues(int input) {
+        this.criticalIssues = input;
     }
 
     public FilterSettings(String hazLevel, Boolean isFavourite, Boolean isGreaterThenInput, Boolean isLowerThenInput, int input) {
@@ -73,7 +72,7 @@ public class FilterSettings {
         this.isFavourite = isFavourite;
         this.isGreaterThenInput = isGreaterThenInput;
         this.isLowerThenInput = isLowerThenInput;
-        this.criticlIssues = input;
+        this.criticalIssues = input;
     }
 }
 

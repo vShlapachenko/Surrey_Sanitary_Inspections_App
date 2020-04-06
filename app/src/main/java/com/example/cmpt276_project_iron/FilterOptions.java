@@ -48,20 +48,28 @@ public class FilterOptions extends AppCompatActivity {
 
                 hazardButton = findViewById(hazId);
 
-                settings.setHazLevel(hazardButton.getText().toString());
+                if(hazardButton != null) {
+
+                    settings.setHazLevel(hazardButton.getText().toString());
+                }
 
                 int favId = favouriteGroup.getCheckedRadioButtonId();
                 favouriteButton = findViewById(favId);
 
-                setFavourite(favouriteButton);
+                if(favouriteButton != null) {
+                    setFavourite(favouriteButton);
+                }
 
                 int rangeId = rangeGroup.getCheckedRadioButtonId();
                 rangeButton = findViewById(rangeId);
 
-                setRange(rangeButton);
+                if(rangeButton != null) {
+                    setRange(rangeButton);
+                }
 
                 int criticalIssuesSelected = getCriticalIssuesNumber();
 
+                Log.e("issues", criticalIssuesSelected + "");
                 setCriticalIssues(criticalIssuesSelected);
 
                 finish();
@@ -71,7 +79,7 @@ public class FilterOptions extends AppCompatActivity {
     }
 
     private void setCriticalIssues(int criticalIssuesSelected) {
-        settings.setInput(criticalIssuesSelected);
+        settings.setCriticalIssues(criticalIssuesSelected);
     }
 
     private void setRange(RadioButton rangeButton) {
@@ -97,7 +105,12 @@ public class FilterOptions extends AppCompatActivity {
     private int getCriticalIssuesNumber() {
         EditText criticalIssues = findViewById(R.id.get_crit_issue_num);
 
-        return Integer.parseInt(criticalIssues.getText().toString());
+        if(criticalIssues.getText().toString().equals("")) {
+            return settings.getCriticalIssues();
+        }
+        else {
+            return Integer.parseInt(criticalIssues.getText().toString());
+        }
 
     }
 
