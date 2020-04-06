@@ -125,7 +125,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private SupportMapFragment mapFragment;
     private OnFragmentInteractionListener mListener;
 
-    private  List<RestaurantMarkerCluster> markers = new ArrayList<>();
+    //Retains all markers such that no data is lost
+    private List<RestaurantMarkerCluster> markersFull;
+    private List<RestaurantMarkerCluster> markers = new ArrayList<>();
     private ClusterManager<RestaurantMarkerCluster> clusterManager;
 
     private static final float ZOOM_AMNT = 17f;
@@ -253,7 +255,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public boolean onClusterClick(Cluster<RestaurantMarkerCluster> cluster) {
 
-        if (cluster == null) {return false;};
+        if (cluster == null) {return false;}
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (RestaurantMarkerCluster restaurant : cluster.getItems())
             builder.include(restaurant.getPosition());
@@ -292,33 +294,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         return view;
     }
 
-    //Note*: The following two methods are for a distinct search bar in the map itself, however,
-    //now the toolbar search bar is used for both
-
-    /*@Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //Since using a fragment, view's can only be attained once the actual view is created (note:
-        //cannot place in onCreate)
-        searchText = view.findViewById(R.id.search_input);
-    }*/
-
-    private void processSearch(){
-        //Before processing the actual input, override the keyboard 'search' button
-        /*searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
-                        || event.getAction() == KeyEvent.ACTION_DOWN ||
-                        event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    //Process the actual input search
-                    String search = searchText.getText().toString();
-
-                }
-                return false;
-            }
-        });*/
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -378,26 +353,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         //Listener for the text change in the search bar
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             //Note: For stability, maps are based on a submission basis
             public boolean onQueryTextSubmit(String query) {
-                Log.i("Map_searched", "map search completed, filter: " + query);
-                //Get filtered results using the logic defined in the RestaurantListAdapter.java
-
-                //On submission, process the input and based on it, set the visibility of the markers
-                //-->> Alter the visibility of the markers
-                //NOTE: Would have to make non-applicable visible as well
-
-                //adapter.getFilter().filter(newText);
-                /*
-                 * Check if viable to use onQueryTextChange
-                 */
-                return false;
+                //Do nothing as programmed to procession on completion, however, hide the keyboard
+                searchView.clearFocus();
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Do nothing as programmed to procession on completion
+                Log.i("Map_searched", "map search completed, filter: " + newText);
+
+                //Clear up all items, and just add those that pertain to the filer
+                clusterManager.clearItems();
+                for(RestaurantMarkerCluster marker : markers){
+                    if(marker.getRestaurant().getName().toLowerCase().trim().contains(newText)){
+                        //Using full data set of markersFull to reference what should be added or removed
+                        clusterManager.addItem(marker);
+                    }
+                }
+                clusterManager.cluster();
+                map.setOnMarkerClickListener(clusterManager);
+                map.setInfoWindowAdapter(clusterManager.getMarkerManager());
+                map.setOnInfoWindowClickListener(clusterManager);
                 return false;
             }
         });
@@ -424,6 +404,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         for(int i=0; i<restaurantList.size(); i++) {
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
         }
+        markersFull = new ArrayList<>(markers);
+
         setUpClusterManager(map);
         clusterManager.getMarkerCollection();
         coordinateTappedByUser(coordLaunch);
@@ -439,7 +421,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         });
         map.setPadding(0,150,0,150);
 
-        processSearch();
     }
 
     private void placePeg(Restaurant restaurant, float zoom, int index) {

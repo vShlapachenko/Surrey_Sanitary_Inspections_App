@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorTint"
     tools:context=".FilterOptions">
 
 
@@ -25,12 +26,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="getInputFavourite"
-            android:text="@string/no_favourites" />
+            android:text="@string/no_favourites"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"/>
 
         <RadioButton
             android:id="@+id/favourites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"
             android:text="@string/favourites" />
 
 
@@ -46,13 +51,16 @@
         app:layout_constraintHorizontal_bias="0.116"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.303">
+        app:layout_constraintVertical_bias="0.303"
+        >
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="getInputFavourite"
             android:text="@string/low"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.053"
@@ -66,6 +74,8 @@
             android:layout_height="wrap_content"
             android:onClick="getInputHazard"
             android:text="@string/moderate"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.059"
@@ -78,6 +88,8 @@
             android:layout_height="wrap_content"
             android:onClick="getInputHazard"
             android:text="@string/high"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.053"
@@ -91,6 +103,8 @@
             android:layout_height="wrap_content"
             android:onClick="getInputHazard"
             android:text="@string/all"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.052"
@@ -125,15 +139,18 @@
         android:layout_below="@+id/hazardGroup"
         android:layout_alignStart="@+id/save"
         android:layout_marginBottom="184dp"
+        android:backgroundTint="@color/white"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/number_of_critical_issues"
+        android:inputType="textPersonName"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintHorizontal_bias="0.237"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.942" />
+        app:layout_constraintVertical_bias="0.954" />
 
     <RadioGroup
         android:id="@+id/range"
@@ -151,6 +168,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="findRange"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"
             android:text="@string/greater_then_or_equal_to_critical_issues" />
 
         <RadioButton
@@ -158,8 +177,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="findRange"
+            android:textColor="@color/white"
+            android:buttonTint="@color/white"
             android:text="@string/less_then_or_equal_to_critical_issues" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/search_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_options"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.127"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.049" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

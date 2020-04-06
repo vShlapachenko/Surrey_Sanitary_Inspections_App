@@ -134,4 +134,9 @@
     <string name="less_then_or_equal_to_critical_issues">Less then or equal to critical issues</string>
     <string name="greater_then_or_equal_to_critical_issues">Greater then or equal to critical issues</string>
 
+    <string name="filter_tittle">Filter:</string>
+    <string name="list_tittle">List</string>
+    <string name="map_tittle">Map</string>
+    <string name="restaurant_hint">Enter a Restaurant Name</string>
+    <string name="options_tittle">Options</string>
 </resources>

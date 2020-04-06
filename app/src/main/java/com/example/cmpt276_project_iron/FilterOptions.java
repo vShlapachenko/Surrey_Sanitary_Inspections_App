@@ -1,9 +1,11 @@
 package com.example.cmpt276_project_iron;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,10 +31,14 @@ public class FilterOptions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_options);
 
+        settings = FilterSettings.getInstance();
+
+        EditText criticalIssues = findViewById(R.id.get_crit_issue_num);
+        criticalIssues.setTextColor(Color.WHITE);
+
         hazardButtons();
         favouriteButton();
         getRange();
-        settings = FilterSettings.getInstance();
 
         Button apply = findViewById(R.id.save);
         apply.setOnClickListener(new View.OnClickListener() {
@@ -43,8 +49,6 @@ public class FilterOptions extends AppCompatActivity {
                 hazardButton = findViewById(hazId);
 
                 settings.setHazLevel(hazardButton.getText().toString());
-
-                Log.e("Input", "" + hazardButton.getText());
 
                 int favId = favouriteGroup.getCheckedRadioButtonId();
                 favouriteButton = findViewById(favId);
@@ -60,9 +64,7 @@ public class FilterOptions extends AppCompatActivity {
 
                 setCriticalIssues(criticalIssuesSelected);
 
-                Log.e("Input", "" + favouriteButton.getText());
-                Log.e("Input", "" + rangeButton.getText());
-                Log.e("edit text is ", "" + criticalIssuesSelected);
+                finish();
             }
         });
 
@@ -117,13 +119,12 @@ public class FilterOptions extends AppCompatActivity {
         int radioId = hazardGroup.getCheckedRadioButtonId();
 
         hazardButton = findViewById(radioId);
-//        Log.e("Input", "" + radioButton.getText());
+
     }
     public void getInputFavourite(View v) {
         int radioId = favouriteGroup.getCheckedRadioButtonId();
 
         favouriteButton = findViewById(radioId);
-//        Log.e("Input", "" + radioButton.getText());
     }
     private void getRange() {
         rangeGroup = findViewById(R.id.range);

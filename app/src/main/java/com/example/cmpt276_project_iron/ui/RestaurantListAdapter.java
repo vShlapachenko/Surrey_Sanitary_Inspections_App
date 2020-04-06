@@ -3,10 +3,13 @@ package com.example.cmpt276_project_iron.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -47,6 +50,26 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //Depending on case, may return a custom one (Ex Nexus S)
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display dimensions = wm.getDefaultDisplay();
+        Point dimension = new Point();
+        dimensions.getSize(dimension);
+        int width = dimension.x;
+        int height = dimension.y;
+        float density = context.getResources().getDisplayMetrics().density;
+        //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
+        double MDPI_SCREEN_SIZE = 1.0;
+
+
+        //this was done by previous member of our team ajbrown
+        //width == x && height == y should have been constants, so they would be clear to everyone
+        //but it is unclear to us what 400 && 800 means so our team desided to leave it as it is
+        if (width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
+            return new ViewHolder(LayoutInflater.from(context)
+                    .inflate(R.layout.restaurant_list_item_custom, parent, false));
+        }
         return new ViewHolder(LayoutInflater.from(context)
                 .inflate(R.layout.restaurant_list_item, parent, false));
     }
@@ -87,6 +110,8 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
         viewHolder.nonCritIssues.setText(context.getString(R.string.not_applicable_text));
 
+        setFavourite(restaurant.isFavourite(), viewHolder.favouriteIcon);
+
         viewHolder.inspectionDate.setText(context.getString(R.string.not_applicable_text));
 
         initializeRestaurantIconImage(restaurant, viewHolder.restaurantIcon);
@@ -97,6 +122,8 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
     private void initializeLayoutWithInspection(Restaurant restaurant, ViewHolder viewHolder) {
         Inspection recentInspection = manager.getInspectionMap().get(restaurant.getTrackingNumber()).get(0);
+
+        setFavourite(restaurant.isFavourite(), viewHolder.favouriteIcon);
 
         viewHolder.critIssues.setText(String.valueOf(recentInspection.getNumCritical()));
 
@@ -110,6 +137,14 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
         initializeHazardIcon(recentInspection.getHazardLevel(), viewHolder.hazardIcon);
 
+    }
+
+    private void setFavourite(boolean favourite, ImageView favouriteIcon) {
+        if (favourite) {
+            favouriteIcon.setImageResource(R.drawable.ic_star_black_24dp);
+        } else {
+            favouriteIcon.setImageResource(R.drawable.ic_star_border_black_24dp);
+        }
     }
 
 
@@ -185,23 +220,25 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
             //If the specified filter (constraint, based on search bar) is empty then we want to show the full
             //set of results
-            if (constraint == null || constraint.length() == 0){
-               filteredRestaurantList.addAll(completeRestaurants);
+            if (constraint == null || constraint.length() == 0) {
+                filteredRestaurantList.addAll(completeRestaurants);
             }
             //In the other case, if there was a specification made by the user
-            else{
+            else {
                 //filter specification == user's filter specification
                 String filterSpecification = constraint.toString().toLowerCase().trim();
 
                 //Iterate through our complete restaurant list to check which ones meet this specification
                 //Current filter: based on restaurant name in regards to .contains()
-                for(Restaurant restaurant : completeRestaurants){
+                for (Restaurant restaurant : completeRestaurants) {
                     /**
                      * ADD ANY OTHER NECESSARY FILTERS HERE, HOWEVER, NEED TO KNOW WHAT OPTIONS WERE TOGGLED
-                     * USE ->> SHARED PREFERENCES
+                     * USE ->> SHARED PREFERENCES (NOTE: THIS IS FOR THE RESTAURANT FILTER)
+                     *
+                     * FIND THE EQUIVALENT FUNCTION IN MAPFRAGMENT TO FILTER MAP RELATED MATERIAL
                      *
                      */
-                    if(restaurant.getName().toLowerCase().contains(filterSpecification)){
+                    if (restaurant.getName().toLowerCase().contains(filterSpecification)) {
                         //If the restaurant name contains the specified filter text then add it
                         //to the list of filtered restaurants
                         filteredRestaurantList.add(restaurant);
@@ -233,6 +270,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         private TextView inspectionDate;
         private ImageView restaurantIcon;
         private ImageView hazardIcon;
+        private ImageView favouriteIcon;
         private View parentView;
 
         public ViewHolder(@NonNull View parentView) {
@@ -244,6 +282,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             inspectionDate = parentView.findViewById(R.id.inspectionDate);
             restaurantIcon = parentView.findViewById(R.id.restaurantIcon);
             hazardIcon = parentView.findViewById(R.id.hazardIcon);
+            favouriteIcon = parentView.findViewById(R.id.favouriteImage);
         }
     }
 }

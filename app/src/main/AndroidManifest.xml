@@ -52,6 +52,7 @@
 
         <activity
             android:name=".ui.MapsFramework"
+            android:windowSoftInputMode="adjustNothing"
             android:label="@string/title_activity_maps_framework" />
         <activity
             android:name=".ui.InitialBoot"
@@ -67,8 +68,10 @@
         </activity>
         <activity
             android:name=".ui.RestaurantList"
+            android:windowSoftInputMode="adjustNothing"
             android:label=""
-            android:parentActivityName=".ui.InitialBoot" />
+            android:parentActivityName=".ui.InitialBoot">
+        </activity>
         <activity
             android:name=".ui.RestaurantDetails"
             android:parentActivityName=".ui.RestaurantList" />

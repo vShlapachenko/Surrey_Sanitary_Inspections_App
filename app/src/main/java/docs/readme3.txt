@@ -1,3 +1,6 @@
-Information for TA:
-* Searching on map
-    * For stability, when a search is made on the map, it must be entered before results are showcased
+Languages supported for internalization:
+    * English (Default)
+    * Spanish
+    * Russian
+    * French
+    * German

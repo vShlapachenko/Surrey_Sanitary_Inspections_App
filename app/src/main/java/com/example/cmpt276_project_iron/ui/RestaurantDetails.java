@@ -12,14 +12,12 @@ import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +29,7 @@ import com.example.cmpt276_project_iron.model.Restaurant;
 import java.util.List;
 
 /**
- *  Attains and sets the necessary information for the restaurant's details
+ * Attains and sets the necessary information for the restaurant's details
  */
 
 public class RestaurantDetails extends AppCompatActivity implements MapFragment.OnFragmentInteractionListener {
@@ -51,6 +49,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
         getIntentData();
         placeRestaurantNameText();
+        placeFavouriteIcon();
         placeRestaurantIcon();
         placeAddressText();
         placeGPScoords();
@@ -61,7 +60,24 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
     }
 
-    private void placeRestaurantNameText(){
+    private void placeFavouriteIcon() {
+        ImageView favouriteIcon = findViewById(R.id.restaurantDetailsFavouriteIcon);
+        setFavourite(curRestaurant.isFavourite(), favouriteIcon);
+        favouriteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (curRestaurant.isFavourite()) {
+                    curRestaurant.setFavourite(false);
+                    setFavourite(curRestaurant.isFavourite(), favouriteIcon);
+                } else {
+                    curRestaurant.setFavourite(true);
+                    setFavourite(curRestaurant.isFavourite(), favouriteIcon);
+                }
+            }
+        });
+    }
+
+    private void placeRestaurantNameText() {
         ActionBar detailsBar = getSupportActionBar();
         String restaurantTitle = curRestaurant.getName();
 
@@ -70,20 +86,20 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
     }
 
-    private void placeRestaurantIcon(){
+    private void placeRestaurantIcon() {
         ImageView restaurantIcon = findViewById(R.id.restaurantIcon);
         restaurantIcon.setScaleType(ImageView.ScaleType.FIT_XY);
         restaurantIcon.setImageResource(R.drawable.restaurant_icon);
     }
 
-    private void placeAddressText(){
+    private void placeAddressText() {
         TextView address = findViewById(R.id.restaurantAddress);
         String restaurantAddress = getResources().getString(R.string.restaurant_address,
-                curRestaurant.getPhysicalAddress(),curRestaurant.getPhysicalCity());
+                curRestaurant.getPhysicalAddress(), curRestaurant.getPhysicalCity());
         address.setText(restaurantAddress);
     }
 
-    private void placeGPScoords(){
+    private void placeGPScoords() {
         TextView coordinates = findViewById(R.id.restaurantCoords);
 
         //Add an underline to make it apparent that it is clickable
@@ -147,10 +163,10 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
         //Do nothing
     }
 
-    private void inflateInspectionList(){
+    private void inflateInspectionList() {
         List<Inspection> inspections = manager.getInspectionMap().get(curRestaurant.getTrackingNumber());
 
-        if(inspections == null){
+        if (inspections == null) {
             TextView emptyListText = findViewById(R.id.noInspectionsText);
             emptyListText.setText(getResources().getString(R.string.no_inspection_text));
         } else {
@@ -162,7 +178,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
         }
     }
 
-    private void getIntentData(){
+    private void getIntentData() {
 
         //Using sharedPreferences to address bug where the def value would be called if coming back from third activity
         //which would set the cur restaurant to the def value. By using SharedPreferences, this data is only changed coming
@@ -177,13 +193,21 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
         curRestaurant = manager.getRestaurantList().get(restaurantIndex);
     }
 
-    public static Intent getIntent(Context context, int restaurantIndex){
+    public static Intent getIntent(Context context, int restaurantIndex) {
         Intent intent = new Intent(context, RestaurantDetails.class);
         intent.putExtra("restaurantIndex", restaurantIndex);
         return intent;
     }
 
-    private void setUpBackButton(){
+    private void setFavourite(boolean favourite, ImageView favouriteIcon) {
+        if (favourite) {
+            favouriteIcon.setImageResource(R.drawable.ic_star_black_24dp);
+        } else {
+            favouriteIcon.setImageResource(R.drawable.ic_star_border_black_24dp);
+        }
+    }
+
+    private void setUpBackButton() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -218,7 +242,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
         return true;
     }
 
-    private void displayCorrectLayout(){
+    private void displayCorrectLayout() {
         Display dimensions = getWindowManager().getDefaultDisplay();
         Point dimension = new Point();
         dimensions.getSize(dimension);
@@ -237,7 +261,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
             setContentView(R.layout.activity_restaurant_details_custom);
         } else if (width == 1440 && height == 2560) {
             setContentView(R.layout.activity_restaurant_details_custom_one);
-        } else{
+        } else {
             setContentView(R.layout.activity_restaurant_details);
         }
     }

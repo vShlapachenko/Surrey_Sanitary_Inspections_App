@@ -39,8 +39,8 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigationView"
-        android:layout_width="812dp"
-        android:layout_height="87dp"
+        android:layout_width="804dp"
+        android:layout_height="90dp"
         app:elevation="10dp"
         app:itemBackground="@android:color/black"
         app:itemIconSize="25dp"

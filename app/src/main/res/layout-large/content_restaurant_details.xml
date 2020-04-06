@@ -125,6 +125,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.113" />
 
+    <ImageView
+        android:id="@+id/restaurantDetailsFavouriteIcon"
+        android:layout_width="51dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/inspectionText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantAddress"
+        app:srcCompat="@drawable/ic_star_border_black_24dp" />
+
     <FrameLayout
         android:id="@+id/mapContainer"
         android:layout_width="match_parent"
