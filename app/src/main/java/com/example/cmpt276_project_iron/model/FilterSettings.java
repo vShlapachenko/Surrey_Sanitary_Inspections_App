@@ -1,5 +1,7 @@
 package com.example.cmpt276_project_iron.model;
 
+import java.util.List;
+
 public class FilterSettings {
     private static FilterSettings instance;
     private String hazLevel;
@@ -7,6 +9,7 @@ public class FilterSettings {
     private Boolean isGreaterThenInput;
     private Boolean isLowerThenInput;
     private int criticalIssues;
+    private List<Restaurant> filteredRestaurants;
 
     public FilterSettings() {
         this.hazLevel = "all";

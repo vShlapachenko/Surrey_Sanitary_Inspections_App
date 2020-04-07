@@ -538,4 +538,5 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         }
         return true;
     }
+
 }

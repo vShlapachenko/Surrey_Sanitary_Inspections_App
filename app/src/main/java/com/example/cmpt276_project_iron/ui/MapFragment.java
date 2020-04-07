@@ -106,11 +106,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onClusterItemInfoWindowClick(RestaurantMarkerCluster restaurantMarkerCluster) {
         Log.e("Cluster", "Clicked at top code!");
+
+
         int index = restaurantMarkerCluster.getId();
+        Log.e("Cluster index", "" + index);
 
         Intent gotoRestaurant = RestaurantDetails.getIntent(getContext(), index);
 
         startActivity(gotoRestaurant);
+
     }
 
     private double inLAT = 0.0;
@@ -420,14 +424,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         for(int i=0; i<restaurantList.size(); i++) {
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
         }
+//        for(int i=0; i<10; i++) {
+//            placePeg(restaurantList.get(i),ZOOM_AMNT, i);
+//        }
         markersFull = new ArrayList<>(markers);
 
         setUpClusterManager(map);
+
         clusterManager.getMarkerCollection();
 
-        coordinateTappedByUser(coordLaunch);
-        makeMarkerTextClickable();
-
+        if(coordLaunch == true) {
+            coordinateTappedByUser(coordLaunch);
+            makeMarkerTextClickable();
+        }
         //Once the map detects movement, the re-centering will be disabled
         map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
