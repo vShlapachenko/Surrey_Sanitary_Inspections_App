@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.database.DatabaseHelper;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
@@ -38,6 +39,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
     private Manager manager;
     private boolean gServicesFlag;
     private int restaurantIndex;
+    DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
     // private FrameLayout mapContainer;
 
@@ -68,10 +70,17 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
             public void onClick(View v) {
                 if (curRestaurant.isFavourite()) {
                     curRestaurant.setFavourite(false);
+                    databaseHelper.deleteFavourite(curRestaurant.getTrackingNumber());
                     setFavourite(curRestaurant.isFavourite(), favouriteIcon);
                 } else {
                     curRestaurant.setFavourite(true);
                     setFavourite(curRestaurant.isFavourite(), favouriteIcon);
+                    List<Inspection> inspections = manager.getInspectionMap().get(curRestaurant.getTrackingNumber());
+                    if (inspections == null || inspections.isEmpty()) {
+                        databaseHelper.addData(curRestaurant.getTrackingNumber(), 0);
+                    } else {
+                        databaseHelper.addData(curRestaurant.getTrackingNumber(), inspections.size());
+                    }
                 }
             }
         });

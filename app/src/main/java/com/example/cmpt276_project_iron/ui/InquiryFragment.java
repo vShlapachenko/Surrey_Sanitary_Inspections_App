@@ -22,6 +22,10 @@ public class InquiryFragment extends AppCompatDialogFragment {
     private final String csvRestaurantUrl;
     private final String csvInspectionUrl;
     private final CallBackInquiryFragment callBackInquiryFragment;
+    private static final String RESTAURANTS_FILE_TIME_STAMP = "restaurants_time_stamp.txt";
+    private static final String INSPECTIONS_FILE_TIME_STAMP = "inspections_time_stamp.txt";
+    private static final String JSON_RESTAURANTS_LAST_MODIFIED = "restaurants_last_modified.json";
+    private static final String JSON_INSPECTIONS_LAST_MODIFIED = "inspections_last_modified.json";
 
     public InquiryFragment(Context context, String csvRestaurantUrl, String csvInspectionUrl, CallBackInquiryFragment callBackInquiryFragment) {
         this.context = context;
@@ -64,4 +68,14 @@ public class InquiryFragment extends AppCompatDialogFragment {
             }
         };
     }
+
+    @Override
+    public void onCancel(@NonNull DialogInterface dialog) {
+        context.getFileStreamPath(RESTAURANTS_FILE_TIME_STAMP).delete();
+        context.getFileStreamPath(INSPECTIONS_FILE_TIME_STAMP).delete();
+        context.getFileStreamPath(JSON_RESTAURANTS_LAST_MODIFIED).delete();
+        context.getFileStreamPath(JSON_INSPECTIONS_LAST_MODIFIED).delete();
+        super.onCancel(dialog);
+    }
+
 }
