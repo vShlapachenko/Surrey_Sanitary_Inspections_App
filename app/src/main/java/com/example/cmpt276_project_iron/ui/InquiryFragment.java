@@ -45,7 +45,7 @@ public class InquiryFragment extends AppCompatDialogFragment {
 
         listener = getOnClickListener();
         return new AlertDialog.Builder(getActivity())
-                .setTitle("Permission to download updated CSV files")
+                .setTitle(R.string.permission_to_download_csv)
                 .setView(view)
                 .setPositiveButton(getString(R.string.yes_positive), listener)
                 .setNegativeButton(getString(R.string.negative_update), listener)

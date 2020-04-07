@@ -40,7 +40,7 @@ public class UpdatedFavouritesFragment extends AppCompatDialogFragment {
         ArrayAdapter<Restaurant> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, updatedRestaurants);
         listView.setAdapter(adapter);
         return new AlertDialog.Builder(getActivity())
-                .setTitle("This list of your favourite restaurants has new inspections")
+                .setTitle(R.string.new_inspections)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
