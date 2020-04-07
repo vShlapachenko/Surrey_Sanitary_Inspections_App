@@ -19,8 +19,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -32,7 +34,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cmpt276_project_iron.FilterOptions;
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.FilterSettings;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -41,6 +45,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static java.security.AccessController.getContext;
 
 /**
  *  Attains and sets the necessary information for the restaurant's details
@@ -54,6 +60,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private FragmentManager fragManager;
     private List<Restaurant> restaurants;
     private RestaurantListAdapter adapter;
+    private final int REQUEST = 0;
+    private FilterSettings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //check if the necessary services are already provided, then launch instantly
         //Fixes bug with invalid service permissions resulting in map related exceptions
         safeLaunchMap();
+        setActionBar();
 
     }
 
@@ -81,6 +90,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     public boolean onCreateOptionsMenu(Menu menu) {
         ActionBar detailsBar = getSupportActionBar();
         detailsBar.setSubtitle("Filter: ");
+
         MenuInflater inflater = getMenuInflater();
         //Setting search bar in place of provided menu
         inflater.inflate(R.menu.filter_menu, menu);
@@ -342,4 +352,18 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Do nothing
     }
 
+    public void setActionBar() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.reduced_option);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        //Back button of toolbar clicked
+        if (item.getItemId() == android.R.id.home) {
+            Log.e("options", "testing");
+            Intent I = new Intent(this, FilterOptions.class);
+            startActivity(I);
+        }
+        return true;
+    }
 }
