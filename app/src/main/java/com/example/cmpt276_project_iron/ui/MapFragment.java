@@ -12,6 +12,8 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -335,6 +338,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         void onFragmentInteraction(Uri uri);
     }
 
+
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
 
@@ -344,32 +348,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         //Just getting access to the options menu to process the input for the maps
         MenuItem searchItem = menu.findItem(R.id.filter_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        EditText searchView = (EditText) searchItem.getActionView();
 
         //Prevents automatic lock-on on search bar
-        searchView.setFocusable(false);
-        searchView.setIconifiedByDefault(false);
-        searchView.clearFocus();
+        searchView.setFocusable(true);
+
+        //Will ensure that the keyboard is closed on enter
+        searchView.setSingleLine();
+        searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                return false;
+            }
+        });
 
         //Listener for the text change in the search bar
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
+        searchView.addTextChangedListener(new TextWatcher() {
             @Override
-            //Note: For stability, maps are based on a submission basis
-            public boolean onQueryTextSubmit(String query) {
-                //Do nothing as programmed to procession on completion, however, hide the keyboard
-                searchView.clearFocus();
-                return true;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Do nothing as programmed to procession actively, however, hide the keyboard
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                Log.i("Map_searched", "map search completed, filter: " + newText);
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.i("Map_searched", "map search completed, filter: " + s);
 
                 //Clear up all items, and just add those that pertain to the filer
                 clusterManager.clearItems();
                 for(RestaurantMarkerCluster marker : markers){
-                    if(marker.getRestaurant().getName().toLowerCase().trim().contains(newText)){
+                    if(marker.getRestaurant().getName().toLowerCase().trim().contains(s)){
                         //Using full data set of markersFull to reference what should be added or removed
                         clusterManager.addItem(marker);
                     }
@@ -378,7 +385,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 map.setOnMarkerClickListener(clusterManager);
                 map.setInfoWindowAdapter(clusterManager.getMarkerManager());
                 map.setOnInfoWindowClickListener(clusterManager);
-                return false;
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Empty on purpose
             }
         });
     }

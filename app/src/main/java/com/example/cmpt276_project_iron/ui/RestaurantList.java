@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -16,6 +18,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,33 +99,38 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Setting search bar in place of provided menu
         inflater.inflate(R.menu.filter_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.filter_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        EditText searchView = (EditText) searchItem.getActionView();
 
-        searchView.setFocusable(false);
-        searchView.setIconifiedByDefault(false);
-        searchView.clearFocus();
 
-        searchView.setQueryHint(getString(R.string.restaurant_hint));
+        searchView.setFocusable(true);
+        searchView.setHint(getString(R.string.restaurant_hint));
+
         //Change the go button in the keyboard to something more appropriate for live search
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        //Listener for the text change in the search bar
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setSingleLine();
+        //Listener for the text change in the search bar - Using EditText such that the keyboard
+        //can be closed upon empty input
+        searchView.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                //Do nothing as programmed to complete in real time, however, hide keyboard
-
-                searchView.clearFocus();
-                return true;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Empty on purpose
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                Log.i("restaurant_filtered", "restaurant list filtered via search, filter: " + newText);
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.i("restaurant_filtered", "restaurant list filtered via search, filter: " + s);
                 //Get filtered results using the logic defined in the RestaurantListAdapter.java
-                adapter.getFilter().filter(newText);
-                return false;
+                adapter.getFilter().filter(s);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+               //Empty
             }
         });
+
+
         return true;
     }
 
@@ -222,6 +231,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                             //the coordinates are clicked and it is changed to "location")
                             ActionBar detailsBar = getSupportActionBar();
                             detailsBar.setSubtitle(R.string.filter_tittle);
+
                             return true;
                         }
                         return false;

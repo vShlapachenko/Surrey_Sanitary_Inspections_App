@@ -5,5 +5,6 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search_tittle"
         app:showAsAction="ifRoom"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+        app:actionViewClass="android.widget.EditText"
+        android:singleLine="true"/>
 </menu>
