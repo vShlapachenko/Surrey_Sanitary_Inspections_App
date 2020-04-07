@@ -91,8 +91,7 @@ public class FilterOptions extends AppCompatActivity {
         if(rangeButton.getText().toString().equals("Greater then or equal to critical issues")) {
             settings.setGreaterThenInput(true);
             settings.setLowerThenInput(false);
-        }
-        else if(rangeButton.getText().toString().equals("Less then or equal to critical issues")) {
+        } else if(rangeButton.getText().toString().equals("Less then or equal to critical issues")) {
             settings.setGreaterThenInput(false);
             settings.setLowerThenInput(true);
         }
@@ -101,8 +100,7 @@ public class FilterOptions extends AppCompatActivity {
     private void setFavourite(RadioButton favouriteButton) {
         if(favouriteButton.getText().toString().equals("Favourites")) {
             settings.setFavourite(true);
-        }
-        else if(favouriteButton.getText().toString().equals("No favourites")) {
+        } else if(favouriteButton.getText().toString().equals("No favourites")) {
             settings.setFavourite(false);
         }
     }
@@ -112,8 +110,7 @@ public class FilterOptions extends AppCompatActivity {
 
         if(criticalIssues.getText().toString().equals("")) {
             return settings.getCriticalIssues();
-        }
-        else {
+        } else {
             return Integer.parseInt(criticalIssues.getText().toString());
         }
 
