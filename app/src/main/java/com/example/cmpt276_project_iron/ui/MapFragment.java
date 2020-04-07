@@ -39,6 +39,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.widget.EditText;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.FilterSettings;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
@@ -136,6 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private Manager manager;
     Dialog popUp;
     Marker coordinateClickedMarker;
+    private FilterSettings settings;
 
     public MapFragment() {
         // Required empty public constructor
@@ -389,6 +391,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
+        Log.e("boolean", "" + coordLaunch);
 
         Log.i("data_check", "latitude: " + inLAT + " | " + "longitude: " + inLONG);
         //If launched from the second activity (via coordinates), the toolbar subtitle is changed to
@@ -398,7 +401,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
 
         manager = Manager.getInstance(getContext());
-        List<Restaurant> restaurantList = manager.getRestaurantList();
+//        List<Restaurant> restaurantList = manager.getRestaurantList();
+        List<Restaurant> restaurantList = filterRestaurants();
 
 
         for(int i=0; i<restaurantList.size(); i++) {
@@ -408,6 +412,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         setUpClusterManager(map);
         clusterManager.getMarkerCollection();
+
         coordinateTappedByUser(coordLaunch);
         makeMarkerTextClickable();
 
@@ -509,6 +514,155 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         } catch (SecurityException e) {
             Log.i("servicesClientException", "Security exception: " + e.getMessage());
         }
+    }
+    private List<Restaurant> filterRestaurants() {
+        settings = FilterSettings.getInstance();
+        manager = Manager.getInstance(getContext());
+
+        List<Restaurant> result = new ArrayList<>();
+        Log.e("settings in res list", "" + settings.getHazLevel());
+        Log.e("settings in res list", "" + settings.getFavourite());
+
+        if((!settings.getFavourite()) && (settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() == -1)) { // default case where user hasnt inputted any new settings
+            result = manager.getRestaurantList();
+        }
+        else if((settings.getHazLevel().equals("all")) && (settings.getFavourite()) && (settings.getCriticalIssues() == -1)){ // case where only favourites is changed
+            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+                Restaurant curRestaurant = manager.getRestaurantList().get(i);
+                if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
+                    Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
+
+                    if (curRestaurant.isFavourite()) {
+                        result.add(curRestaurant);
+                    }
+                }
+            }
+        }
+
+        else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() == -1)){ // case where only haz level and maybe favourites is changed
+            Log.e("settings in res list", "In here!");
+            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+                Restaurant curRestaurant = manager.getRestaurantList().get(i);
+                if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
+                    Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
+                    if (curRestaurant.isFavourite() == settings.getFavourite() && (mostRecentInspection.getHazardLevel().equalsIgnoreCase(settings.getHazLevel()))) {
+                        Log.e("settings in res list", "Haz level in loop " +  mostRecentInspection.getHazardLevel());
+                        Log.e("ResList", "" + curRestaurant.getName());
+                        result.add(curRestaurant);
+                    }
+                }
+            }
+
+        }
+        // need most recent inspection for haz level and crit issues
+        else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (settings.getGreaterThenInput() && settings.getLowerThenInput())) { // case where critical issues filter is inputted and user wants restaurants greater then that number
+            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+                Restaurant curRestaurant = manager.getRestaurantList().get(i);
+
+                if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
+                    Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
+
+                    if((curRestaurant.isFavourite() == settings.getFavourite()) && (mostRecentInspection.getNumCritical() >= settings.getCriticalIssues())){
+                        result.add(curRestaurant);
+                    }
+                }
+
+
+            }
+
+        }
+        else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (settings.getGreaterThenInput() && !settings.getLowerThenInput())) { // crit issues filter + haz level filter
+            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+                Restaurant curRestaurant = manager.getRestaurantList().get(i);
+                if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
+                    Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
+
+                    if((curRestaurant.isFavourite() == settings.getFavourite()) && (mostRecentInspection.getNumCritical() >= settings.getCriticalIssues()) &&
+                            (mostRecentInspection.getHazardLevel().equalsIgnoreCase(settings.getHazLevel()))){
+                        result.add(curRestaurant);
+                    }
+                }
+
+
+            }
+        }
+        else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (settings.getGreaterThenInput() && !settings.getLowerThenInput())) { // case where critical issues filter is inputted and user wants restaurants greater then that number
+            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+                Restaurant curRestaurant = manager.getRestaurantList().get(i);
+
+                if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
+                    Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
+
+                    if((curRestaurant.isFavourite() == settings.getFavourite()) && (mostRecentInspection.getNumCritical() >= settings.getCriticalIssues())){
+                        result.add(curRestaurant);
+                    }
+                }
+
+
+            }
+
+        }
+        else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && settings.getLowerThenInput())) { // crit issues filter with lower then crit issues true + haz level filter
+            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+                Restaurant curRestaurant = manager.getRestaurantList().get(i);
+                if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
+                    Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
+
+                    if((curRestaurant.isFavourite() == settings.getFavourite()) && (mostRecentInspection.getNumCritical() <= settings.getCriticalIssues()) &&
+                            (mostRecentInspection.getHazardLevel().equalsIgnoreCase(settings.getHazLevel()))){
+                        result.add(curRestaurant);
+                    }
+                }
+
+
+            }
+        }
+        else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && settings.getLowerThenInput())) { // case where critical issues filter is inputted and user wants restaurants greater then that number
+            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+                Restaurant curRestaurant = manager.getRestaurantList().get(i);
+
+                if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
+                    Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
+
+                    if((curRestaurant.isFavourite() == settings.getFavourite()) && (mostRecentInspection.getNumCritical() <= settings.getCriticalIssues())){
+                        result.add(curRestaurant);
+                    }
+                }
+            }
+        }
+        else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && !settings.getLowerThenInput())) {
+            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+                Restaurant curRestaurant = manager.getRestaurantList().get(i);
+
+                if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
+                    Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
+
+                    if((curRestaurant.isFavourite() == settings.getFavourite())) {
+                        result.add(curRestaurant);
+                    }
+
+                }
+
+            }
+        }
+        else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && !settings.getLowerThenInput())) {
+            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+                Restaurant curRestaurant = manager.getRestaurantList().get(i);
+
+                if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
+                    Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
+
+                    if((curRestaurant.isFavourite() == settings.getFavourite()) && mostRecentInspection.getHazardLevel().equalsIgnoreCase(settings.getHazLevel())) {
+                        result.add(curRestaurant);
+                    }
+                }
+
+            }
+        }
+
+        Log.e("size of result", "" + result.size());
+
+        return result;
     }
 
 
