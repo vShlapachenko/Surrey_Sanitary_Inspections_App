@@ -116,11 +116,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         databaseHelper.updateAllRestaurants(trackingNumbersUpdatedRestaurants, numberOfInspections);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        adapter.notifyDataSetChanged();
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -235,7 +235,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             restaurants = manager.getRestaurantList();
         }
         adapter = new RestaurantListAdapter(this, restaurants);
-
         if(restaurants == null){
             TextView emptyListText = findViewById(R.id.noRestaurantsText);
             emptyListText.setText(getResources().getString(R.string.no_restaurants_text));
@@ -253,9 +252,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                     }
                 }
             }
-            restaurants = manager.getRestaurantList();
-//            restaurants = manager.getRestaurantList();
-            adapter = new RestaurantListAdapter(this, restaurants);
             RecyclerView restaurantList = findViewById(R.id.restaurantList);
             adapter.notifyDataSetChanged();
             restaurantList.setAdapter(adapter);
@@ -415,7 +411,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         settings = FilterSettings.getInstance(this);
         settings.setFilteredRestaurants(result);
         settings.setHasBeenFiltered(true);
-
         return result;
     }
 
