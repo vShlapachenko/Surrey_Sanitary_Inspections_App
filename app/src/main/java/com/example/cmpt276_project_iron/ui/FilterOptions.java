@@ -1,13 +1,11 @@
-package com.example.cmpt276_project_iron;
+package com.example.cmpt276_project_iron.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.FileObserver;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,8 +15,6 @@ import android.widget.RadioGroup;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.FilterSettings;
-import com.example.cmpt276_project_iron.ui.RestaurantDetails;
-import com.example.cmpt276_project_iron.ui.RestaurantList;
 
 public class FilterOptions extends AppCompatActivity {
     RadioGroup hazardGroup;
