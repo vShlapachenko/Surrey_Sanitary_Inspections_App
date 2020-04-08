@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cmpt276_project_iron.FilterOptions;
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
+import com.example.cmpt276_project_iron.model.FilterSettings;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
@@ -36,15 +37,18 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.ViewHolder> implements Filterable {
     private Context context;
+    private FilterSettings settings;
     private List<Restaurant> restaurants; //Data set list
     private List<Restaurant> completeRestaurants; //Duplicate data set list for filtering
     private Manager manager;
 
+
     public RestaurantListAdapter(Context context, List<Restaurant> restaurants){
         this.context = context;
         this.restaurants = restaurants;
-        this.completeRestaurants = new ArrayList<>(restaurants);  //Copy of list for maintaing data while filtering
         this.manager = Manager.getInstance(context);
+        this.settings = FilterSettings.getInstance(context);
+        this.completeRestaurants = new ArrayList<>(restaurants);
     }
 
     @NonNull
@@ -241,13 +245,16 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                     if (restaurant.getName().toLowerCase().contains(filterSpecification)) {
                         //If the restaurant name contains the specified filter text then add it
                         //to the list of filtered restaurants
+                        Log.e("FILTERING", restaurant.getName());
                         filteredRestaurantList.add(restaurant);
+
                     }
                 }
             }
 
             FilterResults filteredResults = new FilterResults();
             filteredResults.values = filteredRestaurantList;
+
             return filteredResults;
         }
 
@@ -255,9 +262,13 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //Remove the contents of the list of restaurants in order to replace with the filtered ones
             restaurants.clear();
+//            completeRestaurants.clear();
+            Log.e("publish before", restaurants.size() + "");
 
             //Add the filtered results to the list that will be adapted
             restaurants.addAll((List) results.values);
+//            completeRestaurants.addAll((List) results.values);
+            Log.e("publish after", restaurants.size() + "");
             //Once the data has changed, it must be relayed, so the adapter is notified of this change
             notifyDataSetChanged();
         }

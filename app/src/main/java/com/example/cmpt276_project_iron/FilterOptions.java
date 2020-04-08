@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.FileObserver;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.RadioGroup;
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.FilterSettings;
 import com.example.cmpt276_project_iron.ui.RestaurantDetails;
+import com.example.cmpt276_project_iron.ui.RestaurantList;
 
 public class FilterOptions extends AppCompatActivity {
     RadioGroup hazardGroup;
@@ -31,7 +33,7 @@ public class FilterOptions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_options);
 
-        settings = FilterSettings.getInstance();
+        settings = FilterSettings.getInstance(this);
 
         EditText criticalIssues = findViewById(R.id.get_crit_issue_num);
         criticalIssues.setTextColor(Color.WHITE);
@@ -72,7 +74,12 @@ public class FilterOptions extends AppCompatActivity {
                 Log.e("issues", criticalIssuesSelected + "");
                 setCriticalIssues(criticalIssuesSelected);
 
+                settings.setHasBeenFiltered(true);
+
+                Intent I = new Intent(v.getContext(), RestaurantList.class);
+                startActivity(I);
                 finish();
+
             }
         });
 
@@ -142,5 +149,13 @@ public class FilterOptions extends AppCompatActivity {
     public static Intent getIntent(Context context){
         Intent intent = new Intent(context, FilterOptions.class);
         return intent;
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.e("back", "button");
+        Intent I = new Intent(this, RestaurantList.class);
+        startActivity(I);
+        finish();
     }
 }
