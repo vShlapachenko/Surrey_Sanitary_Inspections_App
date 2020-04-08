@@ -33,7 +33,7 @@ public class FilterOptions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_options);
 
-        settings = FilterSettings.getInstance();
+        settings = FilterSettings.getInstance(this);
 
         EditText criticalIssues = findViewById(R.id.get_crit_issue_num);
         criticalIssues.setTextColor(Color.WHITE);
@@ -73,6 +73,8 @@ public class FilterOptions extends AppCompatActivity {
 
                 Log.e("issues", criticalIssuesSelected + "");
                 setCriticalIssues(criticalIssuesSelected);
+
+                settings.setHasBeenFiltered(true);
 
                 Intent I = new Intent(v.getContext(), RestaurantList.class);
                 startActivity(I);

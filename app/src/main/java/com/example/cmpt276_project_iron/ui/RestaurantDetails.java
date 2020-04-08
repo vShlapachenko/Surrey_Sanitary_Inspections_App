@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.FilterSettings;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
@@ -38,6 +39,7 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
     private Manager manager;
     private boolean gServicesFlag;
     private int restaurantIndex;
+    private FilterSettings settings;
 
     // private FrameLayout mapContainer;
 
@@ -188,9 +190,22 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
         manager = Manager.getInstance(this);
         gServicesFlag = data.getBoolean("goog_services", false);
 
+        settings = FilterSettings.getInstance(this);
 
-        manager = Manager.getInstance(this);
-        curRestaurant = manager.getRestaurantList().get(restaurantIndex);
+//        try {
+//            curRestaurant = settings.getFilteredRestaurants().get(restaurantIndex);
+//        } catch (NullPointerException e) {
+//            manager = Manager.getInstance(this);
+//            curRestaurant = manager.getRestaurantList().get(restaurantIndex);
+//        }
+        Log.e("size of list", settings.getFilteredRestaurants().size() + "");
+        if(settings.isHasBeenFiltered() == true) {
+            curRestaurant = settings.getFilteredRestaurants().get(restaurantIndex);
+        }
+        else {
+            manager = Manager.getInstance(this);
+            curRestaurant = manager.getRestaurantList().get(restaurantIndex);
+        }
     }
 
     public static Intent getIntent(Context context, int restaurantIndex) {

@@ -77,6 +77,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         setUpBackButton();
         setUpNavigationBar();
         //Used for launching the map fragment
+        settings = FilterSettings.getInstance(this);
         inflateRestaurantList();
 
         //Will get required permissions for services, wait and then launch activity, but also
@@ -197,9 +198,14 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
     private void inflateRestaurantList(){
         manager = Manager.getInstance(this);
-        restaurants = filterRestaurants();
-        Log.e("size of output", "" + restaurants.size());
-//        restaurants = manager.getRestaurantList();
+        settings = FilterSettings.getInstance(this);
+        Log.e("boolean value", settings.isHasBeenFiltered() + "");
+        if(settings.isHasBeenFiltered() == true) {
+            restaurants = filterRestaurants();
+        }
+        else {
+            restaurants = manager.getRestaurantList();
+        }
         adapter = new RestaurantListAdapter(this, restaurants);
 
         if(restaurants == null){
@@ -216,7 +222,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     }
 
     private List<Restaurant> filterRestaurants() {
-        settings = FilterSettings.getInstance();
+        settings = FilterSettings.getInstance(this);
         manager = Manager.getInstance(this);
 
         List<Restaurant> result = new ArrayList<>();
@@ -361,6 +367,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         }
 
         Log.e("size of result", "" + result.size());
+
+        settings = FilterSettings.getInstance(this);
+        settings.setFilteredRestaurants(result);
+        settings.setHasBeenFiltered(true);
+
 
         return result;
     }
