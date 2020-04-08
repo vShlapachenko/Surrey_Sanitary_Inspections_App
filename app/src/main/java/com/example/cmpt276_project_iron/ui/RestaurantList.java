@@ -83,7 +83,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
     private void showFavouritesFragment() {
         FragmentManager fragManager = getSupportFragmentManager();
-        DatabaseHelper db = new DatabaseHelper(this);
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
         List<String> trackingNumbers = new ArrayList<>();
         List<Integer> numberOfInspections = new ArrayList<>();
         for (Restaurant r : restaurants) {
@@ -97,7 +97,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                 }
             }
         }
-        List<String> trackingNumbersUpdatedRestaurants = db.getUpdatedRestaurants(trackingNumbers, numberOfInspections);
+        List<String> trackingNumbersUpdatedRestaurants = databaseHelper.getUpdatedRestaurants(trackingNumbers, numberOfInspections);
         List<Restaurant> updatedRestaurants = new ArrayList<>();
         numberOfInspections.clear();
         for (Restaurant r : restaurants) {
@@ -107,11 +107,11 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                 numberOfInspections.add(inspections.size());
             }
         }
-        if (!updatedRestaurants.isEmpty()) {
+        if (!(updatedRestaurants.isEmpty())) {
             UpdatedFavouritesFragment dialog = new UpdatedFavouritesFragment(this, updatedRestaurants);
             dialog.show(fragManager, "MessageDialog");
         }
-        db.updateAllRestaurants(trackingNumbersUpdatedRestaurants, numberOfInspections);
+        databaseHelper.updateAllRestaurants(trackingNumbersUpdatedRestaurants, numberOfInspections);
     }
 
     @Override

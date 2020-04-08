@@ -13,6 +13,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    public static final int UNABLE_TO_INSERT = -1;
     private static final String TAG = "DatabaseHelper";
 
     private static final String TABLE_NAME = "favourites_table";
@@ -24,26 +25,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase database) {
         String createTable = "CREATE TABLE " + TABLE_NAME + "(" + COL1 + " TEXT PRIMARY KEY, " +
                 COL2 + " INTEGER)";
-        db.execSQL(createTable);
+        database.execSQL(createTable);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
+    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(database);
     }
 
     public boolean addData(String restaurant_id, Integer number_inspections) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL1, restaurant_id);
         contentValues.put(COL2, number_inspections);
 
-        long result = db.insert(TABLE_NAME, null, contentValues);
-        if (result == -1) {
+        long result = database.insert(TABLE_NAME, null, contentValues);
+        if (result == UNABLE_TO_INSERT) {
             return false;
         } else {
             return true;
@@ -51,22 +52,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getData() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         String query = "Select * FROM " + TABLE_NAME;
-        Cursor data = db.rawQuery(query, null);
+        Cursor data = database.rawQuery(query, null);
         return data;
     }
 
     public List<String> getUpdatedRestaurants(List<String> trackingNumbers, List<Integer> inspectionNumbers) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         List<String> updatedRestaurants = new ArrayList<>();
         Cursor data = null;
         for (int i = 0; i < trackingNumbers.size(); i++) {
             String trackingNumber = trackingNumbers.get(i);
-            Integer inspectionNumber = inspectionNumbers.get(i);
+            int inspectionNumber = inspectionNumbers.get(i);
             String query = ("SELECT " + COL1 + " FROM " + TABLE_NAME + " WHERE "
                     + COL1 + " = '" + trackingNumber + "' AND " + COL2 + " != '" + inspectionNumber + "'");
-            data = db.rawQuery(query, null);
+            data = database.rawQuery(query, null);
             if (data != null && data.moveToFirst()) {
                 do {
                     updatedRestaurants.add(data.getString(0));
@@ -77,21 +78,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateAllRestaurants(List<String> trackingNumbers, List<Integer> inspectionNumbers) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         Cursor data = null;
         for (int i = 0; i < trackingNumbers.size(); i++) {
             String trackingNumber = trackingNumbers.get(i);
-            Integer inspectionNumber = inspectionNumbers.get(i);
+            int inspectionNumber = inspectionNumbers.get(i);
             String query = ("UPDATE " + TABLE_NAME + " SET " + COL2 + " = '" + inspectionNumber + "' " +
                     "WHERE " + COL1 + " = '" + trackingNumber + "'");
-            db.execSQL(query);
+            database.execSQL(query);
         }
     }
 
     public void deleteFavourite(String trackingNumber) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         String query = "DELETE FROM " + TABLE_NAME + " WHERE " + COL1 + " = '" + trackingNumber + "'";
-        db.execSQL(query);
+        database.execSQL(query);
     }
 }
 
