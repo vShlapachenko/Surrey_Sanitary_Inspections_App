@@ -372,7 +372,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         settings.setFilteredRestaurants(result);
         settings.setHasBeenFiltered(true);
 
-
         return result;
     }
 

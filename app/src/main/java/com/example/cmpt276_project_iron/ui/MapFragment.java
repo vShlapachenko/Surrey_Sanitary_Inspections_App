@@ -387,10 +387,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 Log.i("Map_searched", "map search completed, filter: " + s);
 
                 //Clear up all items, and just add those that pertain to the filer
+
                 clusterManager.clearItems();
+                Log.e("Clearing", "map clear");
                 for(RestaurantMarkerCluster marker : markers){
                     if(marker.getRestaurant().getName().toLowerCase().trim().contains(s)){
                         //Using full data set of markersFull to reference what should be added or removed
+                        Log.e("Placement", "" + marker.getRestaurant().getName());
                         clusterManager.addItem(marker);
                     }
                 }

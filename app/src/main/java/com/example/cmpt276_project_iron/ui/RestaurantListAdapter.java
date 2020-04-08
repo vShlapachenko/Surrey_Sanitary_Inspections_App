@@ -48,7 +48,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         this.restaurants = restaurants;
         this.manager = Manager.getInstance(context);
         this.settings = FilterSettings.getInstance(context);
-        this.completeRestaurants = settings.getFilteredRestaurants();
+        this.completeRestaurants = new ArrayList<>(restaurants);
     }
 
     @NonNull
@@ -245,13 +245,16 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                     if (restaurant.getName().toLowerCase().contains(filterSpecification)) {
                         //If the restaurant name contains the specified filter text then add it
                         //to the list of filtered restaurants
+                        Log.e("FILTERING", restaurant.getName());
                         filteredRestaurantList.add(restaurant);
+
                     }
                 }
             }
 
             FilterResults filteredResults = new FilterResults();
             filteredResults.values = filteredRestaurantList;
+
             return filteredResults;
         }
 
@@ -259,9 +262,13 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //Remove the contents of the list of restaurants in order to replace with the filtered ones
             restaurants.clear();
+//            completeRestaurants.clear();
+            Log.e("publish before", restaurants.size() + "");
 
             //Add the filtered results to the list that will be adapted
             restaurants.addAll((List) results.values);
+//            completeRestaurants.addAll((List) results.values);
+            Log.e("publish after", restaurants.size() + "");
             //Once the data has changed, it must be relayed, so the adapter is notified of this change
             notifyDataSetChanged();
         }
