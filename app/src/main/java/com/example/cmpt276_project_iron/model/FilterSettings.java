@@ -1,5 +1,12 @@
 package com.example.cmpt276_project_iron.model;
 
+import android.content.Context;
+import android.content.Intent;
+import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class FilterSettings {
     private static FilterSettings instance;
     private String hazLevel;
@@ -7,18 +14,44 @@ public class FilterSettings {
     private Boolean isGreaterThenInput;
     private Boolean isLowerThenInput;
     private int criticalIssues;
+    private List<Restaurant> filteredRestaurants;
+    private boolean hasBeenFiltered;
+    private Manager manager;
 
-    public FilterSettings() {
+    private Context context;
+
+    public List<Restaurant> getFilteredRestaurants() {
+        return filteredRestaurants;
+    }
+
+    public void setFilteredRestaurants(List<Restaurant> filteredRestaurants) {
+        this.filteredRestaurants = filteredRestaurants;
+    }
+
+    public boolean isHasBeenFiltered() {
+        return hasBeenFiltered;
+    }
+
+    public void setHasBeenFiltered(boolean hasBeenFiltered) {
+        this.hasBeenFiltered = hasBeenFiltered;
+    }
+
+    private FilterSettings(Context c) {
+        this.context = c;
+        this.manager = Manager.getInstance(context);
         this.hazLevel = "all";
         this.isFavourite = false;
         this.isGreaterThenInput = false;
         this.isLowerThenInput = false;
         this.criticalIssues = -1;
+//        this.filteredRestaurants = new ArrayList<>();
+        this.filteredRestaurants = manager.getRestaurantList();
+        this.hasBeenFiltered = false;
     }
 
-    public static FilterSettings getInstance() {
+    public static FilterSettings getInstance(Context c) {
         if(instance == null) {
-            instance = new FilterSettings();
+            instance = new FilterSettings(c);
         }
         return instance;
     }
