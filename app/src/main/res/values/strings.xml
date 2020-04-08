@@ -139,4 +139,8 @@
     <string name="map_tittle">Map</string>
     <string name="restaurant_hint">Enter a Restaurant Name</string>
     <string name="options_tittle">Options</string>
+
+    <!--- TODO TRANSLATE THESE TO OTHER LANGUAGES -->
+    <string name="new_inspections">This list of your favourite restaurants has new inspections</string>
+    <string name="permission_to_download_csv">Permission to download updated CSV files</string>
 </resources>

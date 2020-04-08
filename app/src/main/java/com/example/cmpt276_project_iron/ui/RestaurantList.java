@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
@@ -35,6 +36,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.database.DatabaseHelper;
 import com.example.cmpt276_project_iron.model.FilterSettings;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
@@ -72,20 +74,52 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         //Used for launching the map fragment
         settings = FilterSettings.getInstance(this);
         inflateRestaurantList();
-
         //Will get required permissions for services, wait and then launch activity, but also
         //check if the necessary services are already provided, then launch instantly
         //Fixes bug with invalid service permissions resulting in map related exceptions
         safeLaunchMap();
         setActionBar();
-
+        showFavouritesFragment();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
+    private void showFavouritesFragment() {
+        FragmentManager fragManager = getSupportFragmentManager();
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        List<String> trackingNumbers = new ArrayList<>();
+        List<Integer> numberOfInspections = new ArrayList<>();
+        for (Restaurant r : restaurants) {
+            if (r.isFavourite()) {
+                trackingNumbers.add(r.getTrackingNumber());
+                List<Inspection> inspections = manager.getInspectionMap().get(r.getTrackingNumber());
+                if (inspections == null || inspections.isEmpty()) {
+                    numberOfInspections.add(0);
+                } else {
+                    numberOfInspections.add(inspections.size());
+                }
+            }
+        }
+        List<String> trackingNumbersUpdatedRestaurants = databaseHelper.getUpdatedRestaurants(trackingNumbers, numberOfInspections);
+        List<Restaurant> updatedRestaurants = new ArrayList<>();
+        numberOfInspections.clear();
+        for (Restaurant r : restaurants) {
+            if (trackingNumbersUpdatedRestaurants.contains(r.getTrackingNumber())) {
+                updatedRestaurants.add(r);
+                List<Inspection> inspections = manager.getInspectionMap().get(r.getTrackingNumber());
+                numberOfInspections.add(inspections.size());
+            }
+        }
+        if (!(updatedRestaurants.isEmpty())) {
+            UpdatedFavouritesFragment dialog = new UpdatedFavouritesFragment(this, updatedRestaurants);
+            dialog.show(fragManager, "MessageDialog");
+        }
+        databaseHelper.updateAllRestaurants(trackingNumbersUpdatedRestaurants, numberOfInspections);
     }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        adapter.notifyDataSetChanged();
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -200,13 +234,23 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             restaurants = manager.getRestaurantList();
         }
         adapter = new RestaurantListAdapter(this, restaurants);
-
         if(restaurants == null){
             TextView emptyListText = findViewById(R.id.noRestaurantsText);
             emptyListText.setText(getResources().getString(R.string.no_restaurants_text));
         } else {
-//            restaurants = manager.getRestaurantList();
-            adapter = new RestaurantListAdapter(this, restaurants);
+            DatabaseHelper db = new DatabaseHelper(this);
+            Cursor data = db.getData();
+            List<String> listData = new ArrayList<>();
+            while (data.moveToNext()) {
+                listData.add(data.getString(0));
+            }
+            for (String s : listData) {
+                for (Restaurant r : restaurants) {
+                    if (s.equals(r.getTrackingNumber())) {
+                        r.setFavourite(true);
+                    }
+                }
+            }
             RecyclerView restaurantList = findViewById(R.id.restaurantList);
             adapter.notifyDataSetChanged();
             restaurantList.setAdapter(adapter);
@@ -364,8 +408,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         settings = FilterSettings.getInstance(this);
         settings.setFilteredRestaurants(result);
         settings.setHasBeenFiltered(true);
-
-
         return result;
     }
 

@@ -125,5 +125,7 @@
     <string name="map_tittle">карта</string>
     <string name="restaurant_hint">Введите название ресторана</string>
     <string name="options_tittle">вариант</string>
+    <string name="new_inspections">This list of your favourite restaurants has new inspections</string>
+    <string name="permission_to_download_csv">Permission to download updated CSV files</string>
 
 </resources>
