@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
@@ -18,18 +19,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -40,17 +37,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cmpt276_project_iron.FilterOptions;
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.database.DatabaseHelper;
 import com.example.cmpt276_project_iron.model.FilterSettings;
+import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static java.security.AccessController.getContext;
 
 /**
  *  Attains and sets the necessary information for the restaurant's details
@@ -75,13 +73,45 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         setUpNavigationBar();
         //Used for launching the map fragment
         inflateRestaurantList();
-
         //Will get required permissions for services, wait and then launch activity, but also
         //check if the necessary services are already provided, then launch instantly
         //Fixes bug with invalid service permissions resulting in map related exceptions
         safeLaunchMap();
         setActionBar();
+        showFavouritesFragment();
+    }
 
+    private void showFavouritesFragment() {
+        FragmentManager fragManager = getSupportFragmentManager();
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        List<String> trackingNumbers = new ArrayList<>();
+        List<Integer> numberOfInspections = new ArrayList<>();
+        for (Restaurant r : restaurants) {
+            if (r.isFavourite()) {
+                trackingNumbers.add(r.getTrackingNumber());
+                List<Inspection> inspections = manager.getInspectionMap().get(r.getTrackingNumber());
+                if (inspections == null || inspections.isEmpty()) {
+                    numberOfInspections.add(0);
+                } else {
+                    numberOfInspections.add(inspections.size());
+                }
+            }
+        }
+        List<String> trackingNumbersUpdatedRestaurants = databaseHelper.getUpdatedRestaurants(trackingNumbers, numberOfInspections);
+        List<Restaurant> updatedRestaurants = new ArrayList<>();
+        numberOfInspections.clear();
+        for (Restaurant r : restaurants) {
+            if (trackingNumbersUpdatedRestaurants.contains(r.getTrackingNumber())) {
+                updatedRestaurants.add(r);
+                List<Inspection> inspections = manager.getInspectionMap().get(r.getTrackingNumber());
+                numberOfInspections.add(inspections.size());
+            }
+        }
+        if (!(updatedRestaurants.isEmpty())) {
+            UpdatedFavouritesFragment dialog = new UpdatedFavouritesFragment(this, updatedRestaurants);
+            dialog.show(fragManager, "MessageDialog");
+        }
+        databaseHelper.updateAllRestaurants(trackingNumbersUpdatedRestaurants, numberOfInspections);
     }
 
     @Override
@@ -201,6 +231,19 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             TextView emptyListText = findViewById(R.id.noRestaurantsText);
             emptyListText.setText(getResources().getString(R.string.no_restaurants_text));
         } else {
+            DatabaseHelper db = new DatabaseHelper(this);
+            Cursor data = db.getData();
+            List<String> listData = new ArrayList<>();
+            while (data.moveToNext()) {
+                listData.add(data.getString(0));
+            }
+            for (String s : listData) {
+                for (Restaurant r : restaurants) {
+                    if (s.equals(r.getTrackingNumber())) {
+                        r.setFavourite(true);
+                    }
+                }
+            }
             restaurants = manager.getRestaurantList();
             adapter = new RestaurantListAdapter(this, restaurants);
             RecyclerView restaurantList = findViewById(R.id.restaurantList);
