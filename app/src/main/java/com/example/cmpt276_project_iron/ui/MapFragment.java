@@ -440,7 +440,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             restaurantList = manager.getRestaurantList();
         }
 
-
         for(int i=0; i<restaurantList.size(); i++) {
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
         }

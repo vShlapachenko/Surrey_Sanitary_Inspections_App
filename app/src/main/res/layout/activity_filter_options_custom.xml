@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorTint"
+    tools:context=".ui.FilterOptions">
+
+
+    <RadioGroup
+        android:id="@+id/favouriteGroup"
+        android:layout_width="188dp"
+        android:layout_height="76dp"
+        android:layout_above="@+id/hazardGroup"
+        android:layout_alignEnd="@+id/hazardGroup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.189"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.076">
+
+        <RadioButton
+            android:id="@+id/no_favourite_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:onClick="getInputFavourite"
+            android:text="@string/no_favourites"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/favourites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:text="@string/favourites"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/hazardGroup"
+        android:layout_width="100dp"
+        android:layout_height="139dp"
+        android:layout_centerInParent="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.113"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.355">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:onClick="getInputFavourite"
+            android:text="@string/low"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.053"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.387" />
+
+        <RadioButton
+            android:id="@+id/moderate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:onClick="getInputHazard"
+            android:text="@string/moderate"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.059"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.453" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:onClick="getInputHazard"
+            android:text="@string/high"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.053"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.387" />
+
+        <RadioButton
+            android:id="@+id/all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:onClick="getInputHazard"
+            android:text="@string/all"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.052"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.586" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hazardGroup"
+        android:layout_alignStart="@+id/hazardGroup"
+        android:layout_marginStart="-20dp"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="-103dp"
+        android:layout_toStartOf="@+id/hazardGroup"
+        android:text="@string/save_changes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.849"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.953" />
+
+    <EditText
+        android:id="@+id/get_crit_issue_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hazardGroup"
+        android:layout_alignStart="@+id/save"
+        android:layout_marginTop="412dp"
+        android:layout_marginBottom="120dp"
+        android:backgroundTint="@color/white"
+        android:ems="10"
+        android:hint="@string/number_of_critical_issues"
+        android:inputType="numberDecimal"
+
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/range"
+        android:layout_width="256dp"
+        android:layout_height="74dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.39"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.655">
+
+        <RadioButton
+            android:id="@+id/greater"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:onClick="findRange"
+            android:text="@string/greater_then_or_equal_to_critical_issues"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/less"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:onClick="findRange"
+            android:text="@string/less_then_or_equal_to_critical_issues"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/search_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_options"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.118"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.009" />
+
+    <RadioGroup
+        android:id="@+id/default_group"
+        android:layout_width="145dp"
+        android:layout_height="34dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.028"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.967">
+
+        <RadioButton
+            android:id="@+id/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:onClick="getDefault"
+            android:text="@string/reset_defaults"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </RadioGroup>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

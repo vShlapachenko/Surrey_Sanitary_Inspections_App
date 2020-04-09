@@ -119,7 +119,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         ActionBar detailsBar = getSupportActionBar();
-        detailsBar.setSubtitle("Filter: ");
+        detailsBar.setSubtitle(R.string.filter_tittle);
 
         MenuInflater inflater = getMenuInflater();
         //Setting search bar in place of provided menu

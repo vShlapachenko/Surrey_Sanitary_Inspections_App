@@ -125,7 +125,24 @@
     <string name="map_tittle">карта</string>
     <string name="restaurant_hint">Введите название ресторана</string>
     <string name="options_tittle">вариант</string>
-    <string name="new_inspections">This list of your favourite restaurants has new inspections</string>
-    <string name="permission_to_download_csv">Permission to download updated CSV files</string>
+    <string name="all">все</string>
+    <string name="dialog_message">скачать файлы</string>
+    <string name="favourites">Избранные</string>
+    <string name="greater_then_or_equal_to">чем тогда или равна</string>
+    <string name="greater_then_or_equal_to_critical_issues">равно критическим вопросам</string>
+    <string name="greater_then_or_equal_to_crtical_issues">равно критическим вопросам</string>
+    <string name="haz_level_tittle">Уровень опа:</string>
+    <string name="high">Высокой</string>
+    <string name="less_then_or_equal_to">Менее чем равна</string>
+    <string name="less_then_or_equal_to_critical_issues">Меньше, критическим вопро</string>
+    <string name="low">Низкой</string>
+    <string name="moderate">Умеренной</string>
+    <string name="no_favourites">Нет фаворитов</string>
+    <string name="number_of_critical_issues">Количество проблем</string>
+    <string name="reset_defaults">По умолчанию</string>
+    <string name="save_changes">Сохранить</string>
+    <string name="search_options">Параметры поиска</string>
+    <string name="new_inspections">новые любимые рестораны</string>
+    <string name="permission_to_download_csv">скачать обновленные файлы CSV?</string>
 
 </resources>
