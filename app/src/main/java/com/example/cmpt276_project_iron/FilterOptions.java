@@ -17,6 +17,7 @@ import android.widget.RadioGroup;
 
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.FilterSettings;
+import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.ui.RestaurantDetails;
 import com.example.cmpt276_project_iron.ui.RestaurantList;
 
@@ -28,12 +29,17 @@ public class FilterOptions extends AppCompatActivity {
     RadioGroup rangeGroup;
     RadioButton rangeButton;
     FilterSettings settings;
+
+    RadioGroup defaultGroup;
+    RadioButton defaultButton;
+    Manager manager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_options);
 
         settings = FilterSettings.getInstance(this);
+        manager = Manager.getInstance(this);
 
         EditText criticalIssues = findViewById(R.id.get_crit_issue_num);
         criticalIssues.setTextColor(Color.WHITE);
@@ -41,6 +47,7 @@ public class FilterOptions extends AppCompatActivity {
         hazardButtons();
         favouriteButton();
         getRange();
+        defualtSetter();
 
         Button apply = findViewById(R.id.save);
         apply.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +81,18 @@ public class FilterOptions extends AppCompatActivity {
                 Log.e("issues", criticalIssuesSelected + "");
                 setCriticalIssues(criticalIssuesSelected);
 
-                settings.setHasBeenFiltered(true);
+                if(defaultButton == null) {
+                    settings.setHasBeenFiltered(true);
+                }
+                else {  // resetting to default case
+                    settings.setHasBeenFiltered(false);
+                    settings.setCriticalIssues(-1);
+                    settings.setLowerThenInput(false);
+                    settings.setGreaterThenInput(false);
+                    settings.setFavourite(false);
+                    settings.setHazLevel("all");
+                    settings.setFilteredRestaurants(manager.getRestaurantList());
+                }
 
                 Intent I = new Intent(v.getContext(), RestaurantList.class);
                 startActivity(I);
@@ -83,6 +101,10 @@ public class FilterOptions extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void defualtSetter() {
+        defaultGroup = findViewById(R.id.default_group);
     }
 
     private void setCriticalIssues(int criticalIssuesSelected) {
@@ -150,6 +172,12 @@ public class FilterOptions extends AppCompatActivity {
         Intent intent = new Intent(context, FilterOptions.class);
         return intent;
     }
+    public void getDefault(View v) {
+        int radioId = defaultGroup.getCheckedRadioButtonId();
+
+        defaultButton = findViewById(radioId);
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
