@@ -254,6 +254,8 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             FilterResults filteredResults = new FilterResults();
             filteredResults.values = filteredRestaurantList;
 
+            settings.setHasBeenFiltered(true);
+
             return filteredResults;
         }
 

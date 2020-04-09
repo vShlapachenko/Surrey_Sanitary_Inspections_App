@@ -115,11 +115,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         databaseHelper.updateAllRestaurants(trackingNumbersUpdatedRestaurants, numberOfInspections);
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        adapter.notifyDataSetChanged();
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -299,7 +294,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             }
 
         }
-        // need most recent inspection for haz level and crit issues
+
         else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (settings.getGreaterThenInput() && settings.getLowerThenInput())) { // case where critical issues filter is inputted and user wants restaurants greater then that number
             for(int i=0; i<manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
@@ -375,7 +370,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
                 }
             }
         }
-        else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && !settings.getLowerThenInput())) {
+        else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && !settings.getLowerThenInput())) { // case where user inputs value but doesn't input a range
             for(int i=0; i<manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
 
@@ -390,7 +385,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
             }
         }
-        else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && !settings.getLowerThenInput())) {
+        else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && !settings.getLowerThenInput())) { // no input to range and user wants specific hazard level
             for(int i=0; i<manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
 

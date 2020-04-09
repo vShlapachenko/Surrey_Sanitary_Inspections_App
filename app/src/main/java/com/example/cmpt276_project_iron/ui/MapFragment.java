@@ -111,6 +111,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         int index = restaurantMarkerCluster.getId();
         Log.e("Cluster index", "" + index);
 
+        settings = FilterSettings.getInstance(getContext());
+
+        if(settings.isHasBeenFiltered() == true) { // checking if filter or searching have been applied
+            for(int i=0; i<settings.getFilteredRestaurants().size(); i++) {
+                if(settings.getFilteredRestaurants().get(i).getTrackingNumber() == restaurantMarkerCluster.getRestaurant().getTrackingNumber()){
+                    index = i;
+                }
+            }
+        }
+
         Intent gotoRestaurant = RestaurantDetails.getIntent(getContext(), index);
 
         startActivity(gotoRestaurant);
