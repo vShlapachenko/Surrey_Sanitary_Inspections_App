@@ -259,7 +259,7 @@ public class InitialBoot extends AppCompatActivity implements CallBackInquiryFra
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(InitialBoot.this);
-            progressDialog.setMessage("Downloading and executing CSV files");
+            progressDialog.setMessage(getString(R.string.dialog_message));
             progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, InitialBoot.this.getString(R.string.cancel), (dialog, which) ->
                     CsvTask.this.cancel(true));
             progressDialog.setCancelable(false);

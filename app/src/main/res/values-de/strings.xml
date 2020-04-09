@@ -125,7 +125,24 @@
     <string name="map_tittle">Karte</string>
     <string name="restaurant_hint">Restaurant betreten</string>
     <string name="options_tittle">Rahmen</string>
-    <string name="new_inspections">This list of your favourite restaurants has new inspections</string>
-    <string name="permission_to_download_csv">Permission to download updated CSV files</string>
+    <string name="all">alle</string>
+    <string name="dialog_message">Herunterladen und Ausführen von CSV-Dateien</string>
+    <string name="favourites">Favoriten</string>
+    <string name="greater_then_or_equal_to">Größer dann oder gleich</string>
+    <string name="greater_then_or_equal_to_critical_issues">Größer als odr gleich Fragen</string>
+    <string name="greater_then_or_equal_to_crtical_issues">Größer als odr gleich Fragen</string>
+    <string name="haz_level_tittle">Gefahrenstufe:</string>
+    <string name="high">Hoch</string>
+    <string name="less_then_or_equal_to">Weniger dann oder gleich</string>
+    <string name="less_then_or_equal_to_critical_issues">Weniger gleich kritischen Fragen</string>
+    <string name="low">Niedrig</string>
+    <string name="moderate">Moderate</string>
+    <string name="no_favourites">Keine Favoriten</string>
+    <string name="number_of_critical_issues">Anzahl kritischer Probleme</string>
+    <string name="reset_defaults">Reset Standard</string>
+    <string name="save_changes">Speichern</string>
+    <string name="search_options">Suchoptionen</string>
+    <string name="new_inspections">neue Lieblingsrestaurants</string>
+    <string name="permission_to_download_csv">aktualisierten CSV-Dateien herunterladen?</string>
 
 </resources>

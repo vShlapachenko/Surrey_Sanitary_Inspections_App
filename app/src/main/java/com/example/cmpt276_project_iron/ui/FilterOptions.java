@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +34,8 @@ public class FilterOptions extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter_options);
+        //Selects the correct custom layout if the dimensions match
+        displayCorrectLayout();
 
         settings = FilterSettings.getInstance(this);
         manager = Manager.getInstance(this);
@@ -181,5 +184,23 @@ public class FilterOptions extends AppCompatActivity {
         Intent I = new Intent(this, RestaurantList.class);
         startActivity(I);
         finish();
+    }
+
+    private void displayCorrectLayout(){
+        Display dimensions = getWindowManager().getDefaultDisplay();
+        Point dimension = new Point();
+        dimensions.getSize(dimension);
+        int width = dimension.x;
+        int height = dimension.y;
+        float density = getResources().getDisplayMetrics().density;
+
+        //Checking if it's not a MDPI type screen, used to distinguish between same resolution phones that are of different sizes
+        double MDPI_SCREEN_SIZE = 1.0;
+        if(width == 480 && height == 800 && density != MDPI_SCREEN_SIZE) {
+            setContentView(R.layout.activity_filter_options_custom); //NEXUS S Specific
+        } else{
+                setContentView(R.layout.activity_filter_options);
+        }
+
     }
 }
