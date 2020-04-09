@@ -35,7 +35,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cmpt276_project_iron.FilterOptions;
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.database.DatabaseHelper;
 import com.example.cmpt276_project_iron.model.FilterSettings;
