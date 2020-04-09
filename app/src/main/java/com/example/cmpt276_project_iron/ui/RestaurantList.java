@@ -262,6 +262,8 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         settings = FilterSettings.getInstance(this);
         manager = Manager.getInstance(this);
 
+        Log.e("size of original list ", manager.getRestaurantList().size() + "");
+
         List<Restaurant> result = new ArrayList<>();
         Log.e("settings in res list", "" + settings.getHazLevel());
         Log.e("settings in res list", "" + settings.getFavourite());

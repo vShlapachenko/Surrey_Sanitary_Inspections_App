@@ -201,12 +201,6 @@ public class RestaurantDetails extends AppCompatActivity implements MapFragment.
 
         settings = FilterSettings.getInstance(this);
 
-//        try {
-//            curRestaurant = settings.getFilteredRestaurants().get(restaurantIndex);
-//        } catch (NullPointerException e) {
-//            manager = Manager.getInstance(this);
-//            curRestaurant = manager.getRestaurantList().get(restaurantIndex);
-//        }
         Log.e("size of list", settings.getFilteredRestaurants().size() + "");
         if(settings.isHasBeenFiltered() == true) {
             curRestaurant = settings.getFilteredRestaurants().get(restaurantIndex);
