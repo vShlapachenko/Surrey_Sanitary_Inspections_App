@@ -221,7 +221,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
     private void inflateRestaurantList(){
         manager = Manager.getInstance(this);
         settings = FilterSettings.getInstance(this);
-        Log.e("boolean value", settings.isHasBeenFiltered() + "");
+
         if(settings.isHasBeenFiltered() == true) {
             restaurants = filterRestaurants();
         }
@@ -257,17 +257,13 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         settings = FilterSettings.getInstance(this);
         manager = Manager.getInstance(this);
 
-        Log.e("size of original list ", manager.getRestaurantList().size() + "");
-
         List<Restaurant> result = new ArrayList<>();
-        Log.e("settings in res list", "" + settings.getHazLevel());
-        Log.e("settings in res list", "" + settings.getFavourite());
 
         if((!settings.getFavourite()) && (settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() == -1)) { // default case where user hasnt inputted any new settings
             result = manager.getRestaurantList();
         }
         else if((settings.getHazLevel().equals("all")) && (settings.getFavourite()) && (settings.getCriticalIssues() == -1)){ // case where only favourites is changed
-            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+            for(int i = 0; i < manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
                 if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
                     Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
@@ -281,13 +277,12 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
         else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() == -1)){ // case where only haz level and maybe favourites is changed
             Log.e("settings in res list", "In here!");
-            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+            for(int i = 0; i < manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
                 if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
                     Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
                     if (curRestaurant.isFavourite() == settings.getFavourite() && (mostRecentInspection.getHazardLevel().equalsIgnoreCase(settings.getHazLevel()))) {
-                        Log.e("settings in res list", "Haz level in loop " +  mostRecentInspection.getHazardLevel());
-                        Log.e("ResList", "" + curRestaurant.getName());
+
                         result.add(curRestaurant);
                     }
                 }
@@ -296,7 +291,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
         }
 
         else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (settings.getGreaterThenInput() && settings.getLowerThenInput())) { // case where critical issues filter is inputted and user wants restaurants greater then that number
-            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+            for(int i = 0; i < manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
 
                 if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
@@ -312,7 +307,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
         }
         else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (settings.getGreaterThenInput() && !settings.getLowerThenInput())) { // crit issues filter + haz level filter
-            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+            for(int i = 0; i < manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
                 if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
                     Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
@@ -327,7 +322,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             }
         }
         else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (settings.getGreaterThenInput() && !settings.getLowerThenInput())) { // case where critical issues filter is inputted and user wants restaurants greater then that number
-            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+            for(int i = 0; i < manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
 
                 if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
@@ -343,7 +338,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
         }
         else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && settings.getLowerThenInput())) { // crit issues filter with lower then crit issues true + haz level filter
-            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+            for(int i = 0; i < manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
                 if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
                     Inspection mostRecentInspection = manager.getInspectionMap().get(curRestaurant.getTrackingNumber()).get(0);
@@ -358,7 +353,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             }
         }
         else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && settings.getLowerThenInput())) { // case where critical issues filter is inputted and user wants restaurants greater then that number
-            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+            for(int i = 0; i < manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
 
                 if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
@@ -371,7 +366,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             }
         }
         else if((settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && !settings.getLowerThenInput())) { // case where user inputs value but doesn't input a range
-            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+            for(int i = 0; i < manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
 
                 if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
@@ -386,7 +381,7 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
             }
         }
         else if((!settings.getHazLevel().equals("all")) && (settings.getCriticalIssues() > -1) && (!settings.getGreaterThenInput() && !settings.getLowerThenInput())) { // no input to range and user wants specific hazard level
-            for(int i=0; i<manager.getRestaurantList().size(); i++) {
+            for(int i = 0; i < manager.getRestaurantList().size(); i++) {
                 Restaurant curRestaurant = manager.getRestaurantList().get(i);
 
                 if((manager.getInspectionMap().get(curRestaurant.getTrackingNumber()) != null)) {
@@ -399,8 +394,6 @@ public class RestaurantList extends AppCompatActivity implements MapFragment.OnF
 
             }
         }
-
-        Log.e("size of result", "" + result.size());
 
         settings = FilterSettings.getInstance(this);
         settings.setFilteredRestaurants(result);

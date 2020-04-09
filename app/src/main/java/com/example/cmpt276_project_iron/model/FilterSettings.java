@@ -44,7 +44,6 @@ public class FilterSettings {
         this.isGreaterThenInput = false;
         this.isLowerThenInput = false;
         this.criticalIssues = -1;
-//        this.filteredRestaurants = new ArrayList<>();
         this.filteredRestaurants = manager.getRestaurantList();
         this.hasBeenFiltered = false;
     }

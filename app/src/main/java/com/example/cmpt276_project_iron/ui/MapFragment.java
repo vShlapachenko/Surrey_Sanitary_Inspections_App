@@ -105,16 +105,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     @Override
     public void onClusterItemInfoWindowClick(RestaurantMarkerCluster restaurantMarkerCluster) {
-        Log.e("Cluster", "Clicked at top code!");
 
 
         int index = restaurantMarkerCluster.getId();
-        Log.e("Cluster index", "" + index);
 
         settings = FilterSettings.getInstance(getContext());
 
         if(settings.isHasBeenFiltered() == true) { // checking if filter or searching have been applied
-            for(int i=0; i<settings.getFilteredRestaurants().size(); i++) {
+            for(int i = 0; i < settings.getFilteredRestaurants().size(); i++) {
                 if(settings.getFilteredRestaurants().get(i).getTrackingNumber() == restaurantMarkerCluster.getRestaurant().getTrackingNumber()){
                     index = i;
                 }
@@ -297,7 +295,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     @Override
     public boolean onClusterItemClick(RestaurantMarkerCluster restaurantMarkerCluster) {
-        Log.e("Cluster", "Clicked!");
         return false;
     }
 
@@ -399,11 +396,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 //Clear up all items, and just add those that pertain to the filer
 
                 clusterManager.clearItems();
-                Log.e("Clearing", "map clear");
                 for(RestaurantMarkerCluster marker : markers){
                     if(marker.getRestaurant().getName().toLowerCase().trim().contains(s)){
                         //Using full data set of markersFull to reference what should be added or removed
-                        Log.e("Placement", "" + marker.getRestaurant().getName());
                         clusterManager.addItem(marker);
                     }
                 }
@@ -428,7 +423,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
-        Log.e("boolean", "" + coordLaunch);
 
         Log.i("data_check", "latitude: " + inLAT + " | " + "longitude: " + inLONG);
         //If launched from the second activity (via coordinates), the toolbar subtitle is changed to
@@ -438,8 +432,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
 
         manager = Manager.getInstance(getContext());
-//        List<Restaurant> restaurantList = manager.getRestaurantList();
-//        List<Restaurant> restaurantList = filterRestaurants();
         List<Restaurant> restaurantList;
         if(settings.isHasBeenFiltered() == true) {
             restaurantList = settings.getFilteredRestaurants();
@@ -459,13 +451,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
         clusterManager.getMarkerCollection();
 
-        Log.e("coordlaunch variable", "" + coordLaunch);
         if(coordLaunch == true) {
             coordinateTappedByUser(coordLaunch);
             makeMarkerTextClickable();
         }
-//        coordinateTappedByUser(coordLaunch);
-//        makeMarkerTextClickable();
+
 
         //Once the map detects movement, the re-centering will be disabled
         map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {

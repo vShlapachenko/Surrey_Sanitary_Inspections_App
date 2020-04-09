@@ -24,11 +24,11 @@ public class FilterOptions extends AppCompatActivity {
     RadioButton favouriteButton;
     RadioGroup rangeGroup;
     RadioButton rangeButton;
-    FilterSettings settings;
-
     RadioGroup defaultGroup;
     RadioButton defaultButton;
+
     Manager manager;
+    FilterSettings settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +74,6 @@ public class FilterOptions extends AppCompatActivity {
 
                 int criticalIssuesSelected = getCriticalIssuesNumber();
 
-                Log.e("issues", criticalIssuesSelected + "");
                 setCriticalIssues(criticalIssuesSelected);
 
                 if(defaultButton == null) {
@@ -177,7 +176,6 @@ public class FilterOptions extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Log.e("back", "button");
         Intent I = new Intent(this, RestaurantList.class);
         startActivity(I);
         finish();
