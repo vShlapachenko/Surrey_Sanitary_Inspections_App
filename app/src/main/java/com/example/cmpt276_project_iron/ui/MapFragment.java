@@ -42,6 +42,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.widget.EditText;
 
 import com.example.cmpt276_project_iron.R;
+import com.example.cmpt276_project_iron.model.FilterSettings;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
@@ -104,12 +105,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     @Override
     public void onClusterItemInfoWindowClick(RestaurantMarkerCluster restaurantMarkerCluster) {
-        Log.e("Cluster", "Clicked at top code!");
+
+
         int index = restaurantMarkerCluster.getId();
+
+        settings = FilterSettings.getInstance(getContext());
+
+        if(settings.isHasBeenFiltered() == true) { // checking if filter or searching have been applied
+            for(int i = 0; i < settings.getFilteredRestaurants().size(); i++) {
+                if(settings.getFilteredRestaurants().get(i).getTrackingNumber() == restaurantMarkerCluster.getRestaurant().getTrackingNumber()){
+                    index = i;
+                }
+            }
+        }
 
         Intent gotoRestaurant = RestaurantDetails.getIntent(getContext(), index);
 
         startActivity(gotoRestaurant);
+
     }
 
     private double inLAT = 0.0;
@@ -139,6 +152,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private Manager manager;
     Dialog popUp;
     Marker coordinateClickedMarker;
+    private FilterSettings settings;
 
     public MapFragment() {
         // Required empty public constructor
@@ -146,7 +160,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     private void coordinateTappedByUser(boolean coordLaunch) {
         if(coordLaunch) {
-            Restaurant restaurantSelected = manager.getRestaurantList().get(restaurantIndex);
+            settings = FilterSettings.getInstance(getContext());
+            Restaurant restaurantSelected;
+            if(settings.isHasBeenFiltered() == true) {
+                restaurantSelected = settings.getFilteredRestaurants().get(restaurantIndex);
+            }
+            else {
+                restaurantSelected = manager.getRestaurantList().get(restaurantIndex);
+            }
             LatLng latLng = new LatLng(restaurantSelected.getLatitude(), restaurantSelected.getLongitude());
             coordinateClickedMarker = map.addMarker(new MarkerOptions()
                     .position(latLng)
@@ -274,7 +295,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     @Override
     public boolean onClusterItemClick(RestaurantMarkerCluster restaurantMarkerCluster) {
-        Log.e("Cluster", "Clicked!");
         return false;
     }
 
@@ -374,6 +394,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 Log.i("Map_searched", "map search completed, filter: " + s);
 
                 //Clear up all items, and just add those that pertain to the filer
+
                 clusterManager.clearItems();
                 for(RestaurantMarkerCluster marker : markers){
                     if(marker.getRestaurant().getName().toLowerCase().trim().contains(s)){
@@ -398,6 +419,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        settings = FilterSettings.getInstance(getContext());
         //Shows the user's current location on the map
         placeGPSPosition();
         setMapFeatures();
@@ -410,18 +432,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         }
 
         manager = Manager.getInstance(getContext());
-        List<Restaurant> restaurantList = manager.getRestaurantList();
+        List<Restaurant> restaurantList;
+        if(settings.isHasBeenFiltered() == true) {
+            restaurantList = settings.getFilteredRestaurants();
+        }
+        else {
+            restaurantList = manager.getRestaurantList();
+        }
 
 
         for(int i=0; i<restaurantList.size(); i++) {
             placePeg(restaurantList.get(i),ZOOM_AMNT, i);
         }
+
         markersFull = new ArrayList<>(markers);
 
         setUpClusterManager(map);
+
         clusterManager.getMarkerCollection();
-        coordinateTappedByUser(coordLaunch);
-        makeMarkerTextClickable();
+
+        if(coordLaunch == true) {
+            coordinateTappedByUser(coordLaunch);
+            makeMarkerTextClickable();
+        }
+
 
         //Once the map detects movement, the re-centering will be disabled
         map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {

@@ -143,4 +143,5 @@
     <!--- TODO TRANSLATE THESE TO OTHER LANGUAGES -->
     <string name="new_inspections">This list of your favourite restaurants has new inspections</string>
     <string name="permission_to_download_csv">Permission to download updated CSV files</string>
+    <string name="reset_defaults">Reset Defaults</string>
 </resources>

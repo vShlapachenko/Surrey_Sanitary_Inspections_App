@@ -18,9 +18,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cmpt276_project_iron.FilterOptions;
 import com.example.cmpt276_project_iron.R;
 import com.example.cmpt276_project_iron.model.DateConversionCalculator;
+import com.example.cmpt276_project_iron.model.FilterSettings;
 import com.example.cmpt276_project_iron.model.Inspection;
 import com.example.cmpt276_project_iron.model.Manager;
 import com.example.cmpt276_project_iron.model.Restaurant;
@@ -36,15 +36,18 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.ViewHolder> implements Filterable {
     private Context context;
+    private FilterSettings settings;
     private List<Restaurant> restaurants; //Data set list
     private List<Restaurant> completeRestaurants; //Duplicate data set list for filtering
     private Manager manager;
 
+
     public RestaurantListAdapter(Context context, List<Restaurant> restaurants){
         this.context = context;
         this.restaurants = restaurants;
-        this.completeRestaurants = new ArrayList<>(restaurants);  //Copy of list for maintaing data while filtering
         this.manager = Manager.getInstance(context);
+        this.settings = FilterSettings.getInstance(context);
+        this.completeRestaurants = new ArrayList<>(restaurants);
     }
 
     @NonNull
@@ -242,12 +245,16 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                         //If the restaurant name contains the specified filter text then add it
                         //to the list of filtered restaurants
                         filteredRestaurantList.add(restaurant);
+
                     }
                 }
             }
 
             FilterResults filteredResults = new FilterResults();
             filteredResults.values = filteredRestaurantList;
+
+            settings.setHasBeenFiltered(true);
+
             return filteredResults;
         }
 
